@@ -10,7 +10,7 @@ const Home = () => {
 
    return (
       <div>
-         <button id="book_now" onClick={handleClick}>Book Now</button>
+         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={handleClick}>Book Now</button>
       </div>
    );
 }
