@@ -1,7 +1,6 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import {Page} from './reservation_page/Reservation_page';
-import './App.css';
 
 const Home = () => {
    const handleClick = () => {
