@@ -2,14 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter as Router } from 'react-router-dom'
 import './index.css';
+import "@fontsource/lexend";
 import App from './App';
+import { Page } from './reservation_page/Reservation_page';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <Router>
-      <App />
+      <Page />
     </Router>
   </React.StrictMode>
 );
