@@ -111,8 +111,6 @@ CREATE TABLE HistorialAcceso(
   CONSTRAINT FK_HistorialAcceso_TipoEntidad FOREIGN KEY(CodigoTipoEntidad) REFERENCES TipoEntidad(Codigo) ON DELETE NO ACTION
 );
 
-drop table HistorialAcceso
-
 -- Usuarios cliente, que utilizan servicios y tienen cobros asociados.
 
 CREATE TABLE Cliente(
