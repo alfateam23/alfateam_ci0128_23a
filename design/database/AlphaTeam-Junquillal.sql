@@ -88,26 +88,30 @@ CREATE TABLE TipoPermiso(
 CREATE TABLE Autorizacion(
   IdAdministrador VARCHAR(30),
   CodigoTipoEntidad VARCHAR(30),
-  CodigoTipoPermiso CHAR,
-  CONSTRAINT PK_Autorizacion PRIMARY KEY(IdAdministrador, CodigoTipoEntidad, CodigoTipoPermiso),
+  PermisoCrear BIT DEFAULT(0) NOT NULL,
+  PermisoLeer BIT DEFAULT(0) NOT NULL,
+  PermisoModificar BIT DEFAULT(0) NOT NULL,
+  PermisoBorrar BIT DEFAULT(0) NOT NULL,
+  CONSTRAINT PK_Autorizacion PRIMARY KEY(IdAdministrador, CodigoTipoEntidad),
   CONSTRAINT FK_Autorizacion_Administrador FOREIGN KEY(IdAdministrador) REFERENCES Administrador(Id) ON DELETE CASCADE,
-  CONSTRAINT FK_Autorizacion_TipoEntidad FOREIGN KEY(CodigoTipoEntidad) REFERENCES TipoEntidad(Codigo) ON DELETE CASCADE,
-  CONSTRAINT FK_Autorizacion_TipoPermiso FOREIGN KEY(CodigoTipoPermiso) REFERENCES TipoPermiso(Codigo) ON DELETE CASCADE
+  CONSTRAINT FK_Autorizacion_TipoEntidad FOREIGN KEY(CodigoTipoEntidad) REFERENCES TipoEntidad(Codigo) ON DELETE CASCADE
 );
 
 -- Bitácora de utilización de permisos sobre entidades del sistema, según usuario administrador y fecha y hora.
 -- Permite trazabilidad de acciones en el sistema.
+-- Código de tipo de permiso es: C (create), R (read), U (update), D (delete)
 
 CREATE TABLE HistorialAcceso(
   IdAdministrador VARCHAR(30),
   CodigoTipoEntidad VARCHAR(30),
-  CodigoTipoPermiso CHAR,
-  Fecha DATETIME,
+  CodigoTipoPermiso CHAR NOT NULL,
+  Fecha DATETIME NOT NULL,
   CONSTRAINT PK_HistorialAcceso PRIMARY KEY(IdAdministrador, CodigoTipoEntidad, CodigoTipoPermiso, Fecha),
   CONSTRAINT FK_HistorialAcceso_Administrador FOREIGN KEY(IdAdministrador) REFERENCES Administrador(Id) ON DELETE NO ACTION,
-  CONSTRAINT FK_HistorialAcceso_TipoEntidad FOREIGN KEY(CodigoTipoEntidad) REFERENCES TipoEntidad(Codigo) ON DELETE NO ACTION,
-  CONSTRAINT FK_HistorialAcceso_TipoPermiso FOREIGN KEY(CodigoTipoPermiso) REFERENCES TipoPermiso(Codigo) ON DELETE NO ACTION
+  CONSTRAINT FK_HistorialAcceso_TipoEntidad FOREIGN KEY(CodigoTipoEntidad) REFERENCES TipoEntidad(Codigo) ON DELETE NO ACTION
 );
+
+drop table HistorialAcceso
 
 -- Usuarios cliente, que utilizan servicios y tienen cobros asociados.
 
