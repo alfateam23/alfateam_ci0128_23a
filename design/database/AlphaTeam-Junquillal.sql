@@ -261,5 +261,41 @@ CREATE TABLE TarifaVisitante(
   Procedencia VARCHAR(30),
   CategoriaPago VARCHAR(30),
   Estatus VARCHAR(30),
-  CONSTRAINT FK_TipoVisitante FOREIGN KEY(Procedencia, CategoriaPago, Estatus)
+  Monto MONEY,
+  Moneda CHAR(3) NOT NULL,
+  CONSTRAINT PK_TarifaVisitante PRIMARY KEY(Procedencia, CategoriaPago, Estatus),
+  CONSTRAINT FK_TarifaVisitante_TipoVisitante FOREIGN KEY(Procedencia, CategoriaPago, Estatus)
+    REFERENCES TipoVisitante(Procedencia, CategoriaPago, Estatus) ON DELETE CASCADE,
+  CHECK (Monto >= 0)
+);
+
+-- Visitas específicas por tipos de visitantes.
+-- Además de cobros, permite generar reportes de cantidades por cada tipo de visitante.
+
+CREATE TABLE Visita(
+  Procedencia VARCHAR(30),
+  CategoriaPago VARCHAR(30),
+  Estatus VARCHAR(30),
+  Numero INT,
+  CONSTRAINT PK_Visita PRIMARY KEY(Procedencia, CategoriaPago, Estatus, Numero),
+  CONSTRAINT FK_Visita_TipoVisitante FOREIGN KEY(Procedencia, CategoriaPago, Estatus)
+    REFERENCES TipoVisitante(Procedencia, CategoriaPago, Estatus) ON DELETE CASCADE
+);
+
+-- Cobros de sesiones de uso de servicios, por parte de usuarios cliente.
+-- Los pagos se realizan de forma externa al sistema. El sistema permite llevar control de pagos realizados y pendientes.
+-- TipoCambio guarda el tipo de cambio de la moneda indicada, con respecto al colón, en el día que se generó el cobro.
+
+CREATE TABLE Cobro(
+  Codigo INT,
+  IdCliente VARCHAR(30),
+  Monto MONEY,
+  Moneda CHAR(3) NOT NULL,
+  TipoCambio MONEY,
+  Fecha DATETIME,
+  EstadoPago BIT DEFAULT(0) NOT NULL,
+  CONSTRAINT PK_Cobro PRIMARY KEY(Codigo),
+  CONSTRAINT FK_Cobro_Cliente FOREIGN KEY(IdCliente) REFERENCES Cliente(Id) ON DELETE CASCADE,
+  CHECK (Monto >= 0),
+  CHECK (TipoCambio >= 0)
 );
