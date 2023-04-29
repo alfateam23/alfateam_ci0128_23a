@@ -1,4 +1,6 @@
 import React from 'react';
+import { IconName } from "react-icons/";
+import { CiCalendar } from "react-icons/ci";
 
 const Select_dates = () => {
   return (
@@ -9,15 +11,21 @@ const Select_dates = () => {
     </div>
   );
 };
-
-const Next = () => {
+/*outline-1 outline-dashed outline-black-500*/
+const From_until = () => {
   return (
-    <footer className="bottom-0 absolute w-full">
-      <button className="font-sans bg-YellowButton float-right
-      mr-[20%] mb-[5%] px-8 py-2 shadow-lg">
-        Next
-      </button>
-    </footer>
+    <div className="shadow-[1px_7px_15px_-4px_rgba(0,0,0,0.75)]
+    bg-white float-left px-6 py-4 ml-[10%]
+    divide-x divide-slate-400">
+      <div className='inline-block'>
+        <p className= "inline-block pr-16">From</p>
+        <CiCalendar size="1.4rem" className='inline-block mr-5'/>
+      </div>
+      <div className='inline-block'>
+        <p className= "inline-block pr-16 ml-5">Until</p>
+        <CiCalendar size="1.4rem" className='inline-block'/>
+      </div>
+    </div>
   );
 };
 
@@ -42,11 +50,23 @@ const Reservation_type = () => {
   );
 };
 
+const Next = () => {
+  return (
+    <footer className="bottom-0 absolute w-full">
+      <button className="font-sans bg-YellowButtonP float-right
+      mr-[20%] mb-[5%] px-8 py-2 shadow-lg hover:bg-YellowButton">
+        Next
+      </button>
+    </footer>
+  );
+};
+
 export const Page = () => {
   return (
     <div>
       <Select_dates />
       <Reservation_type />
+      <From_until />
       <Next />
     </div>
   );
