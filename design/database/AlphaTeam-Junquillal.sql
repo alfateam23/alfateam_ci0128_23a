@@ -1,11 +1,11 @@
 -- CI0128 G01 I-2023
--- Esquema de base de datos para Refugio de Vida Silvestre BahÌa Junquillal
--- AlphaTeam: Jason Murillo, Jose Pereira, Marco Piedra, JosuÈ Retana, Ariel SolÌs
+-- Esquema de base de datos para Refugio de Vida Silvestre Bah√≠a Junquillal
+-- AlphaTeam: Jason Murillo, Jose Pereira, Marco Piedra, Josu√© Retana, Ariel Sol√≠s
 
 use AlphaTeam;
 
 -- Usuarios generales del sistema. Superclase de usuarios administradores y usuarios clientes que solicitan servicios.
--- Para propÛsitos de auditorÌa, no se debe eliminar usuarios administradores, sino marcarlos como inactivos.
+-- Para prop√≥sitos de auditor√≠a, no se debe eliminar usuarios administradores, sino marcarlos como inactivos.
 
 CREATE TABLE Usuario(
   Id VARCHAR(30),
@@ -17,7 +17,7 @@ CREATE TABLE Usuario(
   CONSTRAINT PK_Usuario PRIMARY KEY(Id)
 );
 
--- TelÈfonos de usuarios generales.
+-- Tel√©fonos de usuarios generales.
 
 CREATE TABLE Telefono(
   IdUsuario VARCHAR(30),
@@ -27,9 +27,9 @@ CREATE TABLE Telefono(
 );
 
 -- Usuarios administradores.
--- Para propÛsitos de auditorÌa, no se debe eliminar usuarios administradores, sino marcarlos como inactivos en EstadoActividad.
+-- Para prop√≥sitos de auditor√≠a, no se debe eliminar usuarios administradores, sino marcarlos como inactivos en EstadoActividad.
 -- NUNCA se debe guardar claves directamente, sino solo el hash (e.g., Argon2).
--- En el inicio de sesiÛn solo se valida si el hash de la clave ingresada coincide con el hash almacenado.
+-- En el inicio de sesi√≥n solo se valida si el hash de la clave ingresada coincide con el hash almacenado.
 
 CREATE TABLE Administrador(
   Id VARCHAR(30),
@@ -43,15 +43,15 @@ CREATE TABLE Administrador(
 );
 
 -- Tipo de entidad de negocio accesibles para usuarios administradores.
--- En HistorialAcceso, para propÛsitos de auditorÌa, un usuario administrador solo deberÌa poder leer tuplas.
--- Los cÛdigos son:
+-- En HistorialAcceso, para prop√≥sitos de auditor√≠a, un usuario administrador solo deber√≠a poder leer tuplas.
+-- Los c√≥digos son:
 -- Usuario
 -- Telefono
 -- Administrador
 -- Autorizacion
 -- HistorialAcceso
 -- Cliente
--- VehÌculo
+-- Veh√≠culo
 -- Parcela
 -- ReservaParcela
 -- Kayak
@@ -72,7 +72,7 @@ CREATE TABLE TipoEntidad(
 );
 
 -- Tipo de permiso sobre entidad de negocio.
--- Los cÛdigos son:
+-- Los c√≥digos son:
 -- C (create)
 -- R (read)
 -- U (update)
@@ -97,9 +97,9 @@ CREATE TABLE Autorizacion(
   CONSTRAINT FK_Autorizacion_TipoEntidad FOREIGN KEY(CodigoTipoEntidad) REFERENCES TipoEntidad(Codigo) ON DELETE CASCADE
 );
 
--- Bit·cora de utilizaciÛn de permisos sobre entidades del sistema, seg˙n usuario administrador y fecha y hora.
+-- Bit√°cora de utilizaci√≥n de permisos sobre entidades del sistema, seg√∫n usuario administrador y fecha y hora.
 -- Permite trazabilidad de acciones en el sistema.
--- CÛdigo de tipo de permiso es: C (create), R (read), U (update), D (delete)
+-- C√≥digo de tipo de permiso es: C (create), R (read), U (update), D (delete)
 
 CREATE TABLE HistorialAcceso(
   IdAdministrador VARCHAR(30),
@@ -119,7 +119,7 @@ CREATE TABLE Cliente(
   CONSTRAINT FK_Cliente_Usuario FOREIGN KEY(Id) REFERENCES Usuario(Id) ON DELETE CASCADE
 );
 
--- VehÌculos de usuarios cliente, identificados por placa.
+-- Veh√≠culos de usuarios cliente, identificados por placa.
 
 CREATE TABLE Vehiculo(
   IdCliente VARCHAR(30),
@@ -128,7 +128,7 @@ CREATE TABLE Vehiculo(
   CONSTRAINT FK_Vehiculo_Cliente FOREIGN KEY(IdCliente) REFERENCES Cliente(Id) ON DELETE CASCADE
 );
 
--- Parcelas numeradas, que corresponden a espacios fÌsicos especÌficos en el refugio. Cada una cuenta con capacidad m·xima.
+-- Parcelas numeradas, que corresponden a espacios f√≠sicos espec√≠ficos en el refugio. Cada una cuenta con capacidad m√°xima.
 
 CREATE TABLE Parcela(
   Numero INT,
@@ -152,7 +152,7 @@ CREATE TABLE ReservaParcela(
   CHECK (FechaInicio <= FechaFin)
 );
 
--- Unidades numeradas de kayak, cada uno con capacidad m·xima.
+-- Unidades numeradas de kayak, cada uno con capacidad m√°xima.
 
 CREATE TABLE Kayak(
   Numero INT,
@@ -161,8 +161,8 @@ CREATE TABLE Kayak(
   CHECK (Capacidad >= 0)
 );
 
--- Tarifas de kayak por sesiÛn de uso (e.g., 30 minutos).
--- CÛdigo de moneda seg˙n est·ndar ISO 4217. Por ejemplo, CRC (colones costarricenses), USD (dÛlares estadounidenses).
+-- Tarifas de kayak por sesi√≥n de uso (e.g., 30 minutos).
+-- C√≥digo de moneda seg√∫n est√°ndar ISO 4217. Por ejemplo, CRC (colones costarricenses), USD (d√≥lares estadounidenses).
 
 CREATE TABLE TarifaKayak(
   NumeroKayak INT,
@@ -209,7 +209,7 @@ CREATE TABLE RecorridoSendero(
   CONSTRAINT FK_RecorridoSendero_Sendero FOREIGN KEY(NombreSendero) REFERENCES Sendero(Nombre) ON DELETE CASCADE,
 );
 
--- ¡reas numeradas de picnic.
+-- √Åreas numeradas de picnic.
 
 CREATE TABLE AreaPicnic(
   Numero INT,
@@ -218,7 +218,7 @@ CREATE TABLE AreaPicnic(
   CHECK (Capacidad >= 0)
 );
 
--- Sesiones de uso de ·reas de picnic por parte de usuarios cliente.
+-- Sesiones de uso de √°reas de picnic por parte de usuarios cliente.
 
 CREATE TABLE UsoAreaPicnic(
   IdCliente VARCHAR(30),
@@ -229,24 +229,24 @@ CREATE TABLE UsoAreaPicnic(
   CONSTRAINT FK_UsoAreaPicnic_AreaPicnic FOREIGN KEY(NumeroAreaPicnic) REFERENCES AreaPicnic(Numero) ON DELETE CASCADE,
 );
 
--- Tipos de visitante, seg˙n clasificaciÛn de SEMEC (Sistema de EvaluaciÛn del Mejoramiento Continuo de la Calidad)
--- del SINAC (Sistema Nacional de ¡reas de ConservaciÛn).
+-- Tipos de visitante, seg√∫n clasificaci√≥n de SEMEC (Sistema de Evaluaci√≥n del Mejoramiento Continuo de la Calidad)
+-- del SINAC (Sistema Nacional de √Åreas de Conservaci√≥n).
 
--- Procedencia es provincia de Costa Rica o paÌs (sin incluir Costa Rica).
+-- Procedencia es provincia de Costa Rica o pa√≠s (sin incluir Costa Rica).
 
--- CategorÌa de pago es:
+-- Categor√≠a de pago es:
 -- No exonerado
 -- Prepagado
 -- Exonerado
 
 -- Estatus es:
 -- Tarifa regular
--- NiÒo Regular
+-- Ni√±o Regular
 -- Estudiantes
--- NiÒo exonerados
+-- Ni√±o exonerados
 -- Adulto Mayor
--- Miercoles de cortesÌa
--- Por resoluciÛn
+-- Miercoles de cortes√≠a
+-- Por resoluci√≥n
 -- Sin mecanismo de cobro
 -- Otros
 
@@ -271,8 +271,8 @@ CREATE TABLE TarifaVisitante(
   CHECK (Monto >= 0)
 );
 
--- Visitas especÌficas por tipos de visitantes.
--- Adem·s de cobros, permite generar reportes de cantidades por cada tipo de visitante.
+-- Visitas espec√≠ficas por tipos de visitantes.
+-- Adem√°s de cobros, permite generar reportes de cantidades por cada tipo de visitante.
 
 CREATE TABLE Visita(
   Procedencia VARCHAR(30),
@@ -286,7 +286,7 @@ CREATE TABLE Visita(
 
 -- Cobros de sesiones de uso de servicios, por parte de usuarios cliente.
 -- Los pagos se realizan de forma externa al sistema. El sistema permite llevar control de pagos realizados y pendientes.
--- TipoCambio guarda el tipo de cambio de la moneda indicada, con respecto al colÛn, en el dÌa que se generÛ el cobro.
+-- TipoCambio guarda el tipo de cambio de la moneda indicada, con respecto al col√≥n, en el d√≠a que se gener√≥ el cobro.
 
 CREATE TABLE Cobro(
   Codigo INT,
