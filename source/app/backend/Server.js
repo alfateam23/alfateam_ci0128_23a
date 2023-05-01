@@ -5,13 +5,6 @@ const http = require('http');
 const host = '127.0.0.1';
 const port = 3030;
 
-var visitors = {
-    'visitantes': {
-        '1': { 'procedencia': 'España', 'tipo': 'Adulto Extranjero' },
-        '2': { 'Procedencia': 'Alajuela', 'Tipo': 'Niño Nacional' }
-    }
-};
-
 const server = http.createServer((req, res) => {
     if (req.url == '/visitors' && req.method == 'GET') {
         res.writeHead(200, 'Content-Type', 'application/json')
