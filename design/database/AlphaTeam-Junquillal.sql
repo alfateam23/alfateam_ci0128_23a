@@ -301,3 +301,15 @@ CREATE TABLE Cobro(
   CHECK (Monto >= 0),
   CHECK (TipoCambio >= 0)
 );
+
+
+-- -- Procedimientos almacenados
+
+-- CREATE PROCEDURE Cobro.convertirAColones(
+--   @CodigoCobro VARCHAR(30),
+--   @MontoConvertido MONEY OUTPUT
+-- )
+-- AS
+-- BEGIN
+--   SELECT @MontoConvertido = (CASE Moneda WHEN 'CRC' THEN Monto ELSE Monto * TipoCambio END) FROM Cobro WHERE Codigo = @CodigoCobro;
+-- END;
