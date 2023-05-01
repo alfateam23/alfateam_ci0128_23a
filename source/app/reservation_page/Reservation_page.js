@@ -1,6 +1,7 @@
 import React from 'react';
 import { IconName } from "react-icons/";
 import { CiCalendar } from "react-icons/ci";
+import { My_Calendar } from "./Calendar";
 
 const Select_dates = () => {
   return (
@@ -66,7 +67,11 @@ export const Page = () => {
     <div>
       <Select_dates />
       <Reservation_type />
+      <br/>
       <From_until />
+      <br/>
+      <My_Calendar />
+      <br/>
       <Next />
     </div>
   );
