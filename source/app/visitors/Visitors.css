@@ -1,18 +1,18 @@
-h1 {
-  font-family: "Lexend", sans-serif;
-  font-size: 110px;
-}
-
-hr {
-  border: none;
-  border-top: 2px solid #000;
+table {
+  margin: auto;
   width: 50%;
+  text-align: center;
 }
 
 thead {
-  font-size: 36pt;
+  font-size: 24pt;
+  font-weight: bold;
 }
 
 tbody {
-  font-size: 24pt;
+  font-size: 18pt;
+}
+
+tr {
+  background-color: lightgray;
 }
