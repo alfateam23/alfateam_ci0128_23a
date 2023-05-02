@@ -1,21 +1,22 @@
 import React from 'react';
 import './Visitors.css';
 
-const visitorsRawData = [
-    { 'id': '20', 'region': 'España', 'status': 'Adulto Regular' },
-    { 'id': '30', 'region': 'Alajuela', 'status': 'Niño Exonerado' },
-    { 'id': '40', 'region': 'Holanda', 'status': 'Adulto Mayor' },
-    { 'id': '50', 'region': 'Alajuela', 'status': 'Adulto Regular' },
-]
-
 const VisitorsList = () => {
-    const visitorItems = visitorsRawData.map(visitor =>
-        <tr>
-            <td>{visitor.id}</td>
-            <td>{visitor.region}</td>
-            <td>{visitor.status}</td>
-        </tr>
-    );
+    var visitorItems;
+
+    // Fetch JSON from API and build table rows of visitors
+    fetch('/backend/visitordata')
+        .then((response) => response.json())
+        .then((data) => {
+            visitorItems = data.visitors.map(visitor =>
+                <tr>
+                    <td>{visitor.id}</td>
+                    <td>{visitor.region}</td>
+                    <td>{visitor.status}</td>
+                </tr>
+            );
+        })
+        .catch(console.error);
 
     return (
         <div>
