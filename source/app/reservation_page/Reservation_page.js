@@ -20,7 +20,31 @@ export const Parcel_page = () => {
       <br />
       <Reservation_type />
       <br />
-      <NavBar_PIR />
+      <NavBar_PIR selected={"parcel"}/>
+    </div>
+  );
+};
+
+export const T_information = () => {
+  return (
+    <div>
+      <From_until />
+      <br />
+      <Reservation_type />
+      <br />
+      <NavBar_PIR selected={"traveller"}/>
+    </div>
+  );
+};
+
+export const Review = () => {
+  return (
+    <div>
+      <From_until />
+      <br />
+      <Reservation_type />
+      <br />
+      <NavBar_PIR selected={"review"}/>
     </div>
   );
 };

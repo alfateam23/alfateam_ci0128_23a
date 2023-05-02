@@ -57,19 +57,64 @@ export const Next_link = ({route}) => {
 /*Navbar for Parcel Information and Review
 PIR*/
 
-export const NavBar_PIR = () => {
+/*
+
+<div className='bg-OrangeNavBar w-full mt-48
+outline-1 outline-dashed outline-red-500'>
+  <div className='inline-block
+  ml-44 w-80 text-xl h-12 rounded-t-2xl
+  shadow-[0px_1px_4px_0px_rgba(0,0,0,0.50)_inset]'>
+  <Link to="/reservation/parcel" className='flex justify-center
+  items-center'>
+      Parcel Selection
+  </Link>
+  </div>
+  <Link to="/reservation/info" className='inline-block ml-32
+  text-center w-60
+  outline-1 outline-dashed outline-red-500'>
+    Traveller's Information
+  </Link>
+  <Link to="/reservation/review" className='inline-block ml-32'>
+    Review
+  </Link>
+</div>
+
+*/
+
+export const NavBar_PIR = ({selected}) => {
+  let selected_style = 'inline-block mx-2 text-center\
+  font-sans w-72 text-lg py-3 rounded-t-2xl\
+  shadow-[0px_1px_3px_0px_rgba(0,0,0,0.50)_inset]';
+  let non_selected_style = "inline-block mx-2 text-center\
+  font-sans w-72 py-3 rounded-t-2xl\
+  shadow-[0px_1px_1px_0px_rgba(0,0,0,0.50)]\
+  hover:shadow-[0px_1px_3px_0px_rgba(0,0,0,0.50)_inset]\
+  hover:rounded-t-2xl";
+  let parcel_style = '';
+  let traveller_style = '';
+  let review_style = '';
+
+  if (selected === 'parcel') {
+    parcel_style = selected_style;
+    traveller_style = review_style = non_selected_style;
+  } else if (selected === 'traveller') {
+    traveller_style = selected_style;
+    parcel_style = review_style = non_selected_style;
+  } else {
+    review_style = selected_style;
+    parcel_style = traveller_style = non_selected_style;
+  }
+
   return (
-    <div className='bg-OrangeNavBar w-full mt-48 py-7
-    outline-1 outline-dashed outline-red-500'>
-      <Link to="/reservation/parcel" className='inline-block
-      ml-10 px-10
-      outline-1 outline-dashed outline-red-500'>
+    <div className="flex justify-center items-center
+    bg-OrangeNavBar w-full mt-48 pt-4">
+      <Link to="/reservation/parcel" className={parcel_style}>
         Parcel Selection
       </Link>
-      <Link to="/reservation/info" className='inline-block'>
+      <Link to="/reservation/info" className={traveller_style}>
         Traveller's Information
       </Link>
-      <Link to="/reservation/review" className='inline-block'>
+      <Link to="/reservation/review" className={review_style}>
         Review
       </Link>
     </div>
