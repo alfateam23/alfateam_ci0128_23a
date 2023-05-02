@@ -1,7 +1,17 @@
 //import React from "react";
 import { useState } from 'react';
+import InfoParcela from './parcelas.json';
 
 const Parcelas = () => {
+    // import info
+
+    const InformacionParcelas = JSON.parse(InfoParcela);
+    const Informacion = InformacionParcelas.map((item, index) => (
+        <div key={index}>
+          <h2>{item.limite}</h2>
+        </div>
+      ));
+
     // Initializing state
     const [showInfo, setShowInfo] = useState(false);
     const [selectedButton, setSelectedButton] = useState('');
@@ -14,12 +24,12 @@ const Parcelas = () => {
     return (
         <div className='bg-slate-600 min-h-screen'>
             <h1 className="text-center mb-6 text-4xl font-bold py-12">
-                Esta es a página de elección de parcelas
+                Seleccione una parcela que desee como referencia
             </h1>
             <div className="flex items-center ">
                 <div className="max-w-4xl mx-auto">
                     <div class="grid grid-cols-12 grid-rows-3 gap-x-4 gap-y-12 ">
-                        <button className="col-start-1 row-end-1 bg-blue-500 rounded-lg shadow-xl text-white" onClick={() => handleButtonClick('Button 1')}>
+                        <button className="col-start-1 row-end-1 rounded-lg shadow-xl text-white" onClick={() => handleButtonClick('Button 1')}>
                             Parcela 1
                         </button>
                         <button className="col-start-2 row-end-1 bg-blue-500 rounded-lg shadow-xl text-white" onClick={() => handleButtonClick('Button 2')}>
@@ -106,3 +116,4 @@ const Parcelas = () => {
 }
 
 export default Parcelas
+

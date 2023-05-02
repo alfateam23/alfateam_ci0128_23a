@@ -1,0 +1,123 @@
+
+"InfoParcela":[ {
+    "color": "blue",
+    "Parcela": 1,   
+    "limite": 5
+  },
+  {
+    "color": "blue",
+    "Parcela": 2,   
+    "limite": 5
+  },
+  {
+    "color": "yellow",
+    "Parcela": 3,   
+    "limite": 15
+  },
+  {
+    "color": "purple",
+    "Parcela": 4,   
+    "limite": 10
+  },
+  {
+    "color": "blue",
+    "Parcela": 5,   
+    "limite": 5
+  },
+  {
+    "color": "blue",
+    "Parcela": 6,   
+    "limite": 5
+  },
+  {
+    "color": "blue",
+    "Parcela": 7,   
+    "limite": 5
+  },
+  {
+    "color": "blue",
+    "Parcela": 8,   
+    "limite": 5
+  },
+  {
+    "color": "purple",
+    "Parcela": 9,   
+    "limite": 10
+  },
+  {
+    "color": "blue",
+    "Parcela": 10,   
+    "limite": 5
+  },
+  {
+    "color": "yellow",
+    "Parcela": 11,   
+    "limite": 15
+  },
+  {
+    "color": "yellow",
+    "Parcela": 12,   
+    "limite": 15
+  },
+  {
+    "color": "yellow",
+    "Parcela": 13,   
+    "limite": 15
+
+  },
+  {
+    "color": "blue",
+    "Parcela": 14,   
+    "limite": 5
+  },
+  {
+    "color": "purple",
+    "Parcela": 15,   
+    "limite": 10
+  },
+  {
+    "color": "blue",
+    "Parcela": 16,   
+    "limite": 5
+  },
+  {
+    "color": "blue",
+    "Parcela": 17,   
+    "limite": 5
+  },
+  {
+    "color": "blue",
+    "Parcela": 18,   
+    "limite": 5
+  },
+  {
+    "color": "blue",
+    "Parcela": 19,   
+    "limite": 5
+  },
+  {
+    "color": "purple",
+    "Parcela": 20,   
+    "limite": 10
+  },
+  {
+    "color": "purple",
+    "Parcela": 21,   
+    "limite": 10
+  },
+  {
+    "color": "blue",
+    "Parcela": 22,   
+    "limite": 5
+  },
+  {
+    "color": "purple",
+    "Parcela": 23,   
+    "limite": 10
+  },
+  {
+    "color": "blue",
+    "Parcela": 24,   
+    "limite": 5
+  }
+]
