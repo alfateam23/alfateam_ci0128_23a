@@ -26,7 +26,7 @@ export const My_Calendar = () => {
 
   // Select range only when start date is selected
 
-  const [startDate, setStartDate] = useState(null);
+  /*const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 
   function handleDateChange(date) {
@@ -38,14 +38,12 @@ export const My_Calendar = () => {
     } else {
       setStartDate(date);
     }
-  }
+  }*/
 
   return (
     <div className="w-[24.7%] clear-left ml-[10%]
     outline-1 outline-dashed outline-red-500">
-      <Calendar selectRange={startDate !== null}
-      value={startDate !== null ? [startDate, endDate] : null}
-      onChange={handleDateChange} locale="en"/>
+      <Calendar value={value} onChange={onChange} locale="en"/>
     </div>
   );
 };
