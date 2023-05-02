@@ -1,6 +1,7 @@
 import React from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
-import {Availability_page, Select_dates_page} from './reservation_page/Reservation_page';
+import {Availability_page, Parcel_page,
+      Select_dates_page} from './reservation_page/Reservation_page';
 
 const Home = () => {
    const handleClick = () => {
@@ -22,7 +23,7 @@ const App = () => {
          <Route exact path="/" element={<Home />} />
          <Route path="/reservation" element={<Select_dates_page />} />
          <Route path="/reservation/availability" element={<Availability_page />} />
-         <Route path="/reservation/parcel" />
+         <Route path="/reservation/parcel" element={<Parcel_page />} />
          <Route path="/reservation/info" />
          <Route path="/reservation/review" />
       </Routes>

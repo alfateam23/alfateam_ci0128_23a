@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import { My_Calendar } from "./Calendar";
-import { From_until, Reservation_type, Next_link } from './Common';
+import { From_until, Reservation_type, Next_link, NavBar_PIR } from './Common';
 import { Party_title, Availability_title, Spaces_left } from './Availability_page';
 
 const Select_dates_title = () => {
@@ -13,12 +13,24 @@ const Select_dates_title = () => {
   );
 };
 
+export const Parcel_page = () => {
+  return (
+    <div>
+      <From_until />
+      <br />
+      <Reservation_type />
+      <br />
+      <NavBar_PIR />
+    </div>
+  );
+};
+
 export const Availability_page = () => {
   let quantity = 100;
   return (
     <div>
       <From_until />
-      <br/>
+      <br />
       <Reservation_type />
       <br />
       <Availability_title />

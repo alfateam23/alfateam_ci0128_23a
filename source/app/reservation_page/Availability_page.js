@@ -22,11 +22,11 @@ export const Party_title = () => {
       <div className="ml-20 bg-gray-200 w-1/2
       py-2 pl-3">
         <p className="text-lg inline-block">Person(s)</p>
-        <div className='inline-block ml-32'>
+        <div className='inline-block ml-28'>
           <button className='inline-block bg-gray-400 rounded-2xl
           w-6' onClick={() => count > 0 ? setCount((prevCount) => 
             prevCount-1) : setCount(0)}>-</button>
-          <p className='inline-block ml-5 text-lg bg-white w-5 text-center
+          <p className='inline-block ml-5 text-lg bg-white w-7 text-center
           shadow-[0px_1px_2px_0px_rgba(0,0,0,0.50)_inset]'>{count}</p>
           <button className='inline-block ml-5 bg-gray-400 rounded-2xl
           w-6'onClick={() => count > 39 ? 

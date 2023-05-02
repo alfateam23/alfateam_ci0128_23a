@@ -53,3 +53,25 @@ export const Next_link = ({route}) => {
     </footer>
   );
 };
+
+/*Navbar for Parcel Information and Review
+PIR*/
+
+export const NavBar_PIR = () => {
+  return (
+    <div className='bg-OrangeNavBar w-full mt-48 py-7
+    outline-1 outline-dashed outline-red-500'>
+      <Link to="/reservation/parcel" className='inline-block
+      ml-10 px-10
+      outline-1 outline-dashed outline-red-500'>
+        Parcel Selection
+      </Link>
+      <Link to="/reservation/info" className='inline-block'>
+        Traveller's Information
+      </Link>
+      <Link to="/reservation/review" className='inline-block'>
+        Review
+      </Link>
+    </div>
+  );
+};
