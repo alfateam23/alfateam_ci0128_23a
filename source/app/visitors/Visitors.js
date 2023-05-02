@@ -1,22 +1,25 @@
 import React from 'react';
 import './Visitors.css';
 
-const VisitorsList = () => {
-    var visitorItems;
-
-    // Fetch JSON from API and build table rows of visitors
+// Get list of visitors
+function getVisitors() {
     fetch('/backend/visitordata')
-        .then((response) => response.json())
-        .then((data) => {
-            visitorItems = data.visitors.map(visitor =>
-                <tr>
-                    <td>{visitor.id}</td>
-                    <td>{visitor.region}</td>
-                    <td>{visitor.status}</td>
-                </tr>
-            );
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error(`Cannot fetch visitors. Status: ${response.status}`);
+            }
+            return response.JSON();
         })
-        .catch(console.error);
+};
+
+const VisitorsList = () => {
+    const visitorItems = getVisitors().map(visitor =>
+        <tr>
+            <td>{visitor.id}</td>
+            <td>{visitor.region}</td>
+            <td>{visitor.status}</td>
+        </tr>
+    );
 
     return (
         <div>

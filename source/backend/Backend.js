@@ -2,9 +2,10 @@
 // Based on https://progressivecoder.com/how-to-implement-nodejs-routing-without-express/
 
 
-import { createServer } from 'http';
-import { Connection, Request, TYPES } from 'tedious';
-import { DbConfig } from './DbConfig';
+const http = require('http');
+
+//const { Connection, Request, TYPES } = require ('tedious');
+//import { DbConfig } from './DbConfig';
 
 // Connection to SQL Server database, located at ECCI
 // Based on https://www.microsoft.com/en-us/sql-server/developer-get-started/node/windows/step/2.html
@@ -30,9 +31,9 @@ const visitorsRawData = {
     ]
 };
 
-const server = createServer((req, res) => {
+const server = http.createServer((req, res) => {
     if (req.url == '/backend/visitordata' && req.method == 'GET') {
-        res.writeHead(200, 'Content-Type', 'application/json')
+        res.writeHead(200, {'Content-Type' : 'application/json'})
             .end(JSON.stringify(visitorsRawData));
     } else {
         res.writeHead(404)

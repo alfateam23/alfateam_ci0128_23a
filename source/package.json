@@ -16,7 +16,7 @@
     "yaml": "^2.2.2"
   },
   "scripts": {
-    "start": "concurrently \"react-app-rewired start\" \"node app/backend/Backend.js\"",
+    "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-app-rewired eject"
@@ -45,5 +45,5 @@
     "react-app-rewired": "^2.2.1",
     "tailwindcss": "^3.3.1"
   },
-  "proxy": "http://localhost:3030"
+  "proxy" : "http://localhost:3030"
 }
