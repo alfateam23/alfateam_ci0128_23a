@@ -2,15 +2,11 @@
 
 ## Formato
 
-```
-Procedencia-Estatus-TipoDeVisita-Número
-```
+`Procedencia-Estatus-TipoDeVisita-Número`
 
 ## Expresión regular
 
-```python
-[CRC|EXT]-[RNEDMWLXO]-[A|P]-[\d]{8}
-```
+`(CRC|EXT)\-([RNEDMWLXO])\-([AP])\-([0-9]{1,8})`
 
 ## Procedencia
 
