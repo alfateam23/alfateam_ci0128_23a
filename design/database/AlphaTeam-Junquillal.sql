@@ -4,133 +4,110 @@
 
 use AlphaTeam;
 
--- Usuarios generales del sistema. Superclase de usuarios administradores y usuarios clientes que solicitan servicios.
--- Para propósitos de auditoría, no se debe eliminar usuarios administradores, sino marcarlos como inactivos.
+-- Usuarios generales del sistema. Superclase de usuarios administradores y de usuarios clientes que solicitan servicios.
 
-CREATE TABLE Usuario(
-  Id VARCHAR(30),
-  Email VARCHAR(30) UNIQUE NOT NULL,
+CREATE TABLE Usuario
+(
+  Email VARCHAR(30),
+  Cedula VARCHAR(30) UNIQUE NOT NULL,
   PrimerNombre VARCHAR(30) NOT NULL,
   SegundoNombre VARCHAR(30),
   PrimerApellido VARCHAR(30) NOT NULL,
   SegundoApellido VARCHAR(30),
-  CONSTRAINT PK_Usuario PRIMARY KEY(Id)
+  CONSTRAINT PK_Usuario PRIMARY KEY(Email)
 );
 
--- Teléfonos de usuarios generales.
+-- Teléfonos de usuarios.
 
-CREATE TABLE Telefono(
-  IdUsuario VARCHAR(30),
-  Numero VARCHAR(30),
-  CONSTRAINT PK_Telefono PRIMARY KEY(IdUsuario, Numero),
-  CONSTRAINT FK_Telefono_Usuario FOREIGN KEY(IdUsuario) REFERENCES Usuario(Id) ON DELETE CASCADE
+CREATE TABLE Telefono
+(
+  EmailUsuario VARCHAR(30),
+  NumeroTelefono VARCHAR(30),
+  CONSTRAINT PK_Telefono PRIMARY KEY(EmailUsuario, NumeroTelefono),
+  CONSTRAINT FK_Telefono_Usuario FOREIGN KEY(EmailUsuario) REFERENCES Usuario(Email) ON DELETE CASCADE
 );
 
--- Usuarios administradores.
--- Para propósitos de auditoría, no se debe eliminar usuarios administradores, sino marcarlos como inactivos en EstadoActividad.
--- NUNCA se debe guardar claves directamente, sino solo el hash (e.g., Argon2).
+-- Administradores del sistema.
+-- No se debe eliminar administradores, sino marcarlos como inactivos en EstadoActividad.
+-- NUNCA se debe guardar claves en texto plano, sino solo el hash (e.g., Argon2).
 -- En el inicio de sesión solo se valida si el hash de la clave ingresada coincide con el hash almacenado.
+-- Email se utiliza como nombre de usuario para inicio de sesión.
 
-CREATE TABLE Administrador(
-  Id VARCHAR(30),
+CREATE TABLE Administrador
+(
+  Email VARCHAR(30),
   FechaIngreso DATETIME,
   FechaSalida DATETIME,
-  Contrasena VARCHAR(30),
+  Contrasena VARCHAR(30) NOT NULL,
   EstadoActividad BIT DEFAULT 1 NOT NULL,
-  CONSTRAINT PK_Administrador PRIMARY KEY(Id),
-  CONSTRAINT FK_Administrador_Usuario FOREIGN KEY(Id) REFERENCES Usuario(Id) ON DELETE CASCADE,
+  CONSTRAINT PK_Administrador PRIMARY KEY(Email),
+  CONSTRAINT FK_Administrador_Usuario FOREIGN KEY(Email) REFERENCES Usuario(Email) ON DELETE CASCADE,
   CHECK (FechaIngreso <= FechaSalida)
 );
 
--- Tipo de entidad de negocio accesibles para usuarios administradores.
--- En HistorialAcceso, para propósitos de auditoría, un usuario administrador solo debería poder leer tuplas.
--- Los códigos son:
--- Usuario
--- Telefono
--- Administrador
--- Autorizacion
--- HistorialAcceso
--- Cliente
--- Vehículo
--- Parcela
--- ReservaParcela
--- Kayak
--- TarifaKayak
--- ViajeKayak
--- Sendero
--- RecorridoSendero
--- AreaPicnic
--- UsoAreaPicnic
--- TipoVisitante
--- TarifaVisitante
--- Visita
--- Cobro
+-- Roles de administradores.
+-- Las combinaciones concretas de permisos asociados a roles (e.g., modificación de reservas) se realizan en aplicación.
 
-CREATE TABLE TipoEntidad(
-  Codigo VARCHAR(30),
-  CONSTRAINT PK_TipoEntidad PRIMARY KEY(Codigo)
+CREATE TABLE Rol
+(
+  Nombre VARCHAR(30),
+  CONSTRAINT PK_Rol PRIMARY KEY(Nombre)
 );
 
--- Tipo de permiso sobre entidad de negocio.
--- Los códigos son:
--- C (create)
--- R (read)
--- U (update)
--- D (delete)
+-- Autorización de administradores mediante roles.
+-- En aplicación se validan las acciones de administradores contra el rol para el que tengan autorización.
 
-CREATE TABLE TipoPermiso(
-  Codigo CHAR,
-  CONSTRAINT PK_TipoPermiso PRIMARY KEY(Codigo)
+CREATE TABLE Autorizacion
+(
+  EmailAdmin VARCHAR(30),
+  NombreRol VARCHAR(30),
+  CONSTRAINT PK_Autorizacion PRIMARY KEY(EmailAdmin, NombreRol),
+  CONSTRAINT FK_Autorizacion_Administrador FOREIGN KEY(EmailAdmin) REFERENCES Administrador(Email) ON DELETE CASCADE,
+  CONSTRAINT FK_Autorizacion_Rol FOREIGN KEY(NombreRol) REFERENCES Rol(Nombre) ON DELETE CASCADE
 );
 
--- Combinaciones de permisos sobre entidades del sistema, que fueron autorizadas a cada usuario administrador.
+-- Clientes que realizan reservaciones.
 
-CREATE TABLE Autorizacion(
-  IdAdministrador VARCHAR(30),
-  CodigoTipoEntidad VARCHAR(30),
-  PermisoCrear BIT DEFAULT(0) NOT NULL,
-  PermisoLeer BIT DEFAULT(0) NOT NULL,
-  PermisoModificar BIT DEFAULT(0) NOT NULL,
-  PermisoBorrar BIT DEFAULT(0) NOT NULL,
-  CONSTRAINT PK_Autorizacion PRIMARY KEY(IdAdministrador, CodigoTipoEntidad),
-  CONSTRAINT FK_Autorizacion_Administrador FOREIGN KEY(IdAdministrador) REFERENCES Administrador(Id) ON DELETE CASCADE,
-  CONSTRAINT FK_Autorizacion_TipoEntidad FOREIGN KEY(CodigoTipoEntidad) REFERENCES TipoEntidad(Codigo) ON DELETE CASCADE
+CREATE TABLE Cliente
+(
+  Email VARCHAR(30),
+  CONSTRAINT PK_Cliente PRIMARY KEY(Email),
+  CONSTRAINT FK_Cliente_Usuario FOREIGN KEY(Email) REFERENCES Usuario(Email) ON DELETE CASCADE
 );
 
--- Bitácora de utilización de permisos sobre entidades del sistema, según usuario administrador y fecha y hora.
--- Permite trazabilidad de acciones en el sistema.
--- Código de tipo de permiso es: C (create), R (read), U (update), D (delete)
+-- Vehículos de clientes.
 
-CREATE TABLE HistorialAcceso(
-  IdAdministrador VARCHAR(30),
-  CodigoTipoEntidad VARCHAR(30),
-  CodigoTipoPermiso CHAR NOT NULL,
-  Fecha DATETIME NOT NULL,
-  CONSTRAINT PK_HistorialAcceso PRIMARY KEY(IdAdministrador, CodigoTipoEntidad, CodigoTipoPermiso, Fecha),
-  CONSTRAINT FK_HistorialAcceso_Administrador FOREIGN KEY(IdAdministrador) REFERENCES Administrador(Id) ON DELETE NO ACTION,
-  CONSTRAINT FK_HistorialAcceso_TipoEntidad FOREIGN KEY(CodigoTipoEntidad) REFERENCES TipoEntidad(Codigo) ON DELETE NO ACTION
-);
-
--- Usuarios cliente, que utilizan servicios y tienen cobros asociados.
-
-CREATE TABLE Cliente(
-  Id VARCHAR(30),
-  CONSTRAINT PK_Cliente PRIMARY KEY(Id),
-  CONSTRAINT FK_Cliente_Usuario FOREIGN KEY(Id) REFERENCES Usuario(Id) ON DELETE CASCADE
-);
-
--- Vehículos de usuarios cliente, identificados por placa.
-
-CREATE TABLE Vehiculo(
-  IdCliente VARCHAR(30),
+CREATE TABLE Vehiculo
+(
+  EmailCliente VARCHAR(30),
   Placa VARCHAR(30),
-  CONSTRAINT PK_Vehiculo PRIMARY KEY(IdCliente, Placa),
-  CONSTRAINT FK_Vehiculo_Cliente FOREIGN KEY(IdCliente) REFERENCES Cliente(Id) ON DELETE CASCADE
+  CONSTRAINT PK_Vehiculo PRIMARY KEY(EmailCliente, Placa),
+  CONSTRAINT FK_Vehiculo_Cliente FOREIGN KEY(EmailCliente) REFERENCES Cliente(Email) ON DELETE CASCADE
 );
+
+CREATE TABLE Reservacion
+(
+  Codigo INT,
+  EmailCliente VARCHAR(30),
+
+);
+
+
+
+
+
+
+
+
+
+
+
+
 
 -- Parcelas numeradas, que corresponden a espacios físicos específicos en el refugio. Cada una cuenta con capacidad máxima.
 
-CREATE TABLE Parcela(
+CREATE TABLE Parcela
+(
   Numero INT,
   Capacidad INT,
   CONSTRAINT PK_Parcela PRIMARY KEY(Numero),
@@ -139,95 +116,22 @@ CREATE TABLE Parcela(
 
 -- Reservas de parcelas numeradas para clientes en rangos de fechas.
 
-CREATE TABLE ReservaParcela(
-  IdCliente VARCHAR(30),
+CREATE TABLE ReservaParcela
+(
+  EmailCliente VARCHAR(30),
   NumeroParcela INT,
   FechaInicio DATETIME,
   FechaFin DATETIME,
   FechaSolicitud DATETIME NOT NULL,
-  CONSTRAINT PK_ReservaParcela PRIMARY KEY(IdCliente, NumeroParcela, FechaInicio, FechaFin),
-  CONSTRAINT FK_ReservaParcela_Cliente FOREIGN KEY(IdCliente) REFERENCES Cliente(Id) ON DELETE CASCADE,
+  CONSTRAINT PK_ReservaParcela PRIMARY KEY(EmailCliente, NumeroParcela, FechaInicio, FechaFin),
+  CONSTRAINT FK_ReservaParcela_Cliente FOREIGN KEY(EmailCliente) REFERENCES Cliente(Email) ON DELETE CASCADE,
   CONSTRAINT FK_ReservaParcela_Parcela FOREIGN KEY(NumeroParcela) REFERENCES Parcela(Numero) ON DELETE CASCADE,
   CHECK (FechaSolicitud <= FechaInicio),
   CHECK (FechaInicio <= FechaFin)
 );
 
--- Unidades numeradas de kayak, cada uno con capacidad máxima.
 
-CREATE TABLE Kayak(
-  Numero INT,
-  Capacidad INT,
-  CONSTRAINT PK_Kayak PRIMARY KEY(Numero),
-  CHECK (Capacidad >= 0)
-);
 
--- Tarifas de kayak por sesión de uso (e.g., 30 minutos).
--- Código de moneda según estándar ISO 4217. Por ejemplo, CRC (colones costarricenses), USD (dólares estadounidenses).
-
-CREATE TABLE TarifaKayak(
-  NumeroKayak INT,
-  Monto MONEY,
-  Moneda CHAR(3) NOT NULL,
-  CONSTRAINT PK_TarifaKayak PRIMARY KEY(NumeroKayak),
-  CONSTRAINT FK_TarifaKayak_Kayak FOREIGN KEY(NumeroKayak) REFERENCES Kayak(Numero) ON DELETE CASCADE,
-  CHECK (Monto >= 0)
-);
-
--- Viajes en kayak de los usuarios clientes.
--- El tiempo de uso es en minutos.
-
-CREATE TABLE ViajeKayak(
-  IdCliente VARCHAR(30),
-  NumeroKayak INT,
-  Fecha DATETIME,
-  TiempoUso INT,
-  CONSTRAINT PK_ViajeKayak PRIMARY KEY(IdCliente, NumeroKayak, Fecha),
-  CONSTRAINT FK_ViajeKayak_Cliente FOREIGN KEY(IdCliente) REFERENCES Cliente(Id) ON DELETE CASCADE,
-  CONSTRAINT FK_ViajeKayak_Kayak FOREIGN KEY(NumeroKayak) REFERENCES Kayak(Numero) ON DELETE CASCADE,
-  CHECK (TiempoUso >= 0)
-);
-
--- Senderos disponibles en el refugio.
--- Los nombres son:
--- Carao
--- Estero Seco
--- Laguna
-
-CREATE TABLE Sendero(
-  Nombre VARCHAR(30),
-  CONSTRAINT PK_Sendero PRIMARY KEY(Nombre)
-);
-
--- Recorridos de los usuarios cliente por los senderos.
-
-CREATE TABLE RecorridoSendero(
-  IdCliente VARCHAR(30),
-  NombreSendero VARCHAR(30),
-  Fecha DATETIME,
-  CONSTRAINT PK_RecorridoSendero PRIMARY KEY(IdCliente, NombreSendero, Fecha),
-  CONSTRAINT FK_RecorridoSendero_Cliente FOREIGN KEY(IdCliente) REFERENCES Cliente(Id) ON DELETE CASCADE,
-  CONSTRAINT FK_RecorridoSendero_Sendero FOREIGN KEY(NombreSendero) REFERENCES Sendero(Nombre) ON DELETE CASCADE,
-);
-
--- Áreas numeradas de picnic.
-
-CREATE TABLE AreaPicnic(
-  Numero INT,
-  Capacidad INT,
-  CONSTRAINT PK_AreaPicnic PRIMARY KEY(Numero),
-  CHECK (Capacidad >= 0)
-);
-
--- Sesiones de uso de áreas de picnic por parte de usuarios cliente.
-
-CREATE TABLE UsoAreaPicnic(
-  IdCliente VARCHAR(30),
-  NumeroAreaPicnic INT,
-  Fecha DATETIME,
-  CONSTRAINT PK_UsoAreaPicnic PRIMARY KEY(IdCliente, NumeroAreaPicnic, Fecha),
-  CONSTRAINT FK_UsoAreaPicnic_Cliente FOREIGN KEY(IdCliente) REFERENCES Cliente(Id) ON DELETE CASCADE,
-  CONSTRAINT FK_UsoAreaPicnic_AreaPicnic FOREIGN KEY(NumeroAreaPicnic) REFERENCES AreaPicnic(Numero) ON DELETE CASCADE,
-);
 
 -- Tipos de visitante, según clasificación de SEMEC (Sistema de Evaluación del Mejoramiento Continuo de la Calidad)
 -- del SINAC (Sistema Nacional de Áreas de Conservación).
@@ -250,7 +154,8 @@ CREATE TABLE UsoAreaPicnic(
 -- Sin mecanismo de cobro
 -- Otros
 
-CREATE TABLE TipoVisitante(
+CREATE TABLE TipoVisitante
+(
   Procedencia VARCHAR(30),
   CategoriaPago VARCHAR(30),
   Estatus VARCHAR(30),
@@ -259,7 +164,8 @@ CREATE TABLE TipoVisitante(
 
 -- Tarifas por tipos de visitantes.
 
-CREATE TABLE TarifaVisitante(
+CREATE TABLE TarifaVisitante
+(
   Procedencia VARCHAR(30),
   CategoriaPago VARCHAR(30),
   Estatus VARCHAR(30),
@@ -274,7 +180,8 @@ CREATE TABLE TarifaVisitante(
 -- Visitas específicas por tipos de visitantes.
 -- Además de cobros, permite generar reportes de cantidades por cada tipo de visitante.
 
-CREATE TABLE Visita(
+CREATE TABLE Visita
+(
   Procedencia VARCHAR(30),
   CategoriaPago VARCHAR(30),
   Estatus VARCHAR(30),
@@ -288,7 +195,8 @@ CREATE TABLE Visita(
 -- Los pagos se realizan de forma externa al sistema. El sistema permite llevar control de pagos realizados y pendientes.
 -- TipoCambio guarda el tipo de cambio de la moneda indicada, con respecto al colón, en el día que se generó el cobro.
 
-CREATE TABLE Cobro(
+CREATE TABLE Cobro
+(
   Codigo INT,
   IdCliente VARCHAR(30),
   Monto MONEY,
