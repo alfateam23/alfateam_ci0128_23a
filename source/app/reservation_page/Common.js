@@ -1,7 +1,8 @@
 import React from 'react';
 import { IconName } from "react-icons/";
 import { CiCalendar } from "react-icons/ci";
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link,
+ useNavigate } from 'react-router-dom';
 
 const From_fill = ({date, handleClick}) => {
   if (date !== (new Date()).toDateString()) {
@@ -110,7 +111,38 @@ export const Reservation_type = () => {
 /*outline-1 outline-dashed outline-black-500*/
 
 export const Next_link = ({route_next, route_back,
-  userData}) => {
+  userData, check}) => {
+  
+  const navigate = useNavigate();
+  
+  function checkDates (event) {
+    event.preventDefault();
+    if (userData.start_date.toDateString() !== (new Date()).toDateString() &&
+    userData.end_date.toDateString() !== (new Date()).toDateString()) {
+      navigate(route_next);
+    } else {
+      alert('Por favor digite las fechas que desea antes de continuar')
+    }
+  }
+
+  if (check != null) {
+    console.log("aja");
+    return (
+      <footer className="bottom-0 absolute w-full">
+      <Link to={route_back}
+      className="font-sans bg-YellowButtonP float-left
+      ml-[10%] mb-[5%] px-8 py-2 shadow-lg hover:bg-YellowButton
+      inline-block">
+        Atrás
+      </Link>
+      <Link to={route_next} onClick={checkDates} className="font-sans bg-YellowButtonP float-right
+      mr-[20%] mb-[5%] px-8 py-2 shadow-lg hover:bg-YellowButton
+      inline-block">
+        Siguiente
+      </Link>
+    </footer>
+    );
+  }
   return (
     <footer className="bottom-0 absolute w-full">
       <Link to={route_back} className="font-sans bg-YellowButtonP float-left

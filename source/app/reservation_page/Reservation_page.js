@@ -103,7 +103,7 @@ export const Select_dates_page = ({UserData}) => {
       <Date_selector userData={UserData}/>
       <br/>
       <Next_link route_next='/reservation/availability'
-      route_back='/'/>
+      route_back='/' userData={UserData} check={1}/>
     </div>
   );
 };
