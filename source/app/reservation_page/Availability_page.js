@@ -4,7 +4,7 @@ export const Availability_title = () => {
   return (
     <div className="w-1/2 float-left mt-[3%]">
       <p className="font-lexend text-2xl
-      ml-20 mt-0.5">Availability</p>
+      ml-20 mt-0.5">Cupo Total</p>
       <hr className="ml-10 mr-24 bg-black h-0.5"/>
     </div>
   );
@@ -16,12 +16,12 @@ export const Party_title = () => {
   return (
     <div className="w-1/2 clear-left mt-[15%]">
       <p className="font-lexend text-2xl
-      ml-20 mt-0.5">How big is your party?</p>
+      ml-20 mt-0.5">Cuántos lo acompañan?</p>
       <hr className="ml-10 mr-24 bg-black h-0.5"/>
       <br/>
       <div className="ml-20 bg-gray-200 w-1/2
       py-2 pl-3">
-        <p className="text-lg inline-block">Person(s)</p>
+        <p className="text-lg inline-block">Persona(s)</p>
         <div className='inline-block ml-28'>
           <button className='inline-block bg-gray-400 rounded-2xl
           w-6' onClick={() => count > 0 ? setCount((prevCount) => 
@@ -42,7 +42,7 @@ export const Spaces_left = ({quantity}) => {
   return (
     <div className="w-1/2 float-left mt-[1%]">
       <p className="font-lexend text-2xl
-      ml-20 mt-0.5">{quantity} spaces left</p>
+      ml-20 mt-0.5">{quantity} espacios restantes</p>
     </div>
   );
 };

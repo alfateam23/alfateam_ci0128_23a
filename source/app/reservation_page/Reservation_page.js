@@ -8,10 +8,11 @@ import { Date_selector, Select_dates_title } from './Select_dates';
 Function to show the page where the traveller will select the lot
 */
 
-export const Parcel_page = () => {
+export const Parcel_page = ({UserData}) => {
   return (
     <div>
-      <From_until />
+      <From_until date_from={UserData.start_date.toDateString()}
+      date_until={UserData.end_date.toDateString()}/>
       <br />
       <Reservation_type />
       <br />
@@ -27,10 +28,11 @@ export const Parcel_page = () => {
 /*
 Function to add the form for the traveller to fill
 */
-export const T_information = () => {
+export const T_information = ({UserData}) => {
   return (
     <div>
-      <From_until />
+      <From_until date_from={UserData.start_date.toDateString()}
+      date_until={UserData.end_date.toDateString()}/>
       <br />
       <Reservation_type />
       <br />
@@ -47,10 +49,11 @@ export const T_information = () => {
 Function to show the review page
 */
 
-export const Review = () => {
+export const Review = ({UserData}) => {
   return (
     <div>
-      <From_until />
+      <From_until date_from={UserData.start_date.toDateString()}
+      date_until={UserData.end_date.toDateString()}/>
       <br />
       <Reservation_type />
       <br />
@@ -65,11 +68,12 @@ export const Review = () => {
 /*
 Page where the user can see the availability of the dates selected for the visit
 */
-export const Availability_page = () => {
+export const Availability_page = ({UserData}) => {
   let quantity = 100;
   return (
     <div>
-      <From_until />
+      <From_until date_from={UserData.start_date.toDateString()}
+      date_until={UserData.end_date.toDateString()}/>
       <br />
       <Reservation_type />
       <br />
@@ -88,14 +92,15 @@ export const Availability_page = () => {
  * Page where the user can set the dates of the visit
  */
 
-export const Select_dates_page = () => {
-
+export const Select_dates_page = ({UserData}) => {
+  UserData.start_date = new Date();
+  UserData.end_date = new Date();
   return (
     <div>
       <Select_dates_title />
       <br/>
       <Reservation_type />
-      <Date_selector />
+      <Date_selector userData={UserData}/>
       <br/>
       <Next_link route_next='/reservation/availability'
       route_back='/'/>

@@ -4,6 +4,7 @@ import {Availability_page, Parcel_page,
       Review,
       Select_dates_page,
       T_information} from './reservation_page/Reservation_page';
+import { UserData } from './UserData';
 
 const Home = () => {
    const handleClick = () => {
@@ -13,21 +14,27 @@ const Home = () => {
    return (
       <div>
          <Link to="/reservation" className="bg-blue-500 hover:bg-blue-700
-         text-white font-bold py-2 px-4 rounded">Book Now</Link>
+         text-white font-bold py-2 px-4 rounded">Reserva Ahora</Link>
       </div>
    );
 }
 
 const App = () => {
+   const userData = new UserData();
   return (
    <div>
       <Routes>
          <Route exact path="/" element={<Home />} />
-         <Route path="/reservation" element={<Select_dates_page />} />
-         <Route path="/reservation/availability" element={<Availability_page />} />
-         <Route path="/reservation/lot" element={<Parcel_page />} />
-         <Route path="/reservation/info" element={<T_information />}/>
-         <Route path="/reservation/review" element={<Review />}/>
+         <Route path="/reservation" element={<Select_dates_page
+            UserData={userData}/>} />
+         <Route path="/reservation/availability" element={<Availability_page
+         UserData={userData} />} />
+         <Route path="/reservation/lot" element={<Parcel_page
+         UserData={userData} />} />
+         <Route path="/reservation/info" element={<T_information
+         UserData={userData} />}/>
+         <Route path="/reservation/review" element={<Review
+         UserData={userData} />}/>
       </Routes>
    </div>
   );

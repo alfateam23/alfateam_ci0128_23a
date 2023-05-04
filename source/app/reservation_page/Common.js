@@ -28,7 +28,7 @@ const Until_fill = ({date, handleClick}) => {
 const From_fill_text = ({handleClick}) => {
   return (
     <div className='inline-block'>
-      <p className= "inline-block pr-16">From</p>
+      <p className= "inline-block pr-16">Desde</p>
       <button id='from' onClick={handleClick} className='mr-5'>
         <CiCalendar size="1.4rem" className='inline-block'/>
       </button>
@@ -39,7 +39,7 @@ const From_fill_text = ({handleClick}) => {
 const From_fill_date = ({date}) => {
   return (
     <div className='inline-block'>
-      <p className= "inline-block pr-16 text-sm">{date}</p>
+      <p className= "inline-block pr-5 text-sm">{date}</p>
     </div>
   );
 };
@@ -47,7 +47,7 @@ const From_fill_date = ({date}) => {
 const Until_fill_text = ({handleClick}) => {
   return (
     <div className='inline-block'>
-      <p className= "inline-block pr-16 ml-5">Until</p>
+      <p className= "inline-block pr-16 ml-5">Hasta</p>
       <button id='until' onClick={handleClick}>
         <CiCalendar size="1.4rem" className='inline-block'/>
       </button>
@@ -58,7 +58,7 @@ const Until_fill_text = ({handleClick}) => {
 const Until_fill_date = ({date}) => {
   return (
     <div className='inline-block'>
-      <p className= "inline-block pr-16 text-sm">{date}</p>
+      <p className= "inline-block pl-5 text-sm">{date}</p>
     </div>
   );
 };
@@ -95,12 +95,12 @@ export const Reservation_type = () => {
       <div className="bg-blueNormal w-80 ml-[30%]">
         <button onClick={()=>window.location.href = '/reservation'}
         className={style_lot}>
-          Lot
+          Parcela
         </button>
         <hr className="bg-white w-48 ml-[21%]"/>
         <button onClick={()=>window.location.href = '/services'}
         className={style_kayak}>
-          Services Booking
+          Reserva de Servicios
         </button>
       </div>
     </div>
@@ -109,18 +109,19 @@ export const Reservation_type = () => {
 
 /*outline-1 outline-dashed outline-black-500*/
 
-export const Next_link = ({route_next, route_back}) => {
+export const Next_link = ({route_next, route_back,
+  userData}) => {
   return (
     <footer className="bottom-0 absolute w-full">
       <Link to={route_back} className="font-sans bg-YellowButtonP float-left
       ml-[10%] mb-[5%] px-8 py-2 shadow-lg hover:bg-YellowButton
       inline-block">
-        Back
+        Atrás
       </Link>
       <Link to={route_next} className="font-sans bg-YellowButtonP float-right
       mr-[20%] mb-[5%] px-8 py-2 shadow-lg hover:bg-YellowButton
       inline-block">
-        Next
+        Siguiente
       </Link>
     </footer>
   );
@@ -157,13 +158,13 @@ export const NavBar_PIR = ({selected}) => {
     <div className="flex justify-center items-center
     bg-OrangeNavBar w-full mt-48 pt-4">
       <Link to="/reservation/lot" className={lot_style}>
-        Lot Selection
+        Seleccion de Parcela
       </Link>
       <Link to="/reservation/info" className={traveller_style}>
-        Traveller's Information
+        Información del Visitante
       </Link>
       <Link to="/reservation/review" className={review_style}>
-        Review
+        Revisión
       </Link>
     </div>
   );
