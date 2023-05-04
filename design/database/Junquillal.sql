@@ -26,8 +26,8 @@ CREATE TABLE Telefono
 (
   Email VARCHAR(60),
   Numero VARCHAR(60),
-  CONSTRAINT PK_Telefono PRIMARY KEY(EmailUsuario, Numero),
-  CONSTRAINT FK_Telefono_Usuario FOREIGN KEY(EmailUsuario)
+  CONSTRAINT PK_Telefono PRIMARY KEY(Email, Numero),
+  CONSTRAINT FK_Telefono_Usuario FOREIGN KEY(Email)
   REFERENCES Usuario(Email) ON UPDATE CASCADE
 );
 
