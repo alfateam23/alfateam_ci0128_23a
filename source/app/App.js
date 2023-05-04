@@ -25,7 +25,7 @@ const App = () => {
          <Route exact path="/" element={<Home />} />
          <Route path="/reservation" element={<Select_dates_page />} />
          <Route path="/reservation/availability" element={<Availability_page />} />
-         <Route path="/reservation/parcel" element={<Parcel_page />} />
+         <Route path="/reservation/lot" element={<Parcel_page />} />
          <Route path="/reservation/info" element={<T_information />}/>
          <Route path="/reservation/review" element={<Review />}/>
       </Routes>

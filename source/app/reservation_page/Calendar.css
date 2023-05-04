@@ -114,6 +114,8 @@
 .react-calendar__tile:enabled:hover,
 .react-calendar__tile:enabled:focus {
   background-color: #439df7;
+  border-radius: 30%;
+  color: white;
 }
 
 .react-calendar__tile--now {

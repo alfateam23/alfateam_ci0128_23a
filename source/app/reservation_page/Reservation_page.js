@@ -1,17 +1,8 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import { My_Calendar } from "./Calendar";
 import { From_until, Reservation_type, Next_link, NavBar_PIR } from './Common';
 import { Party_title, Availability_title, Spaces_left } from './Availability_page';
-
-const Select_dates_title = () => {
-  return (
-    <div className="w-1/2 float-left mt-[3%]">
-      <p className="font-lexend text-2xl
-      ml-20 mt-0.5">Select dates</p>
-      <hr className="ml-10 mr-24 bg-black h-0.5"/>
-    </div>
-  );
-};
+import { Date_selector, Select_dates_title } from './Select_dates';
 
 /*
 Function to show the page where the traveller will select the lot
@@ -98,19 +89,13 @@ export const Availability_page = () => {
  */
 
 export const Select_dates_page = () => {
-  const [active, setActive] = useState(false);
-  function handleClick() {
-    setActive(!active);
-  }
 
   return (
     <div>
       <Select_dates_title />
       <br/>
       <Reservation_type />
-      <From_until handleClick={handleClick} />
-      <br/>
-      <My_Calendar active={active}/>
+      <Date_selector />
       <br/>
       <Next_link route_next='/reservation/availability'
       route_back='/'/>

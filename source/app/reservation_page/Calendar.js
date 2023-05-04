@@ -2,27 +2,14 @@ import React, { useState } from "react";
 import Calendar from "react-calendar";
 import './Calendar.css'
 
-export const My_Calendar = () => {
-  const [value, onChange] = useState(new Date());
+export const My_Calendar = ({active, handleClick}) => {
 
-  /* to change what is in each button */
-  // left year
-  /*document.querySelector(
-  '.react-calendar__navigation .react-calendar__navigation__arrow:first-of-type')
-    .innerHTML = 'Prev Year';
-  // left month
-  document.querySelector(
-  '.react-calendar__navigation__arrow.react-calendar__navigation__prev-button')
-  .innerHTML = 'Prev Month';
+  let style = "w-[24.7%] clear-left ml-[10%]\
+  outline-1 outline-dashed outline-red-500";
 
-  //right month
-  document.querySelector(
-  '.react-calendar__navigation .react-calendar__navigation__next-button')
-    .innerHTML = 'Next Month';
-  //right year
-  document.querySelector(
-  '.react-calendar__navigation .react-calendar__navigation__arrow:last-of-type')
-    .innerHTML = 'Next Year';*/
+  if (!active) {
+    style += ' hidden';
+  }
 
   // Select range only when start date is selected
 
@@ -41,9 +28,10 @@ export const My_Calendar = () => {
   }*/
 
   return (
-    <div className="w-[24.7%] clear-left ml-[10%]
-    outline-1 outline-dashed outline-red-500">
-      <Calendar value={value} onChange={onChange} locale="en"/>
+    <div className={style}>
+      <Calendar onClickDay={(day) => handleClick(day)}
+      prev2Label='PY' prevLabel='PM' nextLabel='NM'
+      next2Label='NY' locale="en"/>
     </div>
   );
 };
