@@ -4,6 +4,11 @@ import { CiCalendar } from "react-icons/ci";
 import { BrowserRouter as Router, Routes, Route, Link,
  useNavigate } from 'react-router-dom';
 
+ /**
+  * Component to handle what the From div will contain
+  * If the user has already selected a date then it will
+  * show the date, if not it will show the text
+  */
 const From_fill = ({date, handleClick}) => {
   if (date !== (new Date()).toDateString()) {
     return (
@@ -15,6 +20,11 @@ const From_fill = ({date, handleClick}) => {
   );
 };
 
+/**
+  * Component to handle what the until div will contain
+  * If the user has already selected a date then it will
+  * show the date, if not it will show the text
+  */
 const Until_fill = ({date, handleClick}) => {
   if (date !== (new Date()).toDateString()) {
     return (
@@ -26,6 +36,9 @@ const Until_fill = ({date, handleClick}) => {
   );
 };
 
+/**
+ * Component to show the from text
+ */
 const From_fill_text = ({handleClick}) => {
   return (
     <div className='inline-block'>
@@ -37,6 +50,9 @@ const From_fill_text = ({handleClick}) => {
   );
 };
 
+/**
+ * Component to show the from date
+ */
 const From_fill_date = ({date}) => {
   return (
     <div className='inline-block'>
@@ -45,6 +61,9 @@ const From_fill_date = ({date}) => {
   );
 };
 
+/**
+ * Component to show the until text
+ */
 const Until_fill_text = ({handleClick}) => {
   return (
     <div className='inline-block'>
@@ -56,6 +75,9 @@ const Until_fill_text = ({handleClick}) => {
   );
 };
 
+/**
+ * Component to show the until date
+ */
 const Until_fill_date = ({date}) => {
   return (
     <div className='inline-block'>
@@ -64,6 +86,10 @@ const Until_fill_date = ({date}) => {
   );
 };
 
+/**
+ * Component for the from_until rectangle which calls the
+ * from and until fills.
+ */
 export const From_until = ({handleClick, date_from, date_until}) => {
 
   return (
@@ -76,6 +102,10 @@ export const From_until = ({handleClick, date_from, date_until}) => {
   );
 };
 
+/**
+ * This component shows the user what he is currently reserving
+ * there are two types of reservations, either services or lot.
+ */
 export const Reservation_type = () => {
   let common_style = 'font-sans text-white text-sm rounded-none\
   bg-blueNormal p-4 w-80 hover:bg-bluePressed';
@@ -110,6 +140,13 @@ export const Reservation_type = () => {
 
 /*outline-1 outline-dashed outline-black-500*/
 
+/**
+ * This component shows the button that will send the user to the next
+ * step in the reservation.
+ * If the button is at the step where the user has to select dates,
+ * the button first checks that the user has selected the dates,
+ * if the dates are empty then it sends an alert, if not it continues
+ */
 export const Next_link = ({route_next, route_back,
   userData, check}) => {
   
@@ -161,7 +198,11 @@ export const Next_link = ({route_next, route_back,
 
 /*Navbar for lot Information and Review
 PIR*/
-
+/**
+ * This navbar shows the steps to select the lot, add the information
+ * of the visitors and where they will review the information so 
+ * the reservation can eventually be confirmed.
+ */
 export const NavBar_PIR = ({selected}) => {
   let selected_style = 'inline-block mx-2 text-center\
   font-sans w-72 text-lg py-3 rounded-t-2xl\

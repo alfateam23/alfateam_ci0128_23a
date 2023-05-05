@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import Calendar from "react-calendar";
 import './Calendar.css'
 
+/**
+ * Component to show the calendar
+ */
 export const My_Calendar = ({active, handleClick}) => {
 
   let style = "w-[24.7%] clear-left ml-[10%]\

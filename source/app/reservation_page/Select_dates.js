@@ -2,6 +2,9 @@ import { useState, useRef } from "react";
 import { My_Calendar } from "./Calendar";
 import { From_until } from "./Common";
 
+/**
+ * Component for the title on the select dates page
+ */
 export const Select_dates_title = () => {
   return (
     <div className="w-1/2 float-left mt-[3%]">
@@ -12,6 +15,11 @@ export const Select_dates_title = () => {
   );
 };
 
+/**
+ * Component in charge of checking when the user clicks a dates
+ * and through variables, let the from_until component know
+ * what to display.
+ */
 export const Date_selector = ({userData}) => {
   const [active, setActive] = useState(false);
 

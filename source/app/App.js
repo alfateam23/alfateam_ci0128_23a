@@ -6,11 +6,11 @@ import {Availability_page, Parcel_page,
       T_information} from './reservation_page/Reservation_page';
 import { UserData } from './UserData';
 
+/**
+ * Home component, for now it just shows a button to send the user to the reserve
+ * module
+ */
 const Home = () => {
-   const handleClick = () => {
-      window.location.href = '/reservation';
-   };
-
    return (
       <div>
          <Link to="/reservation" className="bg-blue-500 hover:bg-blue-700
@@ -19,6 +19,10 @@ const Home = () => {
    );
 }
 
+/**
+ * This is the component in charge of handling the routing for the whole
+ * web application.
+ */
 const App = () => {
    const userData = new UserData();
   return (

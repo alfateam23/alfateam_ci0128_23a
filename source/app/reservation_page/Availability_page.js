@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
+/**
+ * Component to show the title for the availability page
+ */
 export const Availability_title = () => {
   return (
     <div className="w-1/2 float-left mt-[3%]">
@@ -10,6 +13,10 @@ export const Availability_title = () => {
   );
 };
 
+/**
+ * Title for the user to select how many people is coming with
+ * him
+ */
 export const Party_title = () => {
   const [count, setCount] = useState(0);
 
@@ -38,6 +45,10 @@ export const Party_title = () => {
   );
 };
 
+/**
+ * Component that will eventually receive the total amount of space left
+ * as a parameter and display it.
+ */
 export const Spaces_left = ({quantity}) => {
   return (
     <div className="w-1/2 float-left mt-[1%]">
