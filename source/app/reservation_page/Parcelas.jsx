@@ -15,14 +15,14 @@ const Parcelas = () => {
         setSelectedButton(buttonText);
     };
     return (
-        <div className='bg-slate-600 min-h-screen'>
-            <h1 className="text-center mb-6 text-4xl font-bold py-12">
-                Seleccione una parcela de referencia
-            </h1>
-            <div className="flex items-center ">
-                <div className="max-w-4xl mx-auto">
-                    <div class="grid grid-cols-12 grid-rows-3 gap-x-4 gap-y-12 ">
-                        <button className="col-start-1 row-end-1 bg-blue-500 rounded-lg shadow-xl text-white" onClick={() => handleButtonClick(1)}>
+<div style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/images/Complement.jpg)` }}>
+        <h1 className="text-center mb-6 text-4xl font-bold py-12">
+          Seleccione una parcela de referencia
+        </h1>
+        <div className="flex items-center">
+          <div className="max-w-4xl mx-auto">
+            <div className="grid grid-cols-12 grid-rows-3 gap-x-4 gap-y-12 ">
+              <button className="col-start-1 row-end-1 bg-blue-500 rounded-lg shadow-xl text-white" onClick={() => handleButtonClick(1)}>
                             Parcela 1
                         </button>
                         <button className="col-start-2 row-end-1 bg-blue-500 rounded-lg shadow-xl text-white" onClick={() => handleButtonClick(2)}>
@@ -102,7 +102,10 @@ const Parcelas = () => {
                     <div>
                         <h1 className='text-center my-6 text-4xl font-bold'>Información de la Parcela Seleccionada:</h1>
                         <p className='text-center'>Capacidad de personas: {limites[selectedButton]}</p>
+                        <div class="flex justify-center">
+                        <button className="flex flex-col items-center bg-yellow-500 rounded-lg shadow-xl text-black" onClick={() => handleButtonClick(selectedButton)}>Seleccionar</button>
                     </div>
+  </div>
                 )}
             </div>
         </div>
