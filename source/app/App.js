@@ -1,6 +1,7 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import {Page} from './reservation_page/Reservation_page';
+import { Page } from './reservation_page/Reservation_page';
+import { Visitors } from './visitors/Visitors';
 
 const Home = () => {
    const handleClick = () => {
@@ -15,14 +16,15 @@ const Home = () => {
 }
 
 const App = () => {
-  return (
-   <div>
-      <Routes>
-         <Route exact path="/" element={<Home />} />
-         <Route path="/reservation" element={<Page />} />
-      </Routes>
-   </div>
-  );
+   return (
+      <div>
+         <Routes>
+            <Route exact path="/" element={<Home />} />
+            <Route path="/reservation" element={<Page />} />
+            <Route path="/visitors" element={<Visitors />} />
+         </Routes>
+      </div>
+   );
 }
 
 export default App;
