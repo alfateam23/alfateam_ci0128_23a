@@ -63,8 +63,8 @@ CREATE TABLE Autorizacion
 (
   EmailAdmin VARCHAR(60),
   NombreRol VARCHAR(60),
-  CONSTRAINT PK_Autorizacion PRIMARY KEY(EmailAdmin),
-  CONSTRAINT FK_Autorizacion_Administrador FOREIGN KEY(EmailAdmin, NombreRol)
+  CONSTRAINT PK_Autorizacion PRIMARY KEY(EmailAdmin, NombreRol),
+  CONSTRAINT FK_Autorizacion_Administrador FOREIGN KEY(EmailAdmin)
   REFERENCES Administrador(Email) ON UPDATE CASCADE,
   CONSTRAINT FK_Autorizacion_Rol FOREIGN KEY(NombreRol)
   REFERENCES Rol(Nombre)
