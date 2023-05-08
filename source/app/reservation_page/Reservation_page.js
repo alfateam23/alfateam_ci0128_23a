@@ -3,6 +3,7 @@ import { My_Calendar } from "./Calendar";
 import { From_until, Reservation_type, Next_link, NavBar_PIR } from './Common';
 import { Party_title, Availability_title, Spaces_left } from './Availability_page';
 import { Date_selector, Select_dates_title } from './Select_dates';
+import {FormularioView} from "../form/Form"
 
 /*
 Function to show the page where the traveller will select the lot
@@ -39,6 +40,7 @@ export const T_information = ({UserData}) => {
       <NavBar_PIR selected={"traveller"}/>
       <br />
       {/*Jason's part goes here*/}
+      <FormularioView></FormularioView>
       <Next_link route_next='/reservation/review'
       route_back='/reservation/lot'/>
     </div>
