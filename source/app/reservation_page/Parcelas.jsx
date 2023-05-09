@@ -1,8 +1,8 @@
 //import React from "react";
 import { useState } from 'react';
 
-const Parcelas = () => {
-    //
+const Parcelas = ({UserData}) => {
+    //La cantidad de espacios disponibles para cada parcela.
     const limites =[ 0, 10, 10, 15, 5, 10, 10, 10, 10, 5, 10, 15, 15, 15, 10, 5, 10, 10, 10, 10, 5, 5, 10, 5, 10]
 
     // Initializing state
@@ -13,6 +13,7 @@ const Parcelas = () => {
     const handleButtonClick = (buttonText) => {
         setShowInfo(true);
         setSelectedButton(buttonText);
+        UserData.parcelaSeleccionada=selectedButton;
     };
     return (
 <div style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/images/Complement.jpg)` }}>
@@ -103,8 +104,7 @@ const Parcelas = () => {
                         <h1 className='text-center my-6 text-4xl font-bold'>Información de la Parcela Seleccionada:</h1>
                         <p className='text-center'>Capacidad de personas: {limites[selectedButton]}</p>
                         <div class="flex justify-center">
-                        <button className="flex flex-col items-center bg-yellow-500 rounded-lg shadow-xl text-black" onClick={() => handleButtonClick(selectedButton)}>Seleccionar</button>
-                    </div>
+                        </div>
   </div>
                 )}
             </div>
