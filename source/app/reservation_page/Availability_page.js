@@ -23,7 +23,7 @@ export const Party_title = ({UserData}) => {
   return (
     <div className="w-1/2 clear-left mt-[15%] mb-[10%]">
       <p className="font-lexend text-2xl
-      ml-20 mt-0.5">Cuántos lo acompañan?</p>
+      ml-20 mt-0.5">¿Cuántos lo acompañan?</p>
       <hr className="ml-10 mr-24 bg-black h-0.5"/>
       <br/>
       <div className="ml-20 bg-gray-200 w-1/2
