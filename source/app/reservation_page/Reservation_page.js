@@ -3,6 +3,7 @@ import { My_Calendar } from "./Calendar";
 import { From_until, Reservation_type, Next_link, NavBar_PIR } from './Common';
 import { Party_title, Availability_title, Spaces_left } from './Availability_page';
 import { Date_selector, Select_dates_title } from './Select_dates';
+import { Parcelas } from "./Parcelas";
 import {FormularioView} from "../form/Form"
 
 /*
@@ -19,7 +20,7 @@ export const Parcel_page = ({UserData}) => {
       <br />
       <NavBar_PIR selected={"lot"}/>
       <br />
-      {/*Jose's part goes here*/}
+      <Parcelas UserData={UserData}/>
       <Next_link route_next='/reservation/info'
       route_back='/reservation/availability'/>
     </div>
@@ -39,7 +40,6 @@ export const T_information = ({UserData}) => {
       <br />
       <NavBar_PIR selected={"traveller"}/>
       <br />
-      {/*Jason's part goes here*/}
       <FormularioView UserData={UserData}  />
       <Next_link route_next='/reservation/review'
       route_back='/reservation/lot'/>

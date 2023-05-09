@@ -6,6 +6,8 @@ export class UserData {
   constructor() {
     this.start_date = new Date();
     this.end_date = new Date();
+    this.parcelaSeleccionada = new String();
+
     
     this.nameUser = new String();
     this.firstSurname = new String();
@@ -24,7 +26,6 @@ export class UserData {
     this.countAdultKidsNac = 0;
     this.countAdultFor = 0;
     this.countAdultKidsFor = 0;
-    
     
   }
 
