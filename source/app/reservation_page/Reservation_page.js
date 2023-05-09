@@ -40,7 +40,7 @@ export const T_information = ({UserData}) => {
       <NavBar_PIR selected={"traveller"}/>
       <br />
       {/*Jason's part goes here*/}
-      <FormularioView></FormularioView>
+      <FormularioView UserData={UserData}  />
       <Next_link route_next='/reservation/review'
       route_back='/reservation/lot'/>
     </div>

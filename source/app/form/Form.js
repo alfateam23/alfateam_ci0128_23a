@@ -17,14 +17,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
 
-export const FormularioView = () => {
+export const FormularioView = ({UserData}) => {
   /* Estados para cada tipo de dato que use para poder hacer comprobacion de datos */
 
   const [nombre, cambiarNombre] = useState({ campo: "", valido: null });
   const [apellido, cambiarApellido] = useState({ campo: "", valido: null });
   const [apellido2, cambiarApellido2] = useState({ campo: "", valido: null });
   const [correo, cambiarCorreo] = useState({ campo: "", valido: null });
-  const [edad, cambiarEdad] = useState({ campo: "", valido: null });
+  //const [edad, cambiarEdad] = useState({ campo: "", valido: null });
   const [placa, cambiarPlaca] = useState({ campo: "", valido: null });
   const [placa2, cambiarPlaca2] = useState({ campo: "", valido: null });
   const [placa3, cambiarPlaca3] = useState({ campo: "", valido: null });
@@ -40,6 +40,7 @@ export const FormularioView = () => {
   const [counterPlacas, setCounterPlacas] = useState(0);
   const [mostrarPlacas, setMostrarPlacas] = useState(0);
 
+  // aqui va el total de personas de reserva, por el momento 10
   const [totalPersonas, setTotalPersonas] = useState(10);
   const [totalPlacas, setTotalPlacas] = useState(6); //totalPlacas = 6;
 
@@ -55,7 +56,7 @@ export const FormularioView = () => {
     apellido2: /^[a-zA-ZÀ-ÿ\s]{1,40}$/, // Letras y espacios, pueden llevar acentos.
     correo: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
     // alfanuméricos, puntos, guiones bajos, signos de más y signos de punto,
-    edad: /\b([1-9]|[1-9][0-9]|1[01][0-9]|120)\b/,
+    //edad: /\b([1-9]|[1-9][0-9]|1[01][0-9]|120)\b/,
     // verifica si una cadena representa una edad válida en el rango de 1 a 120 años.
     placa: /^(([A-Za-z]{2}-)?([A-Za-z]{1,3}-)?([0-9A-Za-z]{2,6}))?$/
   };
@@ -64,14 +65,6 @@ export const FormularioView = () => {
   const onChangeTerminos = (e) => {
     cambiarTerminos(e.target.checked);
   };
-  /*const verVariable = () => {
-    console.log("Total Placas: ", counterFuera);
-    console.log("totalAdultosNacionales: ", counterAdultosNac);
-    console.log("totalNinnosNacionales: ", counterMayorNiniosNac);
-    console.log("totalAdultosExtranjeros: ", counterAdultosExt);
-
-    console.log("totalNinnosExtranjeros: ", counterMayorNiniosExt);
-  };*/
   //intercepta los datos que va a enviar del formulario
   const onSubmit = (e) => {
     e.preventDefault();
@@ -81,7 +74,7 @@ export const FormularioView = () => {
       apellido.valido === "true" &&
       apellido2.valido === "true" &&
       correo.valido === "true" &&
-      edad.valido === "true" &&
+      //edad.valido === "true" &&
       //placa.valido === "true" &&
       terminos
     ) {
@@ -90,7 +83,7 @@ export const FormularioView = () => {
       console.log("Apellido enviado: ", e.target.apellido.value);
       console.log("Apellido 2 enviado: ", e.target.apellido2.value);
       console.log("Correo enviado: ", e.target.correo.value);
-      console.log("Edad enviada: ", e.target.edad.value);
+      //console.log("Edad enviada: ", e.target.edad.value);
 
       console.log("Total Placas: ", counterPlacas);
       console.log("Placa enviada: ", placa.campo);
@@ -107,13 +100,34 @@ export const FormularioView = () => {
       console.log("totalAdultosExtranjeros: ", counterAdultosExt);
       console.log("totalNinnosExtranjeros: ", counterMayorNiniosExt);
 
+      UserData.nameUser = e.target.nombre.value;
+      UserData.firstSurname = e.target.apellido.value;
+      UserData.secondSurname = e.target.apellido2.value;
+      UserData.mail =  e.target.correo.value;
+      UserData.totalPlates = counterPlacas;
+      UserData.plate1 = placa.campo;
+      UserData.plate2 = placa2.campo;
+      UserData.plate3 = placa3.campo;
+      UserData.plate4 = placa4.campo;
+      UserData.plate5 = placa5.campo;
+      UserData.plate6 = placa6.campo;
+      UserData.TotalPeople = counterFuera;
+      UserData.countAdultNac = counterAdultosNac;
+      UserData.countAdultKidsNac = counterMayorNiniosNac;
+      UserData.countAdultFor = counterAdultosExt;
+      UserData.countAdultKidsFor = counterMayorNiniosExt;
+
+      console.log("UserData.nameUser: ", UserData.nameUser);
+      console.log("UserData.countAdultKidsFor: ",counterMayorNiniosExt);
+
+
       cambiarFormularioValido(true);
       //reinicio los campos
       cambiarNombre({ campo: "", valido: null });
       cambiarApellido({ campo: "", valido: null });
       cambiarApellido2({ campo: "", valido: null });
       cambiarCorreo({ campo: "", valido: null });
-      cambiarEdad({ campo: "", valido: null });
+      //cambiarEdad({ campo: "", valido: null });
       // reinicio inputs placas
       cambiarPlaca({ campo: "", valido: null });
       cambiarPlaca2({ campo: "", valido: null });
@@ -182,7 +196,7 @@ export const FormularioView = () => {
           leyendaError="El correo solo puede contener letras, numeros, puntos, guiones y guion bajo."
           expresionRegular={expresiones.correo}
         />
-        <ComponenteInput
+        {/*<ComponenteInput
           estado={edad}
           cambiarEstado={cambiarEdad}
           tipo="text"
@@ -190,9 +204,9 @@ export const FormularioView = () => {
           name="edad"
           leyendaError="La edad es válida entre 1-120."
           expresionRegular={expresiones.edad}
-        />
+        />*/}
 
-        <div></div>
+       
         <div
           style={{
             height: "1px",
@@ -410,9 +424,6 @@ export const FormularioView = () => {
         <ContenedorBotonCentrado>
           <Boton
             type="submit"
-            /*onClick={() => {
-              verVariable();
-            }}*/
           >
             Siguiente
           </Boton>
