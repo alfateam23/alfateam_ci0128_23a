@@ -42,7 +42,7 @@ export const T_information = ({UserData}) => {
       <br />
       <FormularioView UserData={UserData}  />
       <Next_link route_next='/reservation/review'
-      route_back='/reservation/lot'/>
+      route_back='/reservation/lot' info={1}/>
     </div>
   );
 };
@@ -83,7 +83,7 @@ export const Availability_page = ({UserData}) => {
       <br />
       <Spaces_left quantity={quantity}/>
       <br />
-      <Party_title />
+      <Party_title UserData={UserData}/>
       <Next_link route_next='/reservation/lot'
       route_back='/reservation/'/>
     </div>

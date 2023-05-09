@@ -148,7 +148,7 @@ export const Reservation_type = () => {
  * if the dates are empty then it sends an alert, if not it continues
  */
 export const Next_link = ({route_next, route_back,
-  userData, check}) => {
+  userData, check, info}) => {
   
   const navigate = useNavigate();
   
@@ -163,7 +163,6 @@ export const Next_link = ({route_next, route_back,
   }
 
   if (check != null) {
-    console.log("aja");
     return (
       <footer className="bottom-0 absolute w-full">
       <Link to={route_back}
@@ -179,20 +178,34 @@ export const Next_link = ({route_next, route_back,
       </Link>
     </footer>
     );
+  } else if (info != null) {
+    return (
+      <div className='flex flex-col'>
+        <footer className="">
+          <Link to={route_back} className="font-sans bg-YellowButtonP float-left
+          ml-[10%] mb-[5%] px-8 py-2 shadow-lg hover:bg-YellowButton
+          inline-block">
+            Atrás
+          </Link>
+        </footer>
+      </div>
+    );
   }
   return (
-    <footer className="bottom-0 absolute w-full">
-      <Link to={route_back} className="font-sans bg-YellowButtonP float-left
-      ml-[10%] mb-[5%] px-8 py-2 shadow-lg hover:bg-YellowButton
-      inline-block">
-        Atrás
-      </Link>
-      <Link to={route_next} className="font-sans bg-YellowButtonP float-right
-      mr-[20%] mb-[5%] px-8 py-2 shadow-lg hover:bg-YellowButton
-      inline-block">
-        Siguiente
-      </Link>
-    </footer>
+    <div className='flex flex-col'>
+      <footer className="">
+        <Link to={route_back} className="font-sans bg-YellowButtonP float-left
+        ml-[10%] mb-[5%] px-8 py-2 shadow-lg hover:bg-YellowButton
+        inline-block">
+          Atrás
+        </Link>
+        <Link to={route_next} className="font-sans bg-YellowButtonP float-right
+        mr-[20%] mb-[5%] px-8 py-2 shadow-lg hover:bg-YellowButton
+        inline-block">
+          Siguiente
+        </Link>
+      </footer>
+    </div>
   );
 };
 

@@ -17,11 +17,11 @@ export const Availability_title = () => {
  * Title for the user to select how many people is coming with
  * him
  */
-export const Party_title = () => {
+export const Party_title = ({UserData}) => {
   const [count, setCount] = useState(0);
 
   return (
-    <div className="w-1/2 clear-left mt-[15%]">
+    <div className="w-1/2 clear-left mt-[15%] mb-[10%]">
       <p className="font-lexend text-2xl
       ml-20 mt-0.5">Cuántos lo acompañan?</p>
       <hr className="ml-10 mr-24 bg-black h-0.5"/>
@@ -37,8 +37,9 @@ export const Party_title = () => {
           shadow-[0px_1px_2px_0px_rgba(0,0,0,0.50)_inset]'>{count}</p>
           <button className='inline-block ml-5 bg-gray-400 rounded-2xl
           w-6'onClick={() => count > 39 ? 
-            alert("You can't bring that many people") : setCount((prevCount) => 
+            alert("No puede traer a tantas personas") : setCount((prevCount) => 
             prevCount+1)}>+</button>
+          <p className='hidden'>{UserData.num_guests=count}</p>
         </div>
       </div>
     </div>

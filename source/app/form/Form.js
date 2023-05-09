@@ -41,7 +41,7 @@ export const FormularioView = ({UserData}) => {
   const [mostrarPlacas, setMostrarPlacas] = useState(0);
 
   // aqui va el total de personas de reserva, por el momento 10
-  const [totalPersonas, setTotalPersonas] = useState(10);
+  const [totalPersonas, setTotalPersonas] = useState(UserData.num_guests);
   const [totalPlacas, setTotalPlacas] = useState(6); //totalPlacas = 6;
 
   const [counterAdultosNac, setCounterAdultosNac] = useState(0);

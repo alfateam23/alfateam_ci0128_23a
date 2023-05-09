@@ -7,8 +7,7 @@ import './Calendar.css'
  */
 export const My_Calendar = ({active, handleClick}) => {
 
-  let style = "w-[24.7%] clear-left ml-[10%]\
-  outline-1 outline-dashed outline-red-500";
+  let style = "w-[24.7%] clear-left ml-[10%]";
 
   if (!active) {
     style += ' hidden';

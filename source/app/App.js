@@ -41,7 +41,6 @@ const App = () => {
          UserData={userData} />}/>
          <Route path="/reservation/review" element={<Review
          UserData={userData} />}/>
-         <Route path="/reservation" element={<Page />} />
          <Route path="/visitors" element={<Visitors />} />
 
       </Routes>

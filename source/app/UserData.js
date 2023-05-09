@@ -7,6 +7,7 @@ export class UserData {
     this.start_date = new Date();
     this.end_date = new Date();
     this.parcelaSeleccionada = new String();
+    this.num_guests = 0;
 
     
     this.nameUser = new String();
