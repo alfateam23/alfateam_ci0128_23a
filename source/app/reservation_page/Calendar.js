@@ -7,7 +7,7 @@ import './Calendar.css'
  */
 export const My_Calendar = ({active, handleClick}) => {
 
-  let style = "flex justify-center";
+  let style = "flex justify-center -translate-y-5";
 
   if (!active) {
     style += ' hidden';

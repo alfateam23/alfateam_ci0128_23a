@@ -70,7 +70,7 @@ export const Reservation_type = ({userData, handleTitleChange}) => {
  * and through variables, let the from_until component know
  * what to display.
  */
-export const Date_selector = ({userData}) => {
+export const Date_selector = ({userData, activate}) => {
   const [active, setActive] = useState(false);
 
   function clickIcon(event) {
@@ -92,7 +92,8 @@ export const Date_selector = ({userData}) => {
     <div>
       <From_until handleClick={clickIcon}
       date_from={userData.start_date.toDateString()}
-      date_until={userData.end_date.toDateString()} />
+      date_until={userData.end_date.toDateString()}
+      activate={activate} />
       <br/>
       <My_Calendar active={active}
       handleClick={calendarClick} />
@@ -116,12 +117,10 @@ export const Start_reservation = ({userData}) => {
 
   const handleTitleChange = (id) => {
     userData.reservation_type = id;
-    console.log(userData.reservation_type);
-    setSelectedDate(()=>1);
+    setSelectedDate(()=>id);
   };
 
   useEffect(() => {
-    console.log(selectedDate)
     if (selectedDate) {
       setTitle('Seleccione la fecha');
     } else {
@@ -135,7 +134,8 @@ export const Start_reservation = ({userData}) => {
       <Select_dates_title title={title}/>
       <Reservation_type userData={userData}
       handleTitleChange={handleTitleChange}/>
-      <Date_selector userData={userData}/>
+      <Date_selector userData={userData}
+      activate={selectedDate} />
     </div>
   );
 };
