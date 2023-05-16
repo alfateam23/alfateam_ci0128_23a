@@ -7,7 +7,7 @@ import './Calendar.css'
  */
 export const My_Calendar = ({active, handleClick}) => {
 
-  let style = "w-[24.7%] clear-left ml-[10%]";
+  let style = "flex justify-center";
 
   if (!active) {
     style += ' hidden';

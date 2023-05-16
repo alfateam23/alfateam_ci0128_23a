@@ -6,6 +6,7 @@ export class UserData {
   constructor() {
     this.start_date = new Date();
     this.end_date = new Date();
+    this.reservation_type = 0; // 1=parcel 2=picnic
     this.parcelaSeleccionada = new String();
     this.num_guests = 0;
 

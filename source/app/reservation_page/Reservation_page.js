@@ -1,8 +1,9 @@
 import React, {useRef, useState} from 'react';
 import { My_Calendar } from "./Calendar";
-import { From_until, Reservation_type, Next_link, NavBar_PIR } from './Common';
+import { Next_link, NavBar_PIR } from './Common';
+import { From_until } from './select_dates/From_until'
 import { Party_title, Availability_title, Spaces_left } from './Availability_page';
-import { Date_selector, Select_dates_title } from './Select_dates';
+import { Start_reservation, Reservation_type } from './select_dates/Select_dates';
 import { Parcelas } from "./Parcelas";
 import {FormularioView} from "../form/Form"
 
@@ -99,10 +100,7 @@ export const Select_dates_page = ({UserData}) => {
   UserData.end_date = new Date();
   return (
     <div>
-      <Select_dates_title />
-      <br/>
-      <Reservation_type />
-      <Date_selector userData={UserData}/>
+      <Start_reservation userData={UserData}/>
       <br/>
       <Next_link route_next='/reservation/availability'
       route_back='/' userData={UserData} check={1}/>

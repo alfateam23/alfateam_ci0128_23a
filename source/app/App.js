@@ -6,7 +6,6 @@ import {Availability_page, Parcel_page,
       T_information} from './reservation_page/Reservation_page';
 import { UserData } from './UserData';
 import { Visitors } from './visitors/Visitors';
-import { Page } from './reservation_page/Reservation_page';
 
 /**
  * Home component, for now it just shows a button to send the user to the reserve
