@@ -1,6 +1,6 @@
 import React, {useRef, useState} from 'react';
 import { My_Calendar } from "./Calendar";
-import { Next_link, NavBar_PIR } from './Common';
+import { Next_link, NavBar_PIR, Dates_type_info } from './Common';
 import { From_until } from './select_dates/From_until'
 import { Party_title, Availability_title, Spaces_left } from './Availability_page';
 import { Start_reservation, Reservation_type } from './select_dates/Select_dates';
@@ -75,16 +75,14 @@ export const Availability_page = ({UserData}) => {
   let quantity = 100;
   return (
     <div>
-      <From_until date_from={UserData.start_date.toDateString()}
-      date_until={UserData.end_date.toDateString()}/>
-      <br />
-      <Reservation_type />
-      <br />
-      <Availability_title />
-      <br />
-      <Spaces_left quantity={quantity}/>
-      <br />
-      <Party_title UserData={UserData}/>
+      <div>
+        <Dates_type_info userData={UserData} />
+        <Availability_title />
+        <br />
+        <Spaces_left quantity={quantity}/>
+        <br />
+        <Party_title UserData={UserData}/>
+      </div>
       <Next_link route_next='/reservation/lot'
       route_back='/reservation/'/>
     </div>

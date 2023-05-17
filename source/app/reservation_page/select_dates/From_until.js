@@ -12,7 +12,8 @@ import { BrowserRouter as Router, Routes, Route, Link,
 const From_fill = ({date, handleClick}) => {
   if (date !== (new Date()).toDateString()) {
     return (
-      <From_fill_date date={date} />
+      <From_fill_date date={date}
+      handleClick={handleClick} />
     );
   }
   return (
@@ -53,10 +54,13 @@ const From_fill_text = ({handleClick}) => {
 /**
  * Component to show the from date
  */
-const From_fill_date = ({date}) => {
+const From_fill_date = ({date, handleClick}) => {
   return (
     <div className='inline-block'>
       <p className= "inline-block pr-5 text-sm">{date}</p>
+      <button id='from' onClick={handleClick} className='mr-5'>
+        <CiCalendar size="1.4rem" className='inline-block'/>
+      </button>
     </div>
   );
 };

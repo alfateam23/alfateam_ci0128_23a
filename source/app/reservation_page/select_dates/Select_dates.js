@@ -72,6 +72,7 @@ export const Reservation_type = ({userData, handleTitleChange}) => {
  */
 export const Date_selector = ({userData, activate}) => {
   const [active, setActive] = useState(false);
+  const [selection, setSelection] = useState(false);
 
   function clickIcon(event) {
     event.currentTarget.id === 'until' &&

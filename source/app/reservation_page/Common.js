@@ -121,3 +121,24 @@ export const NavBar_PIR = ({selected}) => {
     </div>
   );
 };
+
+export const Dates_type_info = ({userData}) => {
+  let dates = (userData.end_date !== (new Date()).toDateString()) ?
+  'Fechas Seleccionadas: ' + userData.start_date.toDateString()
+  + ' - ' + userData.end_date.toDateString() :
+  'Fecha: ' + userData.start_date.toDateString();
+  let type = 'Tipo de reservación\n' + userData.reservation_type === 1 ?
+  'Parcela' : 'Picnic';
+
+  return (
+    <div className='flex flex-row justify-center items-center space-x-96
+    mt-10 outline-1 outline-dashed outline-red-500 bg-gr'>
+      <div className='bg-gray-800 text-white'>
+        {dates}
+      </div>
+      <div className=''>
+        {}
+      </div>
+    </div>
+  );
+};
