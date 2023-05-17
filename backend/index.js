@@ -1,8 +1,7 @@
-// Node server for serving API endpoints, without using Express.
-// Based on https://progressivecoder.com/how-to-implement-nodejs-routing-without-express/
+// Node server for serving API endpoints, using Express.
 
-
-const http = require('http');
+const express = require('express');
+const app = express();
 
 //const { Connection, Request, TYPES } = require ('tedious');
 //import { DbConfig } from './DbConfig';
@@ -31,14 +30,10 @@ const visitorsRawData = {
     ]
 };
 
-const server = http.createServer((req, res) => {
-    if (req.url == '/backend/visitordata' && req.method == 'GET') {
-        res.writeHead(200, {'Content-Type' : 'application/json'})
-            .end(JSON.stringify(visitorsRawData));
-    } else {
-        res.writeHead(404)
-            .end();
-    }
+app.get('/backend/visitordata/:id', (req, res) => {
+    let visitor = visitorsRawData.visitors.find((v) => v.id === req.params.id);
+    if (!visitor) res.status(404).send("Visitor not found");
+    res.send(visitor);
 });
 
-server.listen(3030);
+app.listen(3030, ()=> console.log('Listening on port 3030...'));
