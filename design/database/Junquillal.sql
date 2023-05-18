@@ -17,6 +17,7 @@ CREATE TABLE Usuario
   SegundoNombre VARCHAR(60),
   PrimerApellido VARCHAR(60) NOT NULL,
   SegundoApellido VARCHAR(60),
+  EstadoActividad BIT DEFAULT (1) NOT NULL,
   CONSTRAINT PK_Usuario PRIMARY KEY(Email)
 );
 
@@ -41,7 +42,6 @@ CREATE TABLE Administrador
 (
   Email VARCHAR(60),
   Clave VARCHAR(60) NOT NULL,
-  EstadoActividad BIT DEFAULT(1) NOT NULL,
   CONSTRAINT PK_Administrador PRIMARY KEY(Email),
   CONSTRAINT FK_Administrador_Usuario FOREIGN KEY(Email)
   REFERENCES Usuario(Email) ON UPDATE CASCADE
@@ -97,6 +97,7 @@ CREATE TABLE Reservacion
 (
   Codigo INT,
   Email VARCHAR(60) NOT NULL,
+  TipoArea BIT DEFAULT (1) NOT NULL, -- 0 Camping, 1 picnic
   FechaSolicitud DATETIME NOT NULL,
   CONSTRAINT PK_Reservacion PRIMARY KEY(Codigo),
   CONSTRAINT FK_Reservacion_Cliente FOREIGN KEY(Email)
