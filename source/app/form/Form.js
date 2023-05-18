@@ -10,19 +10,24 @@ import {
   ContenedorBotonCentrado,
   Boton,
   MensajeExito,
-  MensajeError
+  MensajeError,
 } from "./Elementos/ElementosFormulario";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
 
-export const FormularioView = ({UserData}) => {
+export const FormularioView = ({ UserData }) => {
   /* Estados para cada tipo de dato que use para poder hacer comprobacion de datos */
 
   const [nombre, cambiarNombre] = useState({ campo: "", valido: null });
   const [apellido, cambiarApellido] = useState({ campo: "", valido: null });
   const [apellido2, cambiarApellido2] = useState({ campo: "", valido: null });
+  const [identificacionUsuario, cambiarIdentificacionUsuario] = useState({
+    campo: "",
+    valido: null,
+  });
+  const [telefono, cambiarTelefono] = useState({ campo: "", valido: null });
   const [correo, cambiarCorreo] = useState({ campo: "", valido: null });
   //const [edad, cambiarEdad] = useState({ campo: "", valido: null });
   const [placa, cambiarPlaca] = useState({ campo: "", valido: null });
@@ -41,13 +46,15 @@ export const FormularioView = ({UserData}) => {
   const [mostrarPlacas, setMostrarPlacas] = useState(0);
 
   // aqui va el total de personas de reserva, por el momento 10
-  const [totalPersonas, setTotalPersonas] = useState(UserData.num_guests+1);
+  const [totalPersonas, setTotalPersonas] = useState(UserData.num_guests + 1);
   const [totalPlacas, setTotalPlacas] = useState(6); //totalPlacas = 6;
 
   const [counterAdultosNac, setCounterAdultosNac] = useState(0);
   const [counterMayorNiniosNac, setCounterMayorNiniosNac] = useState(0);
   const [counterAdultosExt, setCounterAdultosExt] = useState(0);
   const [counterMayorNiniosExt, setCounterMayorNiniosExt] = useState(0);
+  const [mostrarErrorTotalPersonas, setMostrarErrorTotalPersonas] =
+    useState(null);
 
   //expresiones regulares para combrobar contenido
   const expresiones = {
@@ -58,7 +65,10 @@ export const FormularioView = ({UserData}) => {
     // alfanuméricos, puntos, guiones bajos, signos de más y signos de punto,
     //edad: /\b([1-9]|[1-9][0-9]|1[01][0-9]|120)\b/,
     // verifica si una cadena representa una edad válida en el rango de 1 a 120 años.
-    placa: /^(([A-Za-z]{2}-)?([A-Za-z]{1,3}-)?([0-9A-Za-z]{2,6}))?$/
+    placa: /^(([A-Za-z]{2}-)?([A-Za-z]{1,3}-)?([0-9A-Za-z]{2,6}))?$/,
+    telefono: /^(?:\+\d{1,3})?\d{8}$/,
+    //verifica que solo ponga numeros de 8 digitos o el formato con codigo de pais +50689562145 por ejemplo
+    identificacionUsuario: /^.{0,60}$/, // coincide con cualquier carácter (excepto saltos de línea), hasta 60 caracteres.
   };
 
   // cambia que cuando de click de false a true
@@ -74,6 +84,8 @@ export const FormularioView = ({UserData}) => {
       apellido.valido === "true" &&
       apellido2.valido === "true" &&
       correo.valido === "true" &&
+      telefono.valido === "true" &&
+      identificacionUsuario.valido === "true" &&
       //edad.valido === "true" &&
       //placa.valido === "true" &&
       terminos
@@ -82,6 +94,11 @@ export const FormularioView = ({UserData}) => {
       console.log("Nombre enviado: ", e.target.nombre.value);
       console.log("Apellido enviado: ", e.target.apellido.value);
       console.log("Apellido 2 enviado: ", e.target.apellido2.value);
+      console.log(
+        "Numero de identificación enviado: ",
+        e.target.identificacionUsuario.value
+      );
+      console.log("Telefono enviado: ", e.target.telefono.value);
       console.log("Correo enviado: ", e.target.correo.value);
       //console.log("Edad enviada: ", e.target.edad.value);
 
@@ -103,7 +120,7 @@ export const FormularioView = ({UserData}) => {
       UserData.nameUser = e.target.nombre.value;
       UserData.firstSurname = e.target.apellido.value;
       UserData.secondSurname = e.target.apellido2.value;
-      UserData.mail =  e.target.correo.value;
+      UserData.mail = e.target.correo.value;
       UserData.totalPlates = counterPlacas;
       UserData.plate1 = placa.campo;
       UserData.plate2 = placa2.campo;
@@ -118,8 +135,7 @@ export const FormularioView = ({UserData}) => {
       UserData.countAdultKidsFor = counterMayorNiniosExt;
 
       console.log("UserData.nameUser: ", UserData.nameUser);
-      console.log("UserData.countAdultKidsFor: ",counterMayorNiniosExt);
-
+      console.log("UserData.countAdultKidsFor: ", counterMayorNiniosExt);
 
       cambiarFormularioValido(true);
       //reinicio los campos
@@ -187,6 +203,28 @@ export const FormularioView = ({UserData}) => {
         />
 
         <ComponenteInput
+          estado={identificacionUsuario}
+          cambiarEstado={cambiarIdentificacionUsuario}
+          tipo="text"
+          label="Identificación"
+          placeholder=""
+          name="identificacionUsuario"
+          leyendaError="Acepta cualquier caracter, hasta 60 caracteres."
+          expresionRegular={expresiones.telefono}
+        />
+
+        <ComponenteInput
+          estado={telefono}
+          cambiarEstado={cambiarTelefono}
+          tipo="text"
+          label="Telefono"
+          placeholder="+50685952345"
+          name="telefono"
+          leyendaError="Número de teléfono de 8 dígitos o el símbolo '+', el código de país y 8 dígitos. Por ejemplo +50689745265."
+          expresionRegular={expresiones.telefono}
+        />
+
+        <ComponenteInput
           estado={correo}
           cambiarEstado={cambiarCorreo}
           tipo="email"
@@ -196,26 +234,17 @@ export const FormularioView = ({UserData}) => {
           leyendaError="El correo solo puede contener letras, numeros, puntos, guiones y guion bajo."
           expresionRegular={expresiones.correo}
         />
-        {/*<ComponenteInput
-          estado={edad}
-          cambiarEstado={cambiarEdad}
-          tipo="text"
-          label="Edad"
-          name="edad"
-          leyendaError="La edad es válida entre 1-120."
-          expresionRegular={expresiones.edad}
-        />*/}
 
-       
         <div
           style={{
             height: "1px",
             backgroundColor: "black",
-            width: "200%",
-            margin: "10px 0"
+            width: "100%",
+            margin: "10px 0",
+            gridColumn: "span 2",
           }}
         ></div>
-        <div></div>
+
         {/* Botones para incrementar y decrementar */}
         <ComponenteInputIncDec
           tipo="number"
@@ -226,8 +255,6 @@ export const FormularioView = ({UserData}) => {
           controlTotal={totalPlacas}
           counterTipoEntrada={mostrarPlacas}
           setCounterTipoEntrada={setMostrarPlacas}
-          //mostrarValor={mostrarValor}
-          //setMostrar={setMostrar}
         ></ComponenteInputIncDec>
         <div></div>
 
@@ -243,9 +270,7 @@ export const FormularioView = ({UserData}) => {
             leyendaError="La placa debe tener como mínimo 2 dígitos numéricos o alfanuméricos y como máximo 6."
             expresionRegular={expresiones.placa}
           />
-        ) : (
-          <div></div>
-        )}
+        ) : null}
 
         {counterPlacas >= 2 ? (
           <ComponenteInput
@@ -258,9 +283,7 @@ export const FormularioView = ({UserData}) => {
             leyendaError="La placa debe tener como mínimo 2 dígitos numéricos o alfanuméricos y como máximo 6."
             expresionRegular={expresiones.placa}
           />
-        ) : (
-          <div></div>
-        )}
+        ) : null}
 
         {counterPlacas >= 3 ? (
           <ComponenteInput
@@ -273,9 +296,7 @@ export const FormularioView = ({UserData}) => {
             leyendaError="La placa debe tener como mínimo 2 dígitos numéricos o alfanuméricos y como máximo 6."
             expresionRegular={expresiones.placa}
           />
-        ) : (
-          <div></div>
-        )}
+        ) : null}
         {counterPlacas >= 4 ? (
           <ComponenteInput
             estado={placa4}
@@ -287,9 +308,7 @@ export const FormularioView = ({UserData}) => {
             leyendaError="La placa debe tener como mínimo 2 dígitos numéricos o alfanuméricos y como máximo 6."
             expresionRegular={expresiones.placa}
           />
-        ) : (
-          <div></div>
-        )}
+        ) : null}
 
         {counterPlacas >= 5 ? (
           <ComponenteInput
@@ -302,9 +321,7 @@ export const FormularioView = ({UserData}) => {
             leyendaError="La placa debe tener como mínimo 2 dígitos numéricos o alfanuméricos y como máximo 6."
             expresionRegular={expresiones.placa}
           />
-        ) : (
-          <div></div>
-        )}
+        ) : null}
 
         {counterPlacas >= 6 ? (
           <ComponenteInput
@@ -317,24 +334,22 @@ export const FormularioView = ({UserData}) => {
             leyendaError="La placa debe tener como mínimo 2 dígitos numéricos o alfanuméricos y como máximo 6."
             expresionRegular={expresiones.placa}
           />
-        ) : (
-          <div></div>
-        )}
+        ) : null}
 
         <div
           style={{
             height: "1px",
             backgroundColor: "black",
-            width: "200%",
+            width: "100%",
             margin: "10px 0",
             margintop: "0px",
-            marginbottom: "0px"
+            marginbottom: "0px",
+            gridColumn: "span 2",
           }}
         ></div>
-        <div></div>
 
         <h2>
-          Seleccione las {totalPersonas} personas para reservar:
+          Seleccione {totalPersonas} personas para reservar:
           <br />
           <br />
           Nacionales
@@ -350,6 +365,7 @@ export const FormularioView = ({UserData}) => {
           controlTotal={totalPersonas}
           counterTipoEntrada={counterAdultosNac}
           setCounterTipoEntrada={setCounterAdultosNac}
+          setMostrarErrorTotalPersonas={setMostrarErrorTotalPersonas}
         ></ComponenteInputIncDec>
 
         <ComponenteInputIncDec
@@ -361,19 +377,21 @@ export const FormularioView = ({UserData}) => {
           controlTotal={totalPersonas}
           counterTipoEntrada={counterMayorNiniosNac}
           setCounterTipoEntrada={setCounterMayorNiniosNac}
+          setMostrarErrorTotalPersonas={setMostrarErrorTotalPersonas}
         ></ComponenteInputIncDec>
 
         <div
           style={{
             height: "1px",
             backgroundColor: "black",
-            width: "200%",
+            width: "100%",
             margin: "10px 0",
             margintop: "0px",
-            marginbottom: "0px"
+            marginbottom: "0px",
+            gridColumn: "span 2",
           }}
         ></div>
-        <div></div>
+
         <h2>Extranjeros</h2>
         <div></div>
 
@@ -386,6 +404,7 @@ export const FormularioView = ({UserData}) => {
           controlTotal={totalPersonas}
           counterTipoEntrada={counterAdultosExt}
           setCounterTipoEntrada={setCounterAdultosExt}
+          setMostrarErrorTotalPersonas={setMostrarErrorTotalPersonas}
         ></ComponenteInputIncDec>
 
         <ComponenteInputIncDec
@@ -397,6 +416,7 @@ export const FormularioView = ({UserData}) => {
           controlTotal={totalPersonas}
           counterTipoEntrada={counterMayorNiniosExt}
           setCounterTipoEntrada={setCounterMayorNiniosExt}
+          setMostrarErrorTotalPersonas={setMostrarErrorTotalPersonas}
         ></ComponenteInputIncDec>
 
         <ContenedorTerminos>
@@ -412,24 +432,19 @@ export const FormularioView = ({UserData}) => {
           </label>
         </ContenedorTerminos>
 
-        {formularioValido === false && (
+        {mostrarErrorTotalPersonas === true ? (
           <MensajeError>
-            <p>
-              <FontAwesomeIcon icon={faExclamationTriangle} />
-              <b>Error:</b> Por favor rellena el formulario correctamente.
-            </p>
+            <FontAwesomeIcon icon={faExclamationTriangle} />
+            !Por favor, seleccione el numero de personas correspondiente!
           </MensajeError>
-        )}
+        ) : null}
+
         <div></div>
         <ContenedorBotonCentrado>
-          <Boton
-            type="submit"
-          >
-            Siguiente
-          </Boton>
-          {formularioValido === true && (
+          <Boton type="submit">Siguiente</Boton>
+          {formularioValido === true ? (
             <MensajeExito>Formulario enviado exitosamente!</MensajeExito>
-          )}
+          ) : null}
         </ContenedorBotonCentrado>
       </Formulario>
     </main>
