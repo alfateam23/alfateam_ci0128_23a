@@ -8,8 +8,9 @@ export const Login = () => {
     const [username, setUsername] = useState();
     const [password, setPassword] = useState();
 
-    const handleSubmit = () => {
-        console.log('Sending credentials');
+    const handleSubmit = async e => {
+        e.preventDefault();
+        console.log('Sending credentials', username, password);
     };
 
     return (
@@ -24,7 +25,9 @@ export const Login = () => {
                     <p>Ingrese su contraseña</p>
                     <input type="password" onChange={e => setPassword(e.target.value)} />
                 </label>
-                <input type="submit" minLength={1} maxLength={60} name="Iniciar sesión" onClick={checkCredentials} />
+                <div>
+                    <button type="submit"> Iniciar sesión </button>
+                </div>
             </form>
         </div>
     );
