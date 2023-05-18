@@ -1,5 +1,5 @@
 {
-  "name": "source",
+  "name": "frontend",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -10,6 +10,7 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "bcryptjs": "^2.4.3",
     "concurrently": "^8.0.1",
     "react": "^18.2.0",
     "react-calendar": "^4.2.1",
@@ -24,7 +25,7 @@
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
-    "test": "jest",
+    "test": "react-app-rewired test",
     "eject": "react-app-rewired eject"
   },
   "eslintConfig": {
@@ -51,5 +52,8 @@
     "postcss": "^8.4.23",
     "react-app-rewired": "^2.2.1",
     "tailwindcss": "^3.3.1"
+  },
+  "browser": {
+    "crypto": false
   }
 }

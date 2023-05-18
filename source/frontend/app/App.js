@@ -1,12 +1,15 @@
 import React from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
-import {Availability_page, Parcel_page,
-      Review,
-      Select_dates_page,
-      T_information} from './reservation_page/Reservation_page';
+import {
+   Availability_page, Parcel_page,
+   Review,
+   Select_dates_page,
+   T_information
+} from './reservation_page/Reservation_page';
 import { UserData } from './UserData';
 import { Visitors } from './visitors/Visitors';
 import { Page } from './reservation_page/Reservation_page';
+import { Login } from './login/Login';
 
 /**
  * Home component, for now it just shows a button to send the user to the reserve
@@ -27,25 +30,25 @@ const Home = () => {
  */
 const App = () => {
    const userData = new UserData();
-  return (
-   <div>
-      <Routes>
-         <Route exact path="/" element={<Home />} />
-         <Route path="/reservation" element={<Select_dates_page
-            UserData={userData}/>} />
-         <Route path="/reservation/availability" element={<Availability_page
-         UserData={userData} />} />
-         <Route path="/reservation/lot" element={<Parcel_page
-         UserData={userData} />} />
-         <Route path="/reservation/info" element={<T_information
-         UserData={userData} />}/>
-         <Route path="/reservation/review" element={<Review
-         UserData={userData} />}/>
-         <Route path="/visitors" element={<Visitors />} />
-
-      </Routes>
-   </div>
-  );
+   return (
+      <div>
+         <Routes>
+            <Route exact path="/" element={<Home />} />
+            <Route path="/reservation" element={<Select_dates_page
+               UserData={userData} />} />
+            <Route path="/reservation/availability" element={<Availability_page
+               UserData={userData} />} />
+            <Route path="/reservation/lot" element={<Parcel_page
+               UserData={userData} />} />
+            <Route path="/reservation/info" element={<T_information
+               UserData={userData} />} />
+            <Route path="/reservation/review" element={<Review
+               UserData={userData} />} />
+            <Route path="/visitors" element={<Visitors />} />
+            <Route path="/login" element={<Login />} />
+         </Routes>
+      </div>
+   );
 }
 
 export default App;

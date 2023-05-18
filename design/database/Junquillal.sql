@@ -199,6 +199,8 @@ CREATE TABLE TipoVisitante
 -- Uso de reservación
 -- Procedencia es la provincia de Costa Rica para nacionales o el nombre de país para extranjeros.
 -- Categoría de pago es no exonerado, prepago, o exonerado.
+-- Consecutivo se obtene de la secuencia correspondiente al código (e.g., ConsecutivoNPA para nacional, picnic, adulto regular)
+-- La lista completa de códigos posibles se encuentra en el diccionario de datos (README.md)
 
 CREATE TABLE UsoReservacion
 (
@@ -208,6 +210,7 @@ CREATE TABLE UsoReservacion
   Estatus CHAR,
   Procedencia VARCHAR(60) NOT NULL,
   CategoriaPago CHAR NOT NULL,
+  Consecutivo INT,
   CONSTRAINT PK_UsoReservacion PRIMARY KEY(CodigoReservacion, TipoProcedencia, TipoVisita, Estatus),
   CONSTRAINT FK_UsoReservacion_Reservacion FOREIGN KEY(CodigoReservacion)
   REFERENCES Reservacion(Codigo),
@@ -233,3 +236,183 @@ CREATE TABLE Factura
   REFERENCES Reservacion(Codigo),
   CHECK(Monto >= 0)
 );
+
+CREATE SEQUENCE ConsecutivoNCA
+  START WITH 1
+  INCREMENT BY 1;
+GO
+
+CREATE SEQUENCE ConsecutivoNCB
+  START WITH 1
+  INCREMENT BY 1;
+GO
+
+CREATE SEQUENCE ConsecutivoNCC
+  START WITH 1
+  INCREMENT BY 1;
+GO
+
+CREATE SEQUENCE ConsecutivoNCD
+  START WITH 1
+  INCREMENT BY 1;
+GO
+
+CREATE SEQUENCE ConsecutivoNCE
+  START WITH 1
+  INCREMENT BY 1;
+GO
+
+CREATE SEQUENCE ConsecutivoNCF
+  START WITH 1
+  INCREMENT BY 1;
+GO
+
+CREATE SEQUENCE ConsecutivoNCG
+  START WITH 1
+  INCREMENT BY 1;
+GO
+
+CREATE SEQUENCE ConsecutivoNCH
+  START WITH 1
+  INCREMENT BY 1;
+GO
+
+CREATE SEQUENCE ConsecutivoNCI
+  START WITH 1
+  INCREMENT BY 1;
+GO
+
+CREATE SEQUENCE ConsecutivoNPA
+  START WITH 1
+  INCREMENT BY 1;
+GO
+
+CREATE SEQUENCE ConsecutivoNPB
+  START WITH 1
+  INCREMENT BY 1;
+GO
+
+CREATE SEQUENCE ConsecutivoNPC
+  START WITH 1
+  INCREMENT BY 1;
+GO
+
+CREATE SEQUENCE ConsecutivoNPD
+  START WITH 1
+  INCREMENT BY 1;
+GO
+
+CREATE SEQUENCE ConsecutivoNPE
+  START WITH 1
+  INCREMENT BY 1;
+GO
+
+CREATE SEQUENCE ConsecutivoNPF
+  START WITH 1
+  INCREMENT BY 1;
+GO
+
+CREATE SEQUENCE ConsecutivoNPG
+  START WITH 1
+  INCREMENT BY 1;
+GO
+
+CREATE SEQUENCE ConsecutivoNPH
+  START WITH 1
+  INCREMENT BY 1;
+GO
+
+CREATE SEQUENCE ConsecutivoNPI
+  START WITH 1
+  INCREMENT BY 1;
+GO
+
+CREATE SEQUENCE ConsecutivoECA
+  START WITH 1
+  INCREMENT BY 1;
+GO
+
+CREATE SEQUENCE ConsecutivoECB
+  START WITH 1
+  INCREMENT BY 1;
+GO
+
+CREATE SEQUENCE ConsecutivoECC
+  START WITH 1
+  INCREMENT BY 1;
+GO
+
+CREATE SEQUENCE ConsecutivoECD
+  START WITH 1
+  INCREMENT BY 1;
+GO
+
+CREATE SEQUENCE ConsecutivoECE
+  START WITH 1
+  INCREMENT BY 1;
+GO
+
+CREATE SEQUENCE ConsecutivoECF
+  START WITH 1
+  INCREMENT BY 1;
+GO
+
+CREATE SEQUENCE ConsecutivoECG
+  START WITH 1
+  INCREMENT BY 1;
+GO
+
+CREATE SEQUENCE ConsecutivoECH
+  START WITH 1
+  INCREMENT BY 1;
+GO
+
+CREATE SEQUENCE ConsecutivoECI
+  START WITH 1
+  INCREMENT BY 1;
+GO
+
+CREATE SEQUENCE ConsecutivoEPA
+  START WITH 1
+  INCREMENT BY 1;
+GO
+
+CREATE SEQUENCE ConsecutivoEPB
+  START WITH 1
+  INCREMENT BY 1;
+GO
+
+CREATE SEQUENCE ConsecutivoEPC
+  START WITH 1
+  INCREMENT BY 1;
+GO
+
+CREATE SEQUENCE ConsecutivoEPD
+  START WITH 1
+  INCREMENT BY 1;
+GO
+
+CREATE SEQUENCE ConsecutivoEPE
+  START WITH 1
+  INCREMENT BY 1;
+GO
+
+CREATE SEQUENCE ConsecutivoEPF
+  START WITH 1
+  INCREMENT BY 1;
+GO
+
+CREATE SEQUENCE ConsecutivoEPG
+  START WITH 1
+  INCREMENT BY 1;
+GO
+
+CREATE SEQUENCE ConsecutivoEPH
+  START WITH 1
+  INCREMENT BY 1;
+GO
+
+CREATE SEQUENCE ConsecutivoEPI
+  START WITH 1
+  INCREMENT BY 1;
+GO
