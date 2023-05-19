@@ -32,7 +32,7 @@ CREATE TABLE Telefono
 );
 
 -- Administrador de la aplicación
--- NUNCA guardar contraseñas en texto plano, sino solo el hash (e.g., con algoritmo Argon2).
+-- NUNCA guardar contraseñas en texto plano, sino solo el hash. Se utiliza algoritmo bcrypt.
 -- En el inicio de sesión solo se valida si el hash de la clave ingresada coincide con el hash almacenado.
 -- No borrar administradores, sino solo desactivarlos (i.e., borrado lógico) en la columna EstadoActivo.
 -- Inicialmente el valor de EstadoActividad es activo.
@@ -202,7 +202,7 @@ CREATE TABLE TipoVisitante
 -- Consecutivo se obtene de la secuencia correspondiente al código (e.g., ConsecutivoNPA para nacional, picnic, adulto regular)
 -- La lista completa de códigos posibles se encuentra en el diccionario de datos (README.md)
 
-CREATE TABLE UsoReservacion
+CREATE TABLE Visitante
 (
   CodigoReservacion INT,
   TipoProcedencia CHAR,
