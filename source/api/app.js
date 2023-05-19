@@ -10,21 +10,22 @@ const port = 3030
 const bcrypt = require('bcrypt')
 const saltRounds = 10
 
-const storedPass = 'ABC123456'
-const storedHash = bcrypt.hashSync(storedPass, saltRounds)
+let storedHash
 
 app.use(bodyParser.json())
 
 app.post('/login', (req, res) => {
     const credentials = req.body
     if(bcrypt.compareSync(credentials.pass, storedHash)) {
-      res.send('Login successful\n')
+      res.send(`Login successful\n`)
     } else {
       res.send('Login failed\n')
     }
 });
 
 app.post('/register', (req, res) => {
+  storedHash = bcrypt.hashSync(req.body.pass, saltRounds)
+  res.send(`stored bcrypt hash is: \n${storedHash}\n`)
 });
 
 app.listen(port, () => {
