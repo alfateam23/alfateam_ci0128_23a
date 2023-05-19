@@ -91,6 +91,18 @@ CREATE TABLE Vehiculo
   REFERENCES Cliente(Email) ON UPDATE CASCADE
 );
 
+--Tipo de área, puede ser picnic o camping
+
+CREATE TABLE Area
+(
+  Tipo BIT DEFAULT (1), -- 0 Camping, 1 picnic
+  Cupo INT NOT NULL,
+  Plazo SMALLINT NOT NULL,
+  HoraApertura TIME NOT NULL,
+  HoraCierre TIME NOT NULL
+  CONSTRAINT PK_Area PRIMARY KEY(Tipo)
+);
+
 -- Reservación genérica
 
 CREATE TABLE Reservacion
@@ -101,85 +113,18 @@ CREATE TABLE Reservacion
   FechaSolicitud DATETIME NOT NULL,
   CONSTRAINT PK_Reservacion PRIMARY KEY(Codigo),
   CONSTRAINT FK_Reservacion_Cliente FOREIGN KEY(Email)
-  REFERENCES Cliente(Email) ON UPDATE CASCADE
+  REFERENCES Cliente(Email) ON UPDATE CASCADE,
+  CONSTRAINT FK_Tipo_Area FOREIGN KEY(TipoArea)
+  REFERENCES Area(Tipo) ON UPDATE CASCADE
 );
 
--- Reservación de parcela
+-- Dia inactivo, día que el refugio no trabaja
 
-CREATE TABLE ReservacionParcela
+CREATE TABLE DiaInactivo
 (
-  Codigo INT,
-  FechaInicio DATETIME NOT NULL,
-  FechaFin DATETIME NOT NULL,
-  CONSTRAINT PK_ReservacionParcela PRIMARY KEY(Codigo),
-  CONSTRAINT FK_ReservacionParcela_Reservacion FOREIGN KEY(Codigo)
-  REFERENCES Reservacion(Codigo),
-  CHECK (FechaInicio <= FechaFin)
-);
-
--- Parcela
-
-CREATE TABLE Parcela
-(
-  Numero INT,
-  Cupo INT NOT NULL,
-  CONSTRAINT PK_Parcela PRIMARY KEY(Numero),
-  CHECK (Cupo >= 0)
-);
-
--- Asociacion entre reservación de parcela y parcela
-
-CREATE TABLE AsociacionParcela
-(
-  CodigoReservacion INT,
-  NumeroParcela INT,
-  CONSTRAINT PK_AsociacionParcela PRIMARY KEY(CodigoReservacion, NumeroParcela),
-  CONSTRAINT FK_AsociacionParcela_ReservacionParcela FOREIGN KEY(CodigoReservacion)
-  REFERENCES ReservacionParcela(Codigo),
-  CONSTRAINT FK_AsociacionParcela_Parcela FOREIGN KEY(NumeroParcela)
-  REFERENCES Parcela(Numero)
-);
-
--- Reservación de servicio
--- Tiempo es el uso del servicio (e.g., kayak) en minutos, durante una reservación de servicio.
-
-CREATE TABLE ReservacionServicio
-(
-  Codigo INT,
-  Tiempo INT NOT NULL,
-  CONSTRAINT PK_ReservacionServicio PRIMARY KEY(Codigo),
-  CONSTRAINT FK_ReservacionServicio_Reservacion FOREIGN KEY(Codigo)
-  REFERENCES Reservacion(Codigo),
-  CHECK (Tiempo >= 0)
-);
-
--- Servicio
--- Monto de tarifa en un servicio aplica solo si es independiente de tipo de visitante (e.g., kayak).
--- El cobro se realiza según tiempo de uso del servicio.
--- La moneda es según estándar ISO 4217: CRC (colones costarricenses), USD (dólares estadounidenses).
-
-CREATE TABLE Servicio
-(
-  Nombre VARCHAR(60),
-  Cupo INT NOT NULL,
-  Monto MONEY NOT NULL,
-  Moneda CHAR(3) NOT NULL,
-  CONSTRAINT PK_Servicio PRIMARY KEY(Nombre),
-  CHECK (Cupo >= 0),
-  CHECK (Monto >= 0)
-);
-
--- Asociación entre reservación de servicio y servicio
-
-CREATE TABLE AsociacionServicio
-(
-  CodigoReservacion INT,
-  NombreServicio VARCHAR(60),
-  CONSTRAINT PK_AsociacionServicio PRIMARY KEY(CodigoReservacion, NombreServicio),
-  CONSTRAINT FK_AsociacionServicio_ReservacionServicio FOREIGN KEY(CodigoReservacion)
-  REFERENCES ReservacionServicio(Codigo),
-  CONSTRAINT FK_AsociacionServicio_Servicio FOREIGN KEY(NombreServicio)
-  REFERENCES Servicio(Nombre)
+  TipoArea BIT DEFAULT (1),
+  Fecha DATETIME,
+  CONSTRAINT FK_DiaInactivo PRIMARY KEY(TipoArea, Fecha)
 );
 
 -- Tipo de visitante
@@ -203,7 +148,7 @@ CREATE TABLE TipoVisitante
 -- Consecutivo se obtene de la secuencia correspondiente al código (e.g., ConsecutivoNPA para nacional, picnic, adulto regular)
 -- La lista completa de códigos posibles se encuentra en el diccionario de datos (README.md)
 
-CREATE TABLE UsoReservacion
+CREATE TABLE Visitante
 (
   CodigoReservacion INT,
   TipoProcedencia CHAR,
@@ -237,6 +182,68 @@ CREATE TABLE Factura
   REFERENCES Reservacion(Codigo),
   CHECK(Monto >= 0)
 );
+
+-- Agregar los tipos de area.
+
+/*
+Camping Cupo 100, 3 días de plazo antes de que comience
+la reserva para pagar,
+Hora de apertura 6am, Cierre 8pm
+*/
+INSERT INTO Area (Tipo, Cupo, Plazo, HoraApertura, HoraCierre)
+VALUES (0, 100, 3, '06:00:00', '20:00:00');
+
+/*
+Camping Cupo 70, 7 días de plazo antes de que comience
+la reserva para pagar,
+Hora de apertura 6am, Cierre 8pm
+*/
+INSERT INTO Area (Tipo, Cupo, Plazo, HoraApertura, HoraCierre)
+VALUES (1, 70, 7, '06:00:00', '20:00:00');
+
+INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, Monto, Moneda) VALUES ('N', 'C', 'A', 4520, 'CRC')
+INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, Monto, Moneda) VALUES ('N', 'C', 'B', 3390, 'CRC')
+INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, Monto, Moneda) VALUES ('N', 'C', 'C', 0, 'CAN')
+INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, Monto, Moneda) VALUES ('N', 'C', 'D', 0, 'CAN')
+INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, Monto, Moneda) VALUES ('N', 'C', 'E', 0, 'CAN')
+INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, Monto, Moneda) VALUES ('N', 'C', 'F', 0, 'CAN')
+INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, Monto, Moneda) VALUES ('N', 'C', 'G', 0, 'CAN')
+INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, Monto, Moneda) VALUES ('N', 'C', 'H', 0, 'CAN')
+INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, Monto, Moneda) VALUES ('N', 'C', 'I', 0, 'CAN')
+INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, Monto, Moneda) VALUES ('N', 'P', 'A', 2260, 'CRC')
+INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, Monto, Moneda) VALUES ('N', 'P', 'B', 1130, 'CRC')
+INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, Monto, Moneda) VALUES ('N', 'P', 'C', 0, 'CAN')
+INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, Monto, Moneda) VALUES ('N', 'P', 'D', 0, 'CAN')
+INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, Monto, Moneda) VALUES ('N', 'P', 'E', 0, 'CAN')
+INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, Monto, Moneda) VALUES ('N', 'P', 'F', 0, 'CAN')
+INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, Monto, Moneda) VALUES ('N', 'P', 'G', 0, 'CAN')
+INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, Monto, Moneda) VALUES ('N', 'P', 'H', 0, 'CAN')
+INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, Monto, Moneda) VALUES ('N', 'P', 'I', 0, 'CAN')
+INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, Monto, Moneda) VALUES ('E', 'C', 'A', 18.08, 'USD')
+INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, Monto, Moneda) VALUES ('E', 'C', 'B', 10.17, 'USD')
+INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, Monto, Moneda) VALUES ('E', 'C', 'C', 0, 'CAN')
+INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, Monto, Moneda) VALUES ('E', 'C', 'D', 0, 'CAN')
+INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, Monto, Moneda) VALUES ('E', 'C', 'E', 0, 'CAN')
+INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, Monto, Moneda) VALUES ('E', 'C', 'F', 0, 'CAN')
+INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, Monto, Moneda) VALUES ('E', 'C', 'G', 0, 'CAN')
+INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, Monto, Moneda) VALUES ('E', 'C', 'H', 0, 'CAN')
+INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, Monto, Moneda) VALUES ('E', 'C', 'I', 0, 'CAN')
+INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, Monto, Moneda) VALUES ('E', 'P', 'A', 13.56, 'USD')
+INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, Monto, Moneda) VALUES ('E', 'P', 'B', 5.65, 'USD')
+INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, Monto, Moneda) VALUES ('E', 'P', 'C', 0, 'CAN')
+INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, Monto, Moneda) VALUES ('E', 'P', 'D', 0, 'CAN')
+INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, Monto, Moneda) VALUES ('E', 'P', 'E', 0, 'CAN')
+INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, Monto, Moneda) VALUES ('E', 'P', 'F', 0, 'CAN')
+INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, Monto, Moneda) VALUES ('E', 'P', 'G', 0, 'CAN')
+INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, Monto, Moneda) VALUES ('E', 'P', 'H', 0, 'CAN')
+INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, Monto, Moneda) VALUES ('E', 'P', 'I', 0, 'CAN')
+
+-- Consecutivos para los visitantes y las reservas.
+
+CREATE SEQUENCE ConsecutivoReserva
+  START WITH 1
+  INCREMENT BY 1;
+GO
 
 CREATE SEQUENCE ConsecutivoNCA
   START WITH 1

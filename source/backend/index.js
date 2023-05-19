@@ -2,25 +2,7 @@
 
 const express = require('express');
 const app = express();
-const db = require('./DbConfig');
-
-//const { Connection, Request, TYPES } = require ('tedious');
-//import { DbConfig } from './DbConfig';
-
-// Connection to SQL Server database, located at ECCI
-// Based on https://www.microsoft.com/en-us/sql-server/developer-get-started/node/windows/step/2.html
-
-// var connection = new Connection(DbConfig);
-
-// Try to connect to DB
-
-// connection.on('connect', function (err) {
-//     if (err) {
-//         console.log(err);
-//         throw err;
-//     }
-// });
-// connection.connect();
+const reservationManager = require('./reservation');
 
 const visitorsRawData = {
     "visitors": [
@@ -37,7 +19,7 @@ app.get('/backend/visitordata/:id', (req, res) => {
     res.send(visitor);
 });
 
-reservation = {
+let reservation = {
     start_date : new Date(),
     end_date : new Date(),
     num_guests : 0,
@@ -60,33 +42,9 @@ reservation = {
     countAdultKidsFor : 0,
 };
 
-function insertReservation() {
-
-};
-
-async function insertUser(name, secondName = null, lastname1, lastname2 = null,
-email, phone, id) {
-    try {
-        const query = `insert into Usuario (Email, Cedula, PrimerNombre, SegundoNombre,
-            PrimerApellido, SegundoApellido)
-            values (${email},${id},${name},`;
-        if (secondName) query += `${secondName},`;
-        query += `${lastname1},`;
-        if(lastname2) query += `${lastname2},`;
-        console.log(query)
-        //const result = await db.executeQuery();
-    } catch (error) {
-        return error
-    }
-};
-
-async function insertPhone(phone, email) {
-    try {
-        
-    } catch (error) {
-        
-    }
-};
+reservationManager.insertUser(reservation.mail, reservation.id,
+    reservation.nameUser, null, reservation.firstSurname,
+    reservation.secondSurname, 1);
 
 reservation.end_date.setDate((new Date()).getDate()+1)
 console.log(reservation.end_date.toISOString().replace('T', ' ').substring(0, 19));
