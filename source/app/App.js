@@ -17,6 +17,7 @@ import Dashboard from './admin_dashboard/Dashboard';
 const Home = () => {
    return (
       <div>
+         <h1 className="flex justify-center items-center  text-4xl p-4"> Hola! Esta es la página de inicio</h1>
          <ul className="hidden md:flex">
             <li className="p-4">
                <a className="transition ease-in-out hover:text-[#ffaf00] hover:duration-700 cursor-pointer" href="/Dashboard">Dashboard</a>
@@ -26,7 +27,6 @@ const Home = () => {
             </li>
          </ul>
       </div>
-
    );
 }
 
