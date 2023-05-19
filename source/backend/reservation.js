@@ -1,11 +1,28 @@
 const db = require('./DbConfig');
 
+/**
+ * This function creates a reservation.
+ * The parameter is an object that contains all the information about
+ * a reservation. If there is no second name or second lastname
+ * these variables have to be null.
+ * 
+ */
+
 function insertReservation(reservation) {
-  
+  let result = null;
+  try {
+    result = insertUser(reservation.mail,reservation.id, reservation.name,
+      reservation.secondName, reservation.firstSurname,
+      reservation.secondSurname, 1);
+    insertPhone(reservation.phone, reservation.email);
+  } catch (error) {
+    return error;
+  }
+
 };
 
-async function insertUser(email, id, name, secondName=null,
-    lastname1, lastname2=null, status) {
+async function insertUser(email, id, name, secondName,
+    lastname1, lastname2, status) {
   let result = null;
   try {
       let query = '';

@@ -3,6 +3,7 @@
 const express = require('express');
 const app = express();
 const reservationManager = require('./reservation');
+const db = require('./DbConfig');
 
 const visitorsRawData = {
     "visitors": [
@@ -42,9 +43,13 @@ let reservation = {
     countAdultKidsFor : 0,
 };
 
-reservationManager.insertUser(reservation.mail, reservation.id,
+// eslint-disable-next-line no-multi-str
+const result = db.executeQuery('INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, Monto, Moneda) VALUES (\'A\', \'A\', \'I\', 0, \'CAN\');');
+console.log(result);
+
+/*reservationManager.insertUser(reservation.mail, reservation.id,
     reservation.nameUser, null, reservation.firstSurname,
-    reservation.secondSurname, 1);
+    reservation.secondSurname, 1);*/
 
 reservation.end_date.setDate((new Date()).getDate()+1)
 console.log(reservation.end_date.toISOString().replace('T', ' ').substring(0, 19));
