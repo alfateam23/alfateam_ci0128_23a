@@ -80,33 +80,6 @@ export const FormularioView = ({ UserData }) => {
       identificacionUsuario.valido === "true" &&
       terminos
     ) {
-      //Imprime los datos que va enviar al backend
-      console.log("Nombre enviado: ", e.target.nombre.value);
-      console.log("Apellido enviado: ", e.target.apellido.value);
-      console.log("Apellido 2 enviado: ", e.target.apellido2.value);
-      console.log(
-        "Numero de identificación enviado: ",
-        e.target.identificacionUsuario.value
-      );
-      console.log("Telefono enviado: ", e.target.telefono.value);
-      console.log("Correo enviado: ", e.target.correo.value);
-      console.log("Total Placas: ", counterPlacas);
-      console.log("Placa enviada: ", placa.campo);
-      console.log("Placa enviada: ", placa2.campo);
-      console.log("Placa enviada: ", placa3.campo);
-      console.log("Placa enviada: ", placa4.campo);
-      console.log("Placa enviada: ", placa5.campo);
-      console.log("Placa enviada: ", placa6.campo);
-      console.log("Total Personas: ", counterFuera);
-      console.log("totalNinos0a6Nac: ", counterNinos0a6Nac);
-      console.log("totalNinos6a12Nac: ", counterNinos6a12Nac);
-      console.log("totalAdultosNacionales: ", counterAdultosNac);
-      console.log("totalAdultosMayorNac: ", counterAdultosMayorNac);
-      console.log("totalNinos0a6Ext: ", counterNinos0a6Ext);
-      console.log("totalNinos6a12Ext: ", counterNinos6a12Ext);
-      console.log("totalAdultosExtranjeros: ", counterAdultosExt);
-      console.log("totalAdultosMayorExt: ", counterAdultosMayorExt);
-      /*
       UserData.nameUser = e.target.nombre.value;
       UserData.firstSurname = e.target.apellido.value;
       UserData.secondSurname = e.target.apellido2.value;
@@ -123,15 +96,12 @@ export const FormularioView = ({ UserData }) => {
       UserData.countAdultKidsNac = counterMayorNiniosNac;
       UserData.countAdultFor = counterAdultosExt;
       UserData.countAdultKidsFor = counterMayorNiniosExt;
-      console.log("UserData.nameUser: ", UserData.nameUser);
-      console.log("UserData.countAdultKidsFor: ", counterMayorNiniosExt);*/
       cambiarFormularioValido(true);
       //reinicio los campos
       cambiarNombre({ campo: "", valido: null });
       cambiarApellido({ campo: "", valido: null });
       cambiarApellido2({ campo: "", valido: null });
       cambiarCorreo({ campo: "", valido: null });
-      //cambiarEdad({ campo: "", valido: null });
       // reinicio inputs placas
       cambiarPlaca({ campo: "", valido: null });
       cambiarPlaca2({ campo: "", valido: null });
