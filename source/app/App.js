@@ -10,14 +10,17 @@ import { UserData } from './UserData';
 import { Visitors } from './visitors/Visitors';
 import { Page } from './reservation_page/Reservation_page';
 import Dashboard from './admin_dashboard/Dashboard';
+import DashboardHome from './admin_dashboard//dashboard_home';
+import { useLocation } from 'react-router-dom';
+
 
 /**
  * Temp navbar of project
  */
 const Home = () => {
    return (
-      <div>
-         <h1 className="flex justify-center items-center  text-4xl p-4"> Hola! Esta es la página de inicio</h1>
+      <div className="background-color: rgb(254 243 199)" >
+         <h1 className="flex justify-center items-center  text-4xl p-4"> navegation bar </h1>
          <ul className="hidden md:flex">
             <li className="p-4">
                <a className="transition ease-in-out hover:text-[#ffaf00] hover:duration-700 cursor-pointer" href="/Dashboard">Dashboard</a>
@@ -36,10 +39,14 @@ const Home = () => {
  */
 const App = () => {
    const userData = new UserData();
+   // Varaibles to determine location and set navbar
+   const location = useLocation();
+   const isDashboardPage = location.pathname === '/Dashboard';
    return (
       <div>
+         {isDashboardPage ? <Dashboard /> : <Home />}
          <Routes>
-            <Route exact path="/" element={<Home />} />
+            
             <Route path="/reservation" element={<Select_dates_page
                UserData={userData} />} />
             <Route path="/reservation/availability" element={<Availability_page
