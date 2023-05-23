@@ -10,7 +10,7 @@ import { UserData } from './UserData';
 import { Visitors } from './visitors/Visitors';
 import { Page } from './reservation_page/Reservation_page';
 import Dashboard from './admin_dashboard/Dashboard';
-import DashboardHome from './admin_dashboard//dashboard_home';
+import DashboardHome from './admin_dashboard/dashboard_components/dashboard_home';
 import { useLocation } from 'react-router-dom';
 
 
@@ -58,7 +58,7 @@ const App = () => {
             <Route path="/reservation/review" element={<Review
                UserData={userData} />} />
             <Route path="/visitors" element={<Visitors />} />
-            <Route path='/Dashboard' element={<Dashboard />} />
+            <Route path="/DashboardHome" element={<DashboardHome />} />
          </Routes>
       </div>
    );
