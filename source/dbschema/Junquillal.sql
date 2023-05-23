@@ -17,6 +17,7 @@ CREATE TABLE Usuario
   SegundoNombre VARCHAR(60),
   PrimerApellido VARCHAR(60) NOT NULL,
   SegundoApellido VARCHAR(60),
+  EstadoActividad BIT DEFAULT (1) NOT NULL,
   CONSTRAINT PK_Usuario PRIMARY KEY(Email)
 );
 
@@ -41,7 +42,6 @@ CREATE TABLE Administrador
 (
   Email VARCHAR(60),
   Clave VARCHAR(60) NOT NULL,
-  EstadoActividad BIT DEFAULT(1) NOT NULL,
   CONSTRAINT PK_Administrador PRIMARY KEY(Email),
   CONSTRAINT FK_Administrador_Usuario FOREIGN KEY(Email)
   REFERENCES Usuario(Email) ON UPDATE CASCADE
@@ -91,94 +91,40 @@ CREATE TABLE Vehiculo
   REFERENCES Cliente(Email) ON UPDATE CASCADE
 );
 
+--Tipo de área, puede ser picnic o camping
+
+CREATE TABLE Area
+(
+  Tipo CHAR, -- C Camping, P picnic
+  Cupo INT NOT NULL,
+  Plazo SMALLINT NOT NULL,
+  HoraApertura TIME NOT NULL,
+  HoraCierre TIME NOT NULL
+  CONSTRAINT PK_Area PRIMARY KEY(Tipo)
+);
+
 -- Reservación genérica
 
 CREATE TABLE Reservacion
 (
   Codigo INT,
   Email VARCHAR(60) NOT NULL,
+  TipoArea CHAR NOT NULL, -- C Camping, P picnic
   FechaSolicitud DATETIME NOT NULL,
   CONSTRAINT PK_Reservacion PRIMARY KEY(Codigo),
   CONSTRAINT FK_Reservacion_Cliente FOREIGN KEY(Email)
-  REFERENCES Cliente(Email) ON UPDATE CASCADE
+  REFERENCES Cliente(Email) ON UPDATE CASCADE,
+  CONSTRAINT FK_Tipo_Area FOREIGN KEY(TipoArea)
+  REFERENCES Area(Tipo) ON UPDATE CASCADE
 );
 
--- Reservación de parcela
+-- Dia inactivo, día que el refugio no trabaja
 
-CREATE TABLE ReservacionParcela
+CREATE TABLE DiaInactivo
 (
-  Codigo INT,
-  FechaInicio DATETIME NOT NULL,
-  FechaFin DATETIME NOT NULL,
-  CONSTRAINT PK_ReservacionParcela PRIMARY KEY(Codigo),
-  CONSTRAINT FK_ReservacionParcela_Reservacion FOREIGN KEY(Codigo)
-  REFERENCES Reservacion(Codigo),
-  CHECK (FechaInicio <= FechaFin)
-);
-
--- Parcela
-
-CREATE TABLE Parcela
-(
-  Numero INT,
-  Cupo INT NOT NULL,
-  CONSTRAINT PK_Parcela PRIMARY KEY(Numero),
-  CHECK (Cupo >= 0)
-);
-
--- Asociacion entre reservación de parcela y parcela
-
-CREATE TABLE AsociacionParcela
-(
-  CodigoReservacion INT,
-  NumeroParcela INT,
-  CONSTRAINT PK_AsociacionParcela PRIMARY KEY(CodigoReservacion, NumeroParcela),
-  CONSTRAINT FK_AsociacionParcela_ReservacionParcela FOREIGN KEY(CodigoReservacion)
-  REFERENCES ReservacionParcela(Codigo),
-  CONSTRAINT FK_AsociacionParcela_Parcela FOREIGN KEY(NumeroParcela)
-  REFERENCES Parcela(Numero)
-);
-
--- Reservación de servicio
--- Tiempo es el uso del servicio (e.g., kayak) en minutos, durante una reservación de servicio.
-
-CREATE TABLE ReservacionServicio
-(
-  Codigo INT,
-  Tiempo INT NOT NULL,
-  CONSTRAINT PK_ReservacionServicio PRIMARY KEY(Codigo),
-  CONSTRAINT FK_ReservacionServicio_Reservacion FOREIGN KEY(Codigo)
-  REFERENCES Reservacion(Codigo),
-  CHECK (Tiempo >= 0)
-);
-
--- Servicio
--- Monto de tarifa en un servicio aplica solo si es independiente de tipo de visitante (e.g., kayak).
--- El cobro se realiza según tiempo de uso del servicio.
--- La moneda es según estándar ISO 4217: CRC (colones costarricenses), USD (dólares estadounidenses).
-
-CREATE TABLE Servicio
-(
-  Nombre VARCHAR(60),
-  Cupo INT NOT NULL,
-  Monto MONEY NOT NULL,
-  Moneda CHAR(3) NOT NULL,
-  CONSTRAINT PK_Servicio PRIMARY KEY(Nombre),
-  CHECK (Cupo >= 0),
-  CHECK (Monto >= 0)
-);
-
--- Asociación entre reservación de servicio y servicio
-
-CREATE TABLE AsociacionServicio
-(
-  CodigoReservacion INT,
-  NombreServicio VARCHAR(60),
-  CONSTRAINT PK_AsociacionServicio PRIMARY KEY(CodigoReservacion, NombreServicio),
-  CONSTRAINT FK_AsociacionServicio_ReservacionServicio FOREIGN KEY(CodigoReservacion)
-  REFERENCES ReservacionServicio(Codigo),
-  CONSTRAINT FK_AsociacionServicio_Servicio FOREIGN KEY(NombreServicio)
-  REFERENCES Servicio(Nombre)
+  TipoArea BIT DEFAULT (1),
+  Fecha DATETIME,
+  CONSTRAINT FK_DiaInactivo PRIMARY KEY(TipoArea, Fecha)
 );
 
 -- Tipo de visitante
@@ -199,8 +145,10 @@ CREATE TABLE TipoVisitante
 -- Uso de reservación
 -- Procedencia es la provincia de Costa Rica para nacionales o el nombre de país para extranjeros.
 -- Categoría de pago es no exonerado, prepago, o exonerado.
+-- Consecutivo se obtene de la secuencia correspondiente al código (e.g., ConsecutivoNPA para nacional, picnic, adulto regular)
+-- La lista completa de códigos posibles se encuentra en el diccionario de datos (README.md)
 
-CREATE TABLE UsoReservacion
+CREATE TABLE Visitante
 (
   CodigoReservacion INT,
   TipoProcedencia CHAR,
@@ -208,11 +156,13 @@ CREATE TABLE UsoReservacion
   Estatus CHAR,
   Procedencia VARCHAR(60) NOT NULL,
   CategoriaPago CHAR NOT NULL,
+  CantidadVisitantes INT,
   CONSTRAINT PK_UsoReservacion PRIMARY KEY(CodigoReservacion, TipoProcedencia, TipoVisita, Estatus),
   CONSTRAINT FK_UsoReservacion_Reservacion FOREIGN KEY(CodigoReservacion)
   REFERENCES Reservacion(Codigo),
   CONSTRAINT FK_UsoReservacion_TipoVisitante FOREIGN KEY(TipoProcedencia, TipoVisita, Estatus)
-  REFERENCES TipoVisitante(TipoProcedencia, TipoVisita, Estatus)
+  REFERENCES TipoVisitante(TipoProcedencia, TipoVisita, Estatus),
+  CHECK (CantidadVisitantes > 0)
 );
 
 -- Factura
@@ -233,3 +183,11 @@ CREATE TABLE Factura
   REFERENCES Reservacion(Codigo),
   CHECK(Monto >= 0)
 );
+
+-- Consecutivos para los visitantes y las reservas.
+
+CREATE SEQUENCE ConsecutivoReservacion
+  START WITH 0
+  INCREMENT BY 1
+  MAXVALUE 9999999
+GO
