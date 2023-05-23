@@ -2,8 +2,7 @@
 
 const express = require('express');
 const app = express();
-const reservationManager = require('./reservation');
-const db = require('./DbConfig');
+const reservationManager = require('./reservation/reservationInsert');
 
 const visitorsRawData = {
     "visitors": [
@@ -35,24 +34,18 @@ let reservation = {
     totalPlates: 1,
     plates: ['098767',
     '123456',
-    '789012'
+    '789012',
+    '',
+    '',
+    ''
     ], // Multiple plates
-    countAdultNac: 2,
-    countAdultKidsNac: 1,
-    countAdultFor: 0,
-    countAdultKidsFor: 0,
+    visitors: [
+        { countAdultNac: 2 },
+        { countAdultKidsNac: 1 },
+        { countAdultFor: 0 },
+        { countAdultKidsFor: 0 }
+    ],
     area: 'C'
   };
-
-// TODO funciono pero hay que acomodar mejor como salen los
-// datos, el nombre salio undefined
-//reservationManager.insertReservation(reservation);
-
-/*reservationManager.insertUser(reservation.mail, reservation.id,
-    reservation.nameUser, null, reservation.firstSurname,
-    reservation.secondSurname, 1);*/
-
-reservation.end_date.setDate((new Date()).getDate()+1)
-console.log(reservation.end_date.toISOString().replace('T', ' ').substring(0, 19));
 
 app.listen(3030, ()=> console.log('Listening on port 3030...'));

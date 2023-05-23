@@ -215,7 +215,6 @@ BASARSE EN LOS VALORES YA INSERTADOS PARA
 MONTO, MONEDA.
 
 */
-drop PROCEDURE InsertFactura
 go
 CREATE PROCEDURE InsertFactura
   @CodigoReservacion INT,

@@ -1,4 +1,5 @@
-const db = require('./DbConfig');
+const db = require('../DbConfig');
+const visitorManager = require('./visitorInsert')
 
 /**
  * This function creates a reservation.
@@ -21,10 +22,13 @@ async function insertDataReservation(reservation) {
     await insertClient(reservation.mail);
 
     for (const plate of reservation.plates) {
-      await insertVehicle(reservation.mail, plate);
+      if (plate!=='') await insertVehicle(reservation.mail, plate);
     }
     const reservationCode = await insertReservation(reservation.mail,
       reservation.area);
+    await insertVisitors(reservationCode, reservation.visitors,
+      reservation.area)
+    await insertReceipt(reservationCode)
   } catch (error) {
     console.log(error);
   }
@@ -102,11 +106,43 @@ async function insertReservation(email, area) {
 
 // TODO INSERT VISITANTES
 
+async function insertVisitors(reservationCode, visitors,
+  area) {
+  // Visitor NA
+  if (visitors[0].countAdultNac) {
+    await visitorManager.insertVisitorNA(reservationCode, area,
+      visitors[0].countAdultNac);
+  }
+  // Visitor NB
+  if (visitors[1].countAdultKidsNac) {
+    await visitorManager.insertVisitorNB(reservationCode, area,
+      visitors[1].countAdultKidsNac);
+  }
+  // Visitor EA
+  if (visitors[2].countAdultFor) {
+    await visitorManager.insertVisitorEA(reservationCode, area,
+      visitors[2].countAdultFor);
+  }
+  // Visitor EB
+  if (visitors[3].countAdultKidsFor) {
+    await visitorManager.insertVisitorEB(reservationCode, area,
+      visitors[3].countAdultKidsFor);
+  }
+}
+
 // TODO INSERT FACTURA
+
+async function insertReceipt(reservationCode) {
+  try {
+    const query = `EXEC InsertFactura
+    @CodigoReservacion = ${reservationCode},
+    @EstadoPago = 0;`
+    const result = await db.executeQuery(query);
+  } catch (error) {
+    throw error;
+  }
+};
 
 module.exports = {
   insertDataReservation,
-  insertUser,
-  insertClient,
-  insertReservation
 };
