@@ -10,7 +10,7 @@ import {
   ContenedorBotonCentrado,
   Boton,
   MensajeExito,
-  MensajeError,
+  MensajeError
 } from "./Elementos/ElementosFormulario";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -25,7 +25,7 @@ export const FormularioView = ({ UserData }) => {
   const [apellido2, cambiarApellido2] = useState({ campo: "", valido: null });
   const [identificacionUsuario, cambiarIdentificacionUsuario] = useState({
     campo: "",
-    valido: null,
+    valido: null
   });
   const [telefono, cambiarTelefono] = useState({ campo: "", valido: null });
   const [correo, cambiarCorreo] = useState({ campo: "", valido: null });
@@ -36,41 +36,33 @@ export const FormularioView = ({ UserData }) => {
   const [placa4, cambiarPlaca4] = useState({ campo: "", valido: null });
   const [placa5, cambiarPlaca5] = useState({ campo: "", valido: null });
   const [placa6, cambiarPlaca6] = useState({ campo: "", valido: null });
-
   const [terminos, cambiarTerminos] = useState(false);
   const [formularioValido, cambiarFormularioValido] = useState(null);
-  //variable para llevar el total de personas
-  const [counterFuera, setCounter] = useState(0);
-  // variable para llevar cantidad de placas ingresadas
-  const [counterPlacas, setCounterPlacas] = useState(0);
+  const [counterFuera, setCounter] = useState(0); //variable para llevar el total de personas
+  const [counterPlacas, setCounterPlacas] = useState(0);   // variable para llevar cantidad de placas ingresadas
   const [mostrarPlacas, setMostrarPlacas] = useState(0);
-
-  // aqui va el total de personas de reserva, por el momento 10
   const [totalPersonas, setTotalPersonas] = useState(UserData.num_guests + 1);
   const [totalPlacas, setTotalPlacas] = useState(6); //totalPlacas = 6;
-
+  const [counterNinos0a6Nac, setCounterNinos0a6Nac] = useState(0);
+  const [counterNinos6a12Nac, setCounterNinos6a12Nac] = useState(0);
   const [counterAdultosNac, setCounterAdultosNac] = useState(0);
-  const [counterMayorNiniosNac, setCounterMayorNiniosNac] = useState(0);
+  const [counterAdultosMayorNac, setCounterAdultosMayorNac] = useState(0);
+  const [counterNinos0a6Ext, setCounterNinos0a6Ext] = useState(0);
+  const [counterNinos6a12Ext, setCounterNinos6a12Ext] = useState(0);
   const [counterAdultosExt, setCounterAdultosExt] = useState(0);
-  const [counterMayorNiniosExt, setCounterMayorNiniosExt] = useState(0);
-  const [mostrarErrorTotalPersonas, setMostrarErrorTotalPersonas] =
-    useState(null);
-
+  const [counterAdultosMayorExt, setCounterAdultosMayorExt] = useState(0);
+  const [mostrarErrorTotalPersonas, setMostrarErrorTotalPersonas] = useState(
+    null
+  );
   //expresiones regulares para combrobar contenido
   const expresiones = {
     nombre: /^[a-zA-ZÀ-ÿ\s]{1,40}$/, // Letras y espacios, pueden llevar acentos.
     apellido: /^[a-zA-ZÀ-ÿ\s]{1,40}$/, // Letras y espacios, pueden llevar acentos.
     apellido2: /^[a-zA-ZÀ-ÿ\s]{1,40}$/, // Letras y espacios, pueden llevar acentos.
     correo: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
-    // alfanuméricos, puntos, guiones bajos, signos de más y signos de punto,
-    //edad: /\b([1-9]|[1-9][0-9]|1[01][0-9]|120)\b/,
-    // verifica si una cadena representa una edad válida en el rango de 1 a 120 años.
-    placa: /^(([A-Za-z]{2}-)?([A-Za-z]{1,3}-)?([0-9A-Za-z]{2,6}))?$/,
-    telefono: /^(?:\+\d{1,3})?\d{8}$/,
-    //verifica que solo ponga numeros de 8 digitos o el formato con codigo de pais +50689562145 por ejemplo
-    identificacionUsuario: /^.{0,60}$/, // coincide con cualquier carácter (excepto saltos de línea), hasta 60 caracteres.
+    telefono: /^(?:\+\d{1,3})?\d{8}$/, //verifica que solo ponga numeros de 8 digitos o el formato con codigo de pais +50689562145 por ejemplo
+    identificacionUsuario: /^.{0,60}$/ // coincide con cualquier carácter (excepto saltos de línea), hasta 60 caracteres.
   };
-
   // cambia que cuando de click de false a true
   const onChangeTerminos = (e) => {
     cambiarTerminos(e.target.checked);
@@ -86,37 +78,8 @@ export const FormularioView = ({ UserData }) => {
       correo.valido === "true" &&
       telefono.valido === "true" &&
       identificacionUsuario.valido === "true" &&
-      //edad.valido === "true" &&
-      //placa.valido === "true" &&
       terminos
     ) {
-      //Imprime los datos que va enviar al backend
-      console.log("Nombre enviado: ", e.target.nombre.value);
-      console.log("Apellido enviado: ", e.target.apellido.value);
-      console.log("Apellido 2 enviado: ", e.target.apellido2.value);
-      console.log(
-        "Numero de identificación enviado: ",
-        e.target.identificacionUsuario.value
-      );
-      console.log("Telefono enviado: ", e.target.telefono.value);
-      console.log("Correo enviado: ", e.target.correo.value);
-      //console.log("Edad enviada: ", e.target.edad.value);
-
-      console.log("Total Placas: ", counterPlacas);
-      console.log("Placa enviada: ", placa.campo);
-      console.log("Placa enviada: ", placa2.campo);
-      console.log("Placa enviada: ", placa3.campo);
-      console.log("Placa enviada: ", placa4.campo);
-      console.log("Placa enviada: ", placa5.campo);
-      console.log("Placa enviada: ", placa6.campo);
-
-      console.log("Total Personas: ", counterFuera);
-
-      console.log("totalAdultosNacionales: ", counterAdultosNac);
-      console.log("totalNinnosNacionales: ", counterMayorNiniosNac);
-      console.log("totalAdultosExtranjeros: ", counterAdultosExt);
-      console.log("totalNinnosExtranjeros: ", counterMayorNiniosExt);
-
       UserData.nameUser = e.target.nombre.value;
       UserData.firstSurname = e.target.apellido.value;
       UserData.secondSurname = e.target.apellido2.value;
@@ -133,17 +96,12 @@ export const FormularioView = ({ UserData }) => {
       UserData.countAdultKidsNac = counterMayorNiniosNac;
       UserData.countAdultFor = counterAdultosExt;
       UserData.countAdultKidsFor = counterMayorNiniosExt;
-
-      console.log("UserData.nameUser: ", UserData.nameUser);
-      console.log("UserData.countAdultKidsFor: ", counterMayorNiniosExt);
-
       cambiarFormularioValido(true);
       //reinicio los campos
       cambiarNombre({ campo: "", valido: null });
       cambiarApellido({ campo: "", valido: null });
       cambiarApellido2({ campo: "", valido: null });
       cambiarCorreo({ campo: "", valido: null });
-      //cambiarEdad({ campo: "", valido: null });
       // reinicio inputs placas
       cambiarPlaca({ campo: "", valido: null });
       cambiarPlaca2({ campo: "", valido: null });
@@ -152,17 +110,18 @@ export const FormularioView = ({ UserData }) => {
       cambiarPlaca5({ campo: "", valido: null });
       cambiarPlaca6({ campo: "", valido: null });
       //reinicio cantidad de personas que reservan
+      setCounterNinos0a6Nac(0);
+      setCounterNinos6a12Nac(0);
       setCounterAdultosNac(0);
-      setCounterMayorNiniosNac(0);
+      setCounterAdultosMayorNac(0);
+      setCounterNinos0a6Ext(0);
+      setCounterNinos6a12Ext(0);
       setCounterAdultosExt(0);
-      setCounterMayorNiniosExt(0);
-
+      setCounterAdultosMayorExt(0);
       setCounter(0);
       setCounterPlacas(0);
       setMostrarPlacas(0);
       cambiarTerminos(false);
-
-      // aqui podria hacerse la conexion con la base de datos
     } else {
       cambiarFormularioValido(false);
     }
@@ -235,16 +194,7 @@ export const FormularioView = ({ UserData }) => {
           expresionRegular={expresiones.correo}
         />
 
-        <div
-          style={{
-            height: "1px",
-            backgroundColor: "black",
-            width: "100%",
-            margin: "10px 0",
-            gridColumn: "span 2",
-          }}
-        ></div>
-
+        <div className="linea"></div>
         {/* Botones para incrementar y decrementar */}
         <ComponenteInputIncDec
           tipo="number"
@@ -336,17 +286,7 @@ export const FormularioView = ({ UserData }) => {
           />
         ) : null}
 
-        <div
-          style={{
-            height: "1px",
-            backgroundColor: "black",
-            width: "100%",
-            margin: "10px 0",
-            margintop: "0px",
-            marginbottom: "0px",
-            gridColumn: "span 2",
-          }}
-        ></div>
+        <div className="linea"></div>
 
         <h2>
           Seleccione {totalPersonas} personas para reservar:
@@ -355,6 +295,30 @@ export const FormularioView = ({ UserData }) => {
           Nacionales
         </h2>
         <div></div>
+
+        <ComponenteInputIncDec
+          tipo="number"
+          label="Niños de 0 a 6"
+          name="incrementoNinos0a6Nac"
+          estadoContador={counterFuera}
+          cambiarContador={setCounter}
+          controlTotal={totalPersonas}
+          counterTipoEntrada={counterNinos0a6Nac}
+          setCounterTipoEntrada={setCounterNinos0a6Nac}
+          setMostrarErrorTotalPersonas={setMostrarErrorTotalPersonas}
+        ></ComponenteInputIncDec>
+
+        <ComponenteInputIncDec
+          tipo="number"
+          label="Niños de 6 a 12"
+          name="incrementoNinos6a12Nac"
+          estadoContador={counterFuera}
+          cambiarContador={setCounter}
+          controlTotal={totalPersonas}
+          counterTipoEntrada={counterNinos6a12Nac}
+          setCounterTipoEntrada={setCounterNinos6a12Nac}
+          setMostrarErrorTotalPersonas={setMostrarErrorTotalPersonas}
+        ></ComponenteInputIncDec>
 
         <ComponenteInputIncDec
           tipo="number"
@@ -370,13 +334,13 @@ export const FormularioView = ({ UserData }) => {
 
         <ComponenteInputIncDec
           tipo="number"
-          label="Menores de 6 años o adultos mayores de 65"
-          name="incrementoAdulNinNac"
+          label="Adultos mayores de 65"
+          name="incrementoAdulMayoresNac"
           estadoContador={counterFuera}
           cambiarContador={setCounter}
           controlTotal={totalPersonas}
-          counterTipoEntrada={counterMayorNiniosNac}
-          setCounterTipoEntrada={setCounterMayorNiniosNac}
+          counterTipoEntrada={counterAdultosMayorNac}
+          setCounterTipoEntrada={setCounterAdultosMayorNac}
           setMostrarErrorTotalPersonas={setMostrarErrorTotalPersonas}
         ></ComponenteInputIncDec>
 
@@ -388,12 +352,36 @@ export const FormularioView = ({ UserData }) => {
             margin: "10px 0",
             margintop: "0px",
             marginbottom: "0px",
-            gridColumn: "span 2",
+            gridColumn: "span 2"
           }}
         ></div>
 
         <h2>Extranjeros</h2>
         <div></div>
+
+        <ComponenteInputIncDec
+          tipo="number"
+          label="Niños de 0 a 6"
+          name="incrementoNinos0a6Ext"
+          estadoContador={counterFuera}
+          cambiarContador={setCounter}
+          controlTotal={totalPersonas}
+          counterTipoEntrada={counterNinos0a6Ext}
+          setCounterTipoEntrada={setCounterNinos0a6Ext}
+          setMostrarErrorTotalPersonas={setMostrarErrorTotalPersonas}
+        ></ComponenteInputIncDec>
+
+        <ComponenteInputIncDec
+          tipo="number"
+          label="Niños de 6 a 12"
+          name="incrementoAdultosMayorExt"
+          estadoContador={counterFuera}
+          cambiarContador={setCounter}
+          controlTotal={totalPersonas}
+          counterTipoEntrada={counterNinos6a12Ext}
+          setCounterTipoEntrada={setCounterNinos6a12Ext}
+          setMostrarErrorTotalPersonas={setMostrarErrorTotalPersonas}
+        ></ComponenteInputIncDec>
 
         <ComponenteInputIncDec
           tipo="number"
@@ -409,13 +397,13 @@ export const FormularioView = ({ UserData }) => {
 
         <ComponenteInputIncDec
           tipo="number"
-          label="Menores de 6 años o adultos mayores de 65"
-          name="incrementoAdultosNinExt"
+          label="Adultos mayores de 65"
+          name="incrementoAdultosMayoresExt"
           estadoContador={counterFuera}
           cambiarContador={setCounter}
           controlTotal={totalPersonas}
-          counterTipoEntrada={counterMayorNiniosExt}
-          setCounterTipoEntrada={setCounterMayorNiniosExt}
+          counterTipoEntrada={counterAdultosMayorExt}
+          setCounterTipoEntrada={setCounterAdultosMayorExt}
           setMostrarErrorTotalPersonas={setMostrarErrorTotalPersonas}
         ></ComponenteInputIncDec>
 
