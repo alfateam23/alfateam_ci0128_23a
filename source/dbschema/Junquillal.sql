@@ -95,7 +95,7 @@ CREATE TABLE Vehiculo
 
 CREATE TABLE Area
 (
-  Tipo BIT DEFAULT (1), -- 0 Camping, 1 picnic
+  Tipo CHAR, -- C Camping, P picnic
   Cupo INT NOT NULL,
   Plazo SMALLINT NOT NULL,
   HoraApertura TIME NOT NULL,
@@ -109,7 +109,7 @@ CREATE TABLE Reservacion
 (
   Codigo INT,
   Email VARCHAR(60) NOT NULL,
-  TipoArea BIT DEFAULT (1) NOT NULL, -- 0 Camping, 1 picnic
+  TipoArea CHAR NOT NULL, -- C Camping, P picnic
   FechaSolicitud DATETIME NOT NULL,
   CONSTRAINT PK_Reservacion PRIMARY KEY(Codigo),
   CONSTRAINT FK_Reservacion_Cliente FOREIGN KEY(Email)

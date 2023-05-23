@@ -21,31 +21,32 @@ app.get('/backend/visitordata/:id', (req, res) => {
 });
 
 let reservation = {
-    start_date : new Date(),
-    end_date : new Date(),
-    num_guests : 0,
+    start_date: new Date(),
+    end_date: new Date(),
+    num_guests: 3,
+    nameUser: 'Esteban',
+    secondName: '',
+    firstSurname: 'Dido',
+    secondSurname: 'Chavez',
+    id: '117718065',
+    mail: 'este-bandido@gmail.com',
+    phone: ['50682116523',
+    '50687765432'], // Phone is an array
+    totalPlates: 1,
+    plates: ['098767',
+    '123456',
+    '789012'
+    ], // Multiple plates
+    countAdultNac: 2,
+    countAdultKidsNac: 1,
+    countAdultFor: 0,
+    countAdultKidsFor: 0,
+    area: 'C'
+  };
 
-    
-    nameUser : 'Esteban',
-    firstSurname : 'Dido',
-    secondSurname : 'Chavez',
-    id : '117718065',
-    mail : 'este-bandido@gmail.com',
-    phone: '50682116523',
-    totalPlates : 1,
-    plates : [
-        { number : '098767' }
-    ],
-
-    countAdultNac : 2,
-    countAdultKidsNac : 1,
-    countAdultFor : 0,
-    countAdultKidsFor : 0,
-};
-
-// eslint-disable-next-line no-multi-str
-const result = db.executeQuery('INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, Monto, Moneda) VALUES (\'A\', \'A\', \'I\', 0, \'CAN\');');
-console.log(result);
+// TODO funciono pero hay que acomodar mejor como salen los
+// datos, el nombre salio undefined
+//reservationManager.insertReservation(reservation);
 
 /*reservationManager.insertUser(reservation.mail, reservation.id,
     reservation.nameUser, null, reservation.firstSurname,

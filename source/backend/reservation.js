@@ -8,92 +8,105 @@ const db = require('./DbConfig');
  * 
  */
 
-function insertReservation(reservation) {
-  let result = null;
+async function insertDataReservation(reservation) {
   try {
-    result = insertUser(reservation.mail,reservation.id, reservation.name,
-      reservation.secondName, reservation.firstSurname,
-      reservation.secondSurname, 1);
-    insertPhone(reservation.phone, reservation.email);
-  } catch (error) {
-    return error;
-  }
+    await insertUser(reservation.mail,reservation.id,
+      reservation.nameUser, reservation.secondName,
+      reservation.firstSurname, reservation.secondSurname);
+    
+    for (const phone of reservation.phone) {
+      await insertPhone(phone, reservation.mail);
+    }
 
+    await insertClient(reservation.mail);
+
+    for (const plate of reservation.plates) {
+      await insertVehicle(reservation.mail, plate);
+    }
+    const reservationCode = await insertReservation(reservation.mail,
+      reservation.area);
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 async function insertUser(email, id, name, secondName,
-    lastname1, lastname2, status) {
-  let result = null;
+    lastname1, lastname2) {
   try {
-      let query = '';
-      if (secondName && lastname2) {
-          query = `insert into Usuario
-          (Email, Cedula, PrimerNombre, SegundoNombre,
-              PrimerApellido, SegundoApellido, EstadoActividad)
-          values (${email}, ${id}, ${name}, ${secondName},
-              ${lastname1}, ${lastname2}, ${status})`;
-      } else if (secondName) {
-          query = `insert into Usuario
-          (Email, Cedula, PrimerNombre, SegundoNombre,
-              PrimerApellido, EstadoActividad)
-          values (${email}, ${id}, ${name}, ${secondName},
-              ${lastname1}, ${status})`;
-      } else if (lastname2) {
-          query = `insert into Usuario
-          (Email, Cedula, PrimerNombre,
-              PrimerApellido, SegundoApellido, EstadoActividad)
-          values (${email}, ${id}, ${name},
-              ${lastname1}, ${lastname2}, ${status})`;
-      } else {
-          query = `insert into Usuario
-          (Email, Cedula, PrimerNombre, PrimerApellido, EstadoActividad)
-          values (${email}, ${id}, ${name},
-              ${lastname1}, ${status})`;
-      }
-      console.log(query)
-      result = await db.executeQuery(query);
-    } catch (error) {
-      return error
-    }
-  return result;
+    let mySecondName = null;
+    let myLastName2 = null;
+    if (secondName !== '') mySecondName = secondName;
+    if (lastname2 !== '') myLastName2 = lastname2;
+    const result = await db.executeQuery(
+      `EXEC InsertUser @Email = '${email}', @Cedula = '${id}',
+      @PrimerNombre = '${name}', @SegundoNombre = ${mySecondName},
+      @PrimerApellido = '${lastname1}', @SegundoApellido = ${myLastName2},
+      @EstadoActividad = 1`
+    );
+    return result;
+  } catch (error) {
+    throw error;
+  }
 };
 
 async function insertPhone(phone, email) {
-  let result = null;
   try {
-    const query = `insert into Telefono (Email, Numero) Values
-    (${email}, ${phone})`
-    result = await db.executeQuery(query);
+    const query = `EXEC InsertPhone
+    @Email='${email}',
+    @Numero='${phone}'`
+    const result = await db.executeQuery(query);
+    return result;
   } catch (error) {
-    return error;
+    throw error;
   }
-  return result;
 };
 
 async function insertClient(email) {
-  let result = null;
   try {
-    const query = `insert into Cliente (Email) Values
-    (${email})`
-    result = await db.executeQuery(query);
+    const query = `EXEC InsertClient @Email='${email}'`
+    const result = await db.executeQuery(query);
+    return result;
   } catch (error) {
-    return error;
+    throw error;
   }
-  return result;
 };
 
 async function insertVehicle(email, plate) {
-  let result = null;
   try {
-    const query = `insert into Vehiculo (Email, Placa) Values
-    (${email}, ${plate})`
-    result = await db.executeQuery(query);
+    const query = `EXEC InsertVehicle
+    @EmailCliente='${email}',
+    @Placa='${plate}'`
+    const result = await db.executeQuery(query);
+    return result;
   } catch (error) {
-    return error;
+    throw error;
   }
-  return result;
 };
 
+async function insertReservation(email, area) {
+  try {
+    let date = new Date();
+    const query = `DECLARE @OutputParameter INT;
+    EXEC InsertReservation
+    @Email = '${email}',
+    @TipoArea = '${area}',
+    @FechaSolicitud = '${date.toISOString().replace('T', ' ').substring(0, 19)}',
+    @OutputParameter = @OutputParameter OUTPUT;
+    SELECT @OutputParameter AS OutputParameter;`
+    const result = await db.executeQuery(query);
+    return result.recordset[0].OutputParameter;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// TODO INSERT VISITANTES
+
+// TODO INSERT FACTURA
+
 module.exports = {
+  insertDataReservation,
+  insertUser,
+  insertClient,
   insertReservation
 };

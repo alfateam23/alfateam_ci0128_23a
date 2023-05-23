@@ -34,11 +34,11 @@ const database = require('mssql');
 
 async function executeQuery(query) {
     try {
-        let handler = await database.connect(DbConfig);
-        const result = await handler.query(query);
+        await database.connect(DbConfig);
+        const result = await database.query(query);
         return result;
     } catch (err) {
-        return err;
+        throw err;
     } finally {
         database.close();
     }
