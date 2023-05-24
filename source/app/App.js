@@ -9,17 +9,23 @@ import {
 import { UserData } from './UserData';
 import { Visitors } from './visitors/Visitors';
 import { Page } from './reservation_page/Reservation_page';
-import { Login } from './login/Login';
+import Dashboard from './admin_dashboard/Dashboard';
 
 /**
- * Home component, for now it just shows a button to send the user to the reserve
- * module
+ * Temp navbar of project
  */
 const Home = () => {
    return (
       <div>
-         <Link to="/reservation" className="bg-blue-500 hover:bg-blue-700
-         text-white font-bold py-2 px-4 rounded">Reserva Ahora</Link>
+         <h1 className="flex justify-center items-center  text-4xl p-4"> Hola! Esta es la página de inicio</h1>
+         <ul className="hidden md:flex">
+            <li className="p-4">
+               <a className="transition ease-in-out hover:text-[#ffaf00] hover:duration-700 cursor-pointer" href="/Dashboard">Dashboard</a>
+            </li>
+            <li className="p-4">
+               <a className="transition ease-in-out hover:text-[#ffaf00] hover:duration-700 cursor-pointer" href="/reservation">Reserva Ahora</a>
+            </li>
+         </ul>
       </div>
    );
 }
@@ -45,7 +51,7 @@ const App = () => {
             <Route path="/reservation/review" element={<Review
                UserData={userData} />} />
             <Route path="/visitors" element={<Visitors />} />
-            <Route path="/login" element={<Login />} />
+            <Route path='/Dashboard' element={<Dashboard />} />
          </Routes>
       </div>
    );
