@@ -1,55 +1,82 @@
 import React, { useState } from 'react';
 
 function Lista() {
+
   const initialData = [
-    { codigo: 11211, tipo: 'Camping', personas: '9', fecha: 1.5 },
-    { codigo: 38382, tipo: 'Picnic', personas: '6', fecha: 1.2 },
-    { codigo: 48273, tipo: 'Picnic', personas: '3', fecha: 1.0 },
-    { codigo: 48223, tipo: 'Camping', personas: '9', fecha: 0.8 },
+    { codigo: 11211, tipo: 'Camping', personas: '9', fechaInicio: "2023-05-30" , fechaFinal: "2023-06-05", estado: 'Pendiente'},
+    { codigo: 38382, tipo: 'Picnic', personas: '6', fechaInicio: "2023-05-30" , fechaFinal: "2023-05-30", estado: 'Pendiente'},
+    { codigo: 48273, tipo: 'Picnic', personas: '3', fechaInicio: "2023-05-30" , fechaFinal: "2023-05-30", estado: 'Pendiente'},
+    { codigo: 48223, tipo: 'Camping', personas: '9', fechaInicio: "2023-05-30" , fechaFinal: "2023-06-01", estado: 'Pendiente'},
   ];
 
   const [data, setData] = useState(initialData);
-  const [filterValue, setFilterValue] = useState('');  
+  const [filterValue, setFilterValue] = useState('');
+  const [selectedNameFilter, setSelectedNameFilter] = useState('');
+  const [sortField, setSortField] = useState('');
   const [sortOrder, setSortOrder] = useState('asc');
-  const [typeFilter, setTypeFilter] = useState('');
 
-  const handleDeleteRow = (codigo) => {
-    const updatedData = data.filter((item) => item.codigo !== codigo);
-    setData(updatedData);
-  };
 
-const handleFilterByType = () => {
-  let filteredData = [...initialData];
+  // Al eliminar se debe invocar una funcion que envia el ID de la rserva a eliminar junto al token para eliminarlo en la DB
+  const handleFilter = (field, value) => {
+    let filteredData = [...initialData];
 
-  if (typeFilter !== '') {
-    filteredData = filteredData.filter((item) => item.tipo === typeFilter);
+    if (field === 'filterValue') {
+      setFilterValue(value);
+      filteredData = filteredData.filter((item) => item.id === parseInt(value));
+    } else if (field === 'selectedNameFilter') {
+      setSelectedNameFilter(value);
+      if (value !== '') {
+        filteredData = filteredData.filter((item) => item.name === value);
+      }
+  }
   }
 
-  setData(filteredData);
-  setFilterValue('');
-};
+  const handleSort = (field) => {
+    let sortedData = [...data];
 
-  const handleFilterByCodigo = () => {
-    if (filterValue === '') {
-      setData([...initialData]);
+    if (sortField === field && sortOrder === 'asc') {
+      sortedData.sort((a, b) => {
+        if (typeof a[field] === 'string') {
+          return b[field].localeCompare(a[field]);
+        } else {
+          return b[field] - a[field];
+        }
+      });
+
+      setSortOrder('desc');
     } else {
-      const filteredData = initialData.filter((item) => item.codigo === parseInt(filterValue));
-      setData(filteredData);
+      sortedData.sort((a, b) => {
+        if (typeof a[field] === 'string') {
+          return a[field].localeCompare(b[field]);
+        } else {
+          return a[field] - b[field];
+        }
+      });
+
+      setSortOrder('asc');
     }
-  };
 
-  const handleSortByPeople = () => {
-    const sortedData = [...data].sort((a, b) => {
-      if (sortOrder === 'asc') {
-        return a.personas - b.personas;
-      } else {
-        return b.personas - a.personas;
-      }
-    });
+    setSortField(field);
     setData(sortedData);
-    setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
   };
-
+  const handleCancelEstado = (codigo) => {
+    const updatedData = data.map((item) => {
+      if (item.codigo === codigo && item.estado === 'Pendiente') {
+          return { ...item, estado: 'Cancelado' };
+      }
+      return item;
+    });
+    setData(updatedData);
+  };
+  const handleAprobeEstado = (codigo) => {
+    const updatedData = data.map((item) => {
+      if (item.codigo === codigo && item.estado === 'Pendiente') {
+          return { ...item, estado: 'Aprobado' };
+      }
+      return item;
+    });
+    setData(updatedData);
+  };
   return (
     <div>
       <h1>Lista de Reservas</h1>
@@ -57,35 +84,59 @@ const handleFilterByType = () => {
         <input
           type="text"
           value={filterValue}
-          onChange={(event) => setFilterValue(event.target.value)}
-          placeholder="Buscar por Codigo"
+          onChange={(event) => handleFilter('filterValue', event.target.value)}
+          placeholder="Filtrar por Código"
         />
-        <button onClick={handleFilterByCodigo}>Buscar</button>
+        <button onClick={() => handleFilter('filterValue', filterValue)}>Buscar por Codigo</button>
       </div>
       <div>
         <select
-          value={typeFilter}
-          onChange={(event) => setTypeFilter(event.target.value)}
+          value={selectedNameFilter}
+          onChange={(event) => handleFilter('selectedNameFilter', event.target.value)}
         >
           <option value="">Ambos</option>
           <option value="Picnic">Picnic</option>
           <option value="Camping">Camping</option>
         </select>
-        <button onClick={handleFilterByType}>Filtrar</button>
+        <button onClick={() => handleFilter('selectedNameFilter', selectedNameFilter)}>
+          Filtrar
+        </button>
       </div>
       <table>
         <thead>
           <tr>
-            <th>Codigo</th>
-            <th>Tipo</th>
-            <th>
-            Cantidad de Personas{' '}
-              <button onClick={handleSortByPeople}>
-                {sortOrder === 'asc' ? <>&#x25B2;</> : <>&#x25BC;</>}
+            <th>Codigo
+              <button onClick={() => handleSort('codigo')}>
+                {sortField === 'codigo' && sortOrder === 'asc' ? '▲' : '▼'}
               </button>
             </th>
-            <th>Fecha de visita</th>
-            <th></th>
+            <th>Tipo
+              <button onClick={() => handleSort('tipo')}>
+                {sortField === 'tipo' && sortOrder === 'asc' ? '▲' : '▼'}
+              </button>
+            </th>
+            <th>
+            Cantidad de Personas{' '}
+              <button onClick={() => handleSort('personas')}>
+                {sortField === 'personas' && sortOrder === 'asc' ? '▲' : '▼'}
+              </button>
+            </th>
+            <th>Fecha entrada
+              <button onClick={() => handleSort('fechaInicio')}>
+                {sortField === 'fechaInicio' && sortOrder === 'asc' ? '▲' : '▼'}
+              </button>
+            </th>
+            <th>Fecha salida
+              <button onClick={() => handleSort('fechaFinal')}>
+                {sortField === 'fechaFinal' && sortOrder === 'asc' ? '▲' : '▼'}
+              </button>
+            </th>
+            <th>Estado
+              <button onClick={() => handleSort('estado')}>
+                {sortField === 'estado' && sortOrder === 'asc' ? '▲' : '▼'}
+              </button>
+            </th>
+            
           </tr>
         </thead>
         <tbody>
@@ -94,9 +145,14 @@ const handleFilterByType = () => {
               <td>{item.codigo}</td>
               <td>{item.tipo}</td>
               <td>{item.personas}</td>
-              <td>{item.fecha}</td>
+              <td>{item.fechaInicio}</td>
+              <td>{item.fechaFinal}</td>
+              <td>{item.estado}</td>
               <td>
-                <button onClick={() => handleDeleteRow(item.codigo)}>Eliminar</button>
+                <button onClick={() => handleCancelEstado(item.codigo)}>Cancelar</button>
+              </td>              
+              <td>
+                <button onClick={() => handleAprobeEstado(item.codigo)}>Confirmar</button>
               </td>
             </tr>
           ))}
@@ -105,6 +161,5 @@ const handleFilterByType = () => {
     </div>
   );
 }
-
 
 export default Lista;
