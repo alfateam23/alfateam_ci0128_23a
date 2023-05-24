@@ -1,7 +1,36 @@
 import React, { useState } from 'react';
+import { createUseStyles } from 'react-jss';
+
+const useStyles = createUseStyles({
+  tableContainer: {
+    maxWidth: '1000px',
+    margin: '0 auto',
+    fontFamily: 'Times New Roman, sans-serif',
+  },
+  table: {
+    width: '100%',
+    borderCollapse: 'collapse',
+    '& th, td': {
+      padding: '8px',
+      border: '1px solid #ddd',
+      textAlign: 'center', // Centrar el contenido de las celdas
+    },
+    '& th': {
+      backgroundColor: '#C9F1EB', 
+      fontWeight: 'bold',
+    },
+    '& tr:nth-child(even)': {
+      backgroundColor: '#f2f2f2',
+    },
+    '& tr:hover': {
+      backgroundColor: '#ddd',
+    },
+  },
+});
 
 function Lista() {
-
+  const classes = useStyles();
+   // Setear los datos de initial data con la base de datos
   const initialData = [
     { codigo: 11211, tipo: 'Camping', personas: '9', fechaInicio: "2023-05-30" , fechaFinal: "2023-06-05", estado: 'Pendiente'},
     { codigo: 38382, tipo: 'Picnic', personas: '6', fechaInicio: "2023-05-30" , fechaFinal: "2023-05-30", estado: 'Pendiente'},
@@ -16,7 +45,6 @@ function Lista() {
   const [sortOrder, setSortOrder] = useState('asc');
 
 
-  // Al eliminar se debe invocar una funcion que envia el ID de la rserva a eliminar junto al token para eliminarlo en la DB
   const handleFilter = (field, value) => {
     let filteredData = [...initialData];
 
@@ -59,6 +87,9 @@ function Lista() {
     setSortField(field);
     setData(sortedData);
   };
+    // Al cancelar se debe invocar una funcion que envia el ID de la reserva a 
+    //cancelar junto al token para eliminarlo en la DB
+
   const handleCancelEstado = (codigo) => {
     const updatedData = data.map((item) => {
       if (item.codigo === codigo && item.estado === 'Pendiente') {
@@ -68,6 +99,8 @@ function Lista() {
     });
     setData(updatedData);
   };
+     // Al aprobar se debe invocar una funcion que envia el ID de la reserva a 
+    //aprobar junto al token para eliminarlo en la DB
   const handleAprobeEstado = (codigo) => {
     const updatedData = data.map((item) => {
       if (item.codigo === codigo && item.estado === 'Pendiente') {
@@ -78,8 +111,8 @@ function Lista() {
     setData(updatedData);
   };
   return (
-    <div>
-      <h1>Lista de Reservas</h1>
+    <div className='{{ backgroundColor: gray }}'>
+      <h1 className='col' >Lista de Reservas</h1>
       <div>
         <input
           type="text"
@@ -102,7 +135,8 @@ function Lista() {
           Filtrar
         </button>
       </div>
-      <table>
+      <div className={classes.tableContainer}>
+      <table className={classes.table}>
         <thead>
           <tr>
             <th>Codigo
@@ -158,8 +192,8 @@ function Lista() {
           ))}
         </tbody>
       </table>
+      </div>
     </div>
   );
 }
-
 export default Lista;
