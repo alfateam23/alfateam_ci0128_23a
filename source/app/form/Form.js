@@ -1,8 +1,12 @@
 //npm install react-modal
-
 import React, { useState } from "react";
-
-import { ComponenteInput, ComponenteInputIncDec } from "./Input";
+import {
+  ComponenteInput,
+  ComponenteInputIncDec,
+  ComponentDropDown,
+  ComponentCheckBox,
+} from "./Input";
+import { RegularExpresions } from "./RegularExpresions";
 import "./style.css";
 import {
   Formulario,
@@ -10,7 +14,7 @@ import {
   ContenedorBotonCentrado,
   Boton,
   MensajeExito,
-  MensajeError
+  MensajeError,
 } from "./Elementos/ElementosFormulario";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -19,17 +23,17 @@ import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
 
 export const FormularioView = ({ UserData }) => {
   /* Estados para cada tipo de dato que use para poder hacer comprobacion de datos */
-
+  const regularExpresions = new RegularExpresions();
   const [nombre, cambiarNombre] = useState({ campo: "", valido: null });
+  const [secondName, setSecondName] = useState({ campo: "", valido: null });
   const [apellido, cambiarApellido] = useState({ campo: "", valido: null });
   const [apellido2, cambiarApellido2] = useState({ campo: "", valido: null });
   const [identificacionUsuario, cambiarIdentificacionUsuario] = useState({
     campo: "",
-    valido: null
+    valido: null,
   });
   const [telefono, cambiarTelefono] = useState({ campo: "", valido: null });
   const [correo, cambiarCorreo] = useState({ campo: "", valido: null });
-  //const [edad, cambiarEdad] = useState({ campo: "", valido: null });
   const [placa, cambiarPlaca] = useState({ campo: "", valido: null });
   const [placa2, cambiarPlaca2] = useState({ campo: "", valido: null });
   const [placa3, cambiarPlaca3] = useState({ campo: "", valido: null });
@@ -39,7 +43,7 @@ export const FormularioView = ({ UserData }) => {
   const [terminos, cambiarTerminos] = useState(false);
   const [formularioValido, cambiarFormularioValido] = useState(null);
   const [counterFuera, setCounter] = useState(0); //variable para llevar el total de personas
-  const [counterPlacas, setCounterPlacas] = useState(0);   // variable para llevar cantidad de placas ingresadas
+  const [counterPlacas, setCounterPlacas] = useState(0); // variable para llevar cantidad de placas ingresadas
   const [mostrarPlacas, setMostrarPlacas] = useState(0);
   const [totalPersonas, setTotalPersonas] = useState(UserData.num_guests + 1);
   const [totalPlacas, setTotalPlacas] = useState(6); //totalPlacas = 6;
@@ -51,18 +55,46 @@ export const FormularioView = ({ UserData }) => {
   const [counterNinos6a12Ext, setCounterNinos6a12Ext] = useState(0);
   const [counterAdultosExt, setCounterAdultosExt] = useState(0);
   const [counterAdultosMayorExt, setCounterAdultosMayorExt] = useState(0);
-  const [mostrarErrorTotalPersonas, setMostrarErrorTotalPersonas] = useState(
-    null
-  );
-  //expresiones regulares para combrobar contenido
-  const expresiones = {
-    nombre: /^[a-zA-ZÀ-ÿ\s]{1,40}$/, // Letras y espacios, pueden llevar acentos.
-    apellido: /^[a-zA-ZÀ-ÿ\s]{1,40}$/, // Letras y espacios, pueden llevar acentos.
-    apellido2: /^[a-zA-ZÀ-ÿ\s]{1,40}$/, // Letras y espacios, pueden llevar acentos.
-    correo: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
-    telefono: /^(?:\+\d{1,3})?\d{8}$/, //verifica que solo ponga numeros de 8 digitos o el formato con codigo de pais +50689562145 por ejemplo
-    identificacionUsuario: /^.{0,60}$/ // coincide con cualquier carácter (excepto saltos de línea), hasta 60 caracteres.
-  };
+  const [mostrarErrorTotalPersonas, setMostrarErrorTotalPersonas] =
+    useState(null);
+  const [selectOrigin, setSelectOrigin] = useState(null); // se usa para establecer el pais o provincia
+  const [selectedOption, setSelectedOption] = useState(null); // se usa para selecionar entre nacional o extranjero
+  const nationalityOptions = ["Nacional", "Extranjero"];
+  const pais = [
+    {
+      label: "Costa Rica",
+    },
+    {
+      label: "Nicaragua",
+    },
+    {
+      label: "Panamá",
+    },
+  ];
+  const provincias = [
+    {
+      label: "San Jose",
+    },
+    {
+      label: "Heredia",
+    },
+    {
+      label: "Alajuela",
+    },
+    {
+      label: "Cartago",
+    },
+    {
+      label: "Puntarenas",
+    },
+    {
+      label: "Limón",
+    },
+    {
+      label: "Guanacaste",
+    },
+  ];
+
   // cambia que cuando de click de false a true
   const onChangeTerminos = (e) => {
     cambiarTerminos(e.target.checked);
@@ -77,30 +109,86 @@ export const FormularioView = ({ UserData }) => {
       apellido2.valido === "true" &&
       correo.valido === "true" &&
       telefono.valido === "true" &&
-      identificacionUsuario.valido === "true" &&
-      terminos
+      terminos &&
+      counterFuera === totalPersonas &&
+      selectedOption !== null
     ) {
+      //Imprime los datos que va enviar al backend
+      console.log("Nombre enviado: ", e.target.nombre.value);
+      console.log("secondName: ", e.target.secondName.value);
+      console.log("Apellido enviado: ", e.target.apellido.value);
+      console.log("Apellido 2 enviado: ", e.target.apellido2.value);
+      console.log(
+        "Numero de identificación enviado: ",
+        e.target.identificacionUsuario.value
+      );
+      console.log("Telefono enviado: ", e.target.telefono.value);
+      console.log("Correo enviado: ", e.target.correo.value);
+      const { label } = selectOrigin || {};
+      console.log("Procedencia: ", label);
+      console.log("Total Placas: ", counterPlacas);
+      console.log("Placa enviada: ", placa.campo);
+      console.log("Placa enviada: ", placa2.campo);
+      console.log("Placa enviada: ", placa3.campo);
+      console.log("Placa enviada: ", placa4.campo);
+      console.log("Placa enviada: ", placa5.campo);
+      console.log("Placa enviada: ", placa6.campo);
+      console.log("Total Personas: ", counterFuera);
+      console.log("totalNinos0a6Nac: ", counterNinos0a6Nac);
+      console.log("totalNinos6a12Nac: ", counterNinos6a12Nac);
+      console.log("totalAdultosNac: ", counterAdultosNac);
+      console.log("totalAdultosMayorNac: ", counterAdultosMayorNac);
+      console.log("totalNinos0a6Ext: ", counterNinos0a6Ext);
+      console.log("totalNinos6a12Ext: ", counterNinos6a12Ext);
+      console.log("totalAdultosExtranjeros: ", counterAdultosExt);
+      console.log("totalAdultosMayorExt: ", counterAdultosMayorExt);
+
       UserData.nameUser = e.target.nombre.value;
+      UserData.secondName = e.target.secondName.value;
       UserData.firstSurname = e.target.apellido.value;
       UserData.secondSurname = e.target.apellido2.value;
+      UserData.id = e.target.identificacionUsuario.value;
+      UserData.phone = e.target.telefono.value;
       UserData.mail = e.target.correo.value;
-      UserData.totalPlates = counterPlacas;
-      UserData.plate1 = placa.campo;
-      UserData.plate2 = placa2.campo;
-      UserData.plate3 = placa3.campo;
-      UserData.plate4 = placa4.campo;
-      UserData.plate5 = placa5.campo;
-      UserData.plate6 = placa6.campo;
-      UserData.TotalPeople = counterFuera;
-      UserData.countAdultNac = counterAdultosNac;
-      UserData.countAdultKidsNac = counterMayorNiniosNac;
-      UserData.countAdultFor = counterAdultosExt;
-      UserData.countAdultKidsFor = counterMayorNiniosExt;
-      cambiarFormularioValido(true);
+      UserData.origin = label;
+      UserData.plates = [
+        placa.campo,
+        placa2.campo,
+        placa3.campo,
+        placa4.campo,
+        placa5.campo,
+        placa6.campo,
+      ];
+      //UserData.TotalPeople = counterFuera;
+      UserData.visitors = [
+        counterNinos0a6Nac,
+        counterNinos6a12Nac,
+        counterAdultosNac,
+        counterAdultosMayorNac,
+        counterNinos0a6Ext,
+        counterNinos6a12Ext,
+        counterAdultosExt,
+        counterAdultosMayorExt,
+      ];
+
+      console.log("UserData.nameUser:", UserData.nameUser);
+      console.log("UserData.secondName:", UserData.secondName);
+      console.log("UserData.firstSurname:", UserData.firstSurname);
+      console.log("UserData.secondSurname:", UserData.secondSurname);
+      console.log("UserData.id:", UserData.id);
+      console.log("UserData.phone:", UserData.phone);
+      console.log("UserData.mail:", UserData.mail);
+      console.log("UserData.origin:", UserData.origin);
+      console.log("UserData.plates:", UserData.plates);
+      console.log("UserData.visitors:", UserData.visitors);
       //reinicio los campos
+      cambiarFormularioValido(true);
       cambiarNombre({ campo: "", valido: null });
+      setSecondName({ campo: "", valido: null });
       cambiarApellido({ campo: "", valido: null });
       cambiarApellido2({ campo: "", valido: null });
+      cambiarIdentificacionUsuario({ campo: "", valido: null });
+      cambiarTelefono({ campo: "", valido: null });
       cambiarCorreo({ campo: "", valido: null });
       // reinicio inputs placas
       cambiarPlaca({ campo: "", valido: null });
@@ -109,6 +197,8 @@ export const FormularioView = ({ UserData }) => {
       cambiarPlaca4({ campo: "", valido: null });
       cambiarPlaca5({ campo: "", valido: null });
       cambiarPlaca6({ campo: "", valido: null });
+      setSelectOrigin(null);
+      setSelectedOption(null);
       //reinicio cantidad de personas que reservan
       setCounterNinos0a6Nac(0);
       setCounterNinos6a12Nac(0);
@@ -138,7 +228,16 @@ export const FormularioView = ({ UserData }) => {
           label="Nombre"
           name="nombre"
           leyendaError="El nombre solo puede contener letras y espacios."
-          expresionRegular={expresiones.nombre}
+          expresionRegular={regularExpresions.expresiones.nombre}
+        />
+
+        <ComponenteInput
+          estado={secondName}
+          cambiarEstado={setSecondName}
+          tipo="text"
+          label="Segundo nombre"
+          name="secondName"
+          leyendaError="El nombre solo puede contener letras y espacios."
         />
 
         <ComponenteInput
@@ -148,7 +247,7 @@ export const FormularioView = ({ UserData }) => {
           label="Apellido"
           name="apellido"
           leyendaError="El apellido solo puede contener letras y espacios."
-          expresionRegular={expresiones.apellido}
+          expresionRegular={regularExpresions.expresiones.apellido}
         />
 
         <ComponenteInput
@@ -158,7 +257,7 @@ export const FormularioView = ({ UserData }) => {
           label="Segundo Apellido"
           name="apellido2"
           leyendaError="El apellido solo puede contener letras y espacios."
-          expresionRegular={expresiones.apellido2}
+          expresionRegulaGr={regularExpresions.expresiones.apellido2}
         />
 
         <ComponenteInput
@@ -169,7 +268,7 @@ export const FormularioView = ({ UserData }) => {
           placeholder=""
           name="identificacionUsuario"
           leyendaError="Acepta cualquier caracter, hasta 60 caracteres."
-          expresionRegular={expresiones.telefono}
+          expresionRegular={regularExpresions.expresiones.identificacionUsuario}
         />
 
         <ComponenteInput
@@ -177,10 +276,10 @@ export const FormularioView = ({ UserData }) => {
           cambiarEstado={cambiarTelefono}
           tipo="text"
           label="Telefono"
-          placeholder="+50685952345"
+          placeholder="85952345"
           name="telefono"
-          leyendaError="Número de teléfono de 8 dígitos o el símbolo '+', el código de país y 8 dígitos. Por ejemplo +50689745265."
-          expresionRegular={expresiones.telefono}
+          leyendaError="Número de teléfono de 8 dígitos o el código de país y 8 dígitos. Por ejemplo 89745265 o 50689745265."
+          expresionRegular={regularExpresions.expresiones.telefono}
         />
 
         <ComponenteInput
@@ -191,8 +290,35 @@ export const FormularioView = ({ UserData }) => {
           placeholder="john@correo.com"
           name="correo"
           leyendaError="El correo solo puede contener letras, numeros, puntos, guiones y guion bajo."
-          expresionRegular={expresiones.correo}
+          expresionRegular={regularExpresions.expresiones.correo}
         />
+        <ComponentCheckBox
+          label="Nacionalidad de la persona que reserva: "
+          name="CheckBoxNacionality"
+          nationalityOptions={nationalityOptions}
+          selectedOption={selectedOption}
+          setSelectedOption={setSelectedOption}
+        ></ComponentCheckBox>
+
+        {selectedOption === null ? null : selectedOption === "Extranjero" ? (
+          <ComponentDropDown
+            label="Procedecia"
+            name="procedeciaPais"
+            leyenda="Seleccione país"
+            items={pais}
+            selectedItem={selectOrigin}
+            setSelectedItem={setSelectOrigin}
+          ></ComponentDropDown>
+        ) : (
+          <ComponentDropDown
+            label="Procedecia"
+            name="procedeciaProvincia"
+            leyenda="Seleccione provincia"
+            items={provincias}
+            selectedItem={selectOrigin}
+            setSelectedItem={setSelectOrigin}
+          ></ComponentDropDown>
+        )}
 
         <div className="linea"></div>
         {/* Botones para incrementar y decrementar */}
@@ -218,7 +344,7 @@ export const FormularioView = ({ UserData }) => {
             placeholder="placa"
             name="placa"
             leyendaError="La placa debe tener como mínimo 2 dígitos numéricos o alfanuméricos y como máximo 6."
-            expresionRegular={expresiones.placa}
+            expresionRegular={regularExpresions.expresiones.placa}
           />
         ) : null}
 
@@ -231,7 +357,7 @@ export const FormularioView = ({ UserData }) => {
             placeholder="placa"
             name="placa2"
             leyendaError="La placa debe tener como mínimo 2 dígitos numéricos o alfanuméricos y como máximo 6."
-            expresionRegular={expresiones.placa}
+            expresionRegular={regularExpresions.expresiones.placa}
           />
         ) : null}
 
@@ -244,9 +370,10 @@ export const FormularioView = ({ UserData }) => {
             placeholder="placa"
             name="placa3"
             leyendaError="La placa debe tener como mínimo 2 dígitos numéricos o alfanuméricos y como máximo 6."
-            expresionRegular={expresiones.placa}
+            expresionRegular={regularExpresions.expresiones.placa}
           />
         ) : null}
+
         {counterPlacas >= 4 ? (
           <ComponenteInput
             estado={placa4}
@@ -256,7 +383,7 @@ export const FormularioView = ({ UserData }) => {
             placeholder="placa 4"
             name="placa4"
             leyendaError="La placa debe tener como mínimo 2 dígitos numéricos o alfanuméricos y como máximo 6."
-            expresionRegular={expresiones.placa}
+            expresionRegular={regularExpresions.expresiones.placa}
           />
         ) : null}
 
@@ -269,7 +396,7 @@ export const FormularioView = ({ UserData }) => {
             placeholder="placa"
             name="placa5"
             leyendaError="La placa debe tener como mínimo 2 dígitos numéricos o alfanuméricos y como máximo 6."
-            expresionRegular={expresiones.placa}
+            expresionRegular={regularExpresions.expresiones.placa}
           />
         ) : null}
 
@@ -282,12 +409,11 @@ export const FormularioView = ({ UserData }) => {
             placeholder="placa"
             name="placa6"
             leyendaError="La placa debe tener como mínimo 2 dígitos numéricos o alfanuméricos y como máximo 6."
-            expresionRegular={expresiones.placa}
+            expresionRegular={regularExpresions.expresiones.placa}
           />
         ) : null}
 
         <div className="linea"></div>
-
         <h2>
           Seleccione {totalPersonas} personas para reservar:
           <br />
@@ -295,7 +421,6 @@ export const FormularioView = ({ UserData }) => {
           Nacionales
         </h2>
         <div></div>
-
         <ComponenteInputIncDec
           tipo="number"
           label="Niños de 0 a 6"
@@ -343,22 +468,9 @@ export const FormularioView = ({ UserData }) => {
           setCounterTipoEntrada={setCounterAdultosMayorNac}
           setMostrarErrorTotalPersonas={setMostrarErrorTotalPersonas}
         ></ComponenteInputIncDec>
-
-        <div
-          style={{
-            height: "1px",
-            backgroundColor: "black",
-            width: "100%",
-            margin: "10px 0",
-            margintop: "0px",
-            marginbottom: "0px",
-            gridColumn: "span 2"
-          }}
-        ></div>
-
+        <div className="linea"></div>
         <h2>Extranjeros</h2>
         <div></div>
-
         <ComponenteInputIncDec
           tipo="number"
           label="Niños de 0 a 6"
@@ -411,12 +523,12 @@ export const FormularioView = ({ UserData }) => {
           <label>
             <input
               type="checkbox"
-              name="terminos"
+              name="verificacion"
               id="terminos"
               checked={terminos}
               onChange={onChangeTerminos}
             />
-            Acepto Términos y Condiciones
+            He revisado que la información es correcta
           </label>
         </ContenedorTerminos>
 
