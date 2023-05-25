@@ -6,8 +6,13 @@ import {
   LeyendaError,
   IconoValidacion,
   ButtonIncDec,
+  ButtonDropDown,
+  DropDown,
+  CheckBox,
 } from "./Elementos/ElementosFormulario";
-
+import { Space, Menu } from "antd";
+import { DownOutlined } from "@ant-design/icons";
+// importo iconos para verificación y error
 // importo iconos para verificación y error
 import {
   faCircleCheck,
@@ -104,7 +109,6 @@ const ComponenteInputIncDec = ({
     errorControl();
     cambiarContador(estadoContador - 1);
     setCounterTipoEntrada(counterTipoEntrada - 1);
-
   };
 
   return (
@@ -131,4 +135,94 @@ const ComponenteInputIncDec = ({
   );
 };
 
-export { ComponenteInput, ComponenteInputIncDec };
+const ComponentDropDown = ({
+  label,
+  name,
+  items,
+  selectedItem,
+  setSelectedItem,
+  leyenda,
+}) => {
+  const handleMenuClick = (e) => {
+    const selected = items.find((item) => item.label === e.key);
+    setSelectedItem(selected);
+  };
+
+  const handleDropDownVisibleChange = (visible) => {
+    if (visible && selectedItem) {
+      const selectedItemLabel = selectedItem.label;
+      const currentSelectedItemLabel = items.find(
+        (item) => item.label === selectedItemLabel
+      )?.label;
+      if (selectedItemLabel !== currentSelectedItemLabel) {
+        setSelectedItem(null);
+      }
+    }
+  };
+
+  const shouldDisplayLeyenda =
+    !selectedItem || !items.some((item) => item.label === selectedItem.label);
+
+  const menu = (
+    <Menu onClick={handleMenuClick}>
+      {items.map((item) => (
+        <Menu.Item key={item.label}>{item.label}</Menu.Item>
+      ))}
+    </Menu>
+  );
+  return (
+    <div>
+      <label htmlFor={name}>{label}</label>
+      <div>
+        <DropDown
+          overlay={menu}
+          trigger={["click"]}
+          onVisibleChange={handleDropDownVisibleChange}
+        >
+          <ButtonDropDown>
+            <Space>
+              {shouldDisplayLeyenda ? leyenda : selectedItem.label}
+              <DownOutlined />
+            </Space>
+          </ButtonDropDown>
+        </DropDown>
+      </div>
+    </div>
+  );
+};
+
+const ComponentCheckBox = ({
+  label,
+  name,
+  nationalityOptions,
+  selectedOption,
+  setSelectedOption,
+}) => {
+  const onChangeCheckValues = (checkedValues) => {
+    let value = null;
+    if (checkedValues.length > 0) {
+      value = checkedValues[checkedValues.length - 1];
+    }
+    setSelectedOption(value);
+    //console.log("checked =", value);
+  };
+  return (
+    <div>
+      <Label htmlFor={name}>{label}</Label>
+      <GrupoInput>
+        <CheckBox
+          options={nationalityOptions}
+          value={selectedOption ? [selectedOption] : []}
+          onChange={onChangeCheckValues}
+        />
+      </GrupoInput>
+    </div>
+  );
+};
+
+export {
+  ComponenteInput,
+  ComponenteInputIncDec,
+  ComponentDropDown,
+  ComponentCheckBox,
+};
