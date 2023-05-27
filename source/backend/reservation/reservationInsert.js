@@ -108,25 +108,45 @@ async function insertReservation(email, area) {
 
 async function insertVisitors(reservationCode, visitors,
   area) {
-  // Visitor NA
+  // Visitor Adult national
   if (visitors[0].countAdultNac) {
-    await visitorManager.insertVisitorNA(reservationCode, area,
+    await visitorManager.insertVisitorAdultNational(reservationCode, area,
       visitors[0].countAdultNac);
   }
-  // Visitor NB
-  if (visitors[1].countAdultKidsNac) {
-    await visitorManager.insertVisitorNB(reservationCode, area,
+  // Visitor kid 0-6 y/o national
+  if (visitors[1].countAdultKids06Nac) {
+    await visitorManager.insertVisitorKid06National(reservationCode, area,
       visitors[1].countAdultKidsNac);
   }
-  // Visitor EA
-  if (visitors[2].countAdultFor) {
-    await visitorManager.insertVisitorEA(reservationCode, area,
+  // Visitor kid 6-12 y/o national
+  if (visitors[2].countAdultKids612Nac) {
+    await visitorManager.insertVisitorKids612National(reservationCode, area,
       visitors[2].countAdultFor);
   }
-  // Visitor EB
-  if (visitors[3].countAdultKidsFor) {
-    await visitorManager.insertVisitorEB(reservationCode, area,
+  // Visitor elder 65+ y/o national
+  if (visitors[3].countElderNac) {
+    await visitorManager.insertVisitorElderNational(reservationCode, area,
       visitors[3].countAdultKidsFor);
+  }
+  // Visitor Adult foreigner
+  if (visitors[4].countAdultExt) {
+    await visitorManager.insertVisitorAdultForeign(reservationCode, area,
+      visitors[4].countAdultNac);
+  }
+  // Visitor kid 0-6 y/o foreigner
+  if (visitors[5].countAdultKids06Ext) {
+    await visitorManager.insertVisitorKid06Foreign(reservationCode, area,
+      visitors[1].countAdultKidsNac);
+  }
+  // Visitor kid 6-12 y/o foreigner
+  if (visitors[5].countAdultKids612Ext) {
+    await visitorManager.insertVisitorKids612Foreign(reservationCode, area,
+      visitors[5].countAdultFor);
+  }
+  // Visitor elder 65+ y/o foreigner
+  if (visitors[6].countElderExt) {
+    await visitorManager.insertVisitorElderForeign(reservationCode, area,
+      visitors[6].countAdultKidsFor);
   }
 }
 

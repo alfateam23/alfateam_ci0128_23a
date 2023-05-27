@@ -40,10 +40,14 @@ let reservation = {
     ''
     ], // Multiple plates
     visitors: [
-        { countAdultNac: 2 },
-        { countAdultKidsNac: 1 },
-        { countAdultFor: 0 },
-        { countAdultKidsFor: 0 }
+        { countAdultNac: 0 },
+        { countAdultKids06Nac: 0 },
+        { countAdultKids612Nac: 0 },
+        { countElderNac: 0 },
+        { countAdultExt: 0 },
+        { countAdultKids06Ext: 0 },
+        { countAdultKids612Ext: 0 },
+        { countElderExt: 0 }
     ],
     area: 'C'
   };
