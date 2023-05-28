@@ -3,6 +3,7 @@
 const express = require('express');
 const app = express();
 const reservationManager = require('./reservation/reservationInsert');
+const reports = require('reports/reportsSelect')
 
 const visitorsRawData = {
     "visitors": [
@@ -19,6 +20,20 @@ app.get('/backend/visitordata/:id', (req, res) => {
     res.send(visitor);
 });
 
+// Get visitors in date range
+app.get('/backend/reports/visits/:startdate/:enddate', (req, res) => {
+    const visitsData = (startdate, enddate) => selectVisitsInDateRange(startdate, enddate)
+    if (!visitsData) res.status(404).send("Invalid date range for visitors report");
+    res.send(visitsData);
+});
+
+// Get profits in date range
+app.get('/backend/reports/profits/:startdate/:enddate', (req, res) => {
+    const profitsData = (startdate, enddate) => selectProfitsInDateRange(startdate, enddate)
+    if (!profitsData) res.status(404).send("Invalid date range for profits report");
+    res.send(profitsData);
+});
+
 let reservation = {
     start_date: new Date(),
     end_date: new Date(),
@@ -30,14 +45,14 @@ let reservation = {
     id: '117718065',
     mail: 'este-bandido@gmail.com',
     phone: ['50682116523',
-    '50687765432'], // Phone is an array
+        '50687765432'], // Phone is an array
     totalPlates: 1,
     plates: ['098767',
-    '123456',
-    '789012',
-    '',
-    '',
-    ''
+        '123456',
+        '789012',
+        '',
+        '',
+        ''
     ], // Multiple plates
     visitors: [
         { countAdultNac: 2 },
@@ -46,6 +61,6 @@ let reservation = {
         { countAdultKidsFor: 0 }
     ],
     area: 'C'
-  };
+};
 
-app.listen(3030, ()=> console.log('Listening on port 3030...'));
+app.listen(3030, () => console.log('Listening on port 3030...'));
