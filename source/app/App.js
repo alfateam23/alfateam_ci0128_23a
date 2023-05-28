@@ -1,7 +1,7 @@
 import React from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
 import {
-   Availability_page, Parcel_page,
+   Availability_page,
    Review,
    Select_dates_page,
    T_information
@@ -43,8 +43,6 @@ const App = () => {
             <Route path="/reservation" element={<Select_dates_page
                UserData={userData} />} />
             <Route path="/reservation/availability" element={<Availability_page
-               UserData={userData} />} />
-            <Route path="/reservation/lot" element={<Parcel_page
                UserData={userData} />} />
             <Route path="/reservation/info" element={<T_information
                UserData={userData} />} />

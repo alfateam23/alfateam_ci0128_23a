@@ -1,31 +1,12 @@
 import React, {useRef, useState} from 'react';
 import { My_Calendar } from "./Calendar";
-import { From_until, Reservation_type, Next_link, NavBar_PIR } from './Common';
-import { Party_title, Availability_title, Spaces_left } from './Availability_page';
-import { Date_selector, Select_dates_title } from './Select_dates';
-import { Parcelas } from "./Parcelas";
+import { Next_link, NavBar_PIR, Dates_type_info } from './Common';
+import { From_until } from './select_dates/From_until'
+import { Party_title,
+  Availability_title,
+  Spaces_left } from './Availability_page';
+import { Start_reservation, Reservation_type } from './select_dates/Select_dates';
 import {FormularioView} from "../form/Form"
-
-/*
-Function to show the page where the traveller will select the lot
-*/
-
-export const Parcel_page = ({UserData}) => {
-  return (
-    <div>
-      <From_until date_from={UserData.start_date.toDateString()}
-      date_until={UserData.end_date.toDateString()}/>
-      <br />
-      <Reservation_type />
-      <br />
-      <NavBar_PIR selected={"lot"}/>
-      <br />
-      <Parcelas UserData={UserData}/>
-      <Next_link route_next='/reservation/info'
-      route_back='/reservation/availability'/>
-    </div>
-  );
-};
 
 /*
 Function to add the form for the traveller to fill
@@ -33,16 +14,13 @@ Function to add the form for the traveller to fill
 export const T_information = ({UserData}) => {
   return (
     <div>
-      <From_until date_from={UserData.start_date.toDateString()}
-      date_until={UserData.end_date.toDateString()}/>
-      <br />
-      <Reservation_type />
+      <Dates_type_info userData={UserData} />
       <br />
       <NavBar_PIR selected={"traveller"}/>
       <br />
       <FormularioView UserData={UserData}  />
       <Next_link route_next='/reservation/review'
-      route_back='/reservation/lot' info={1}/>
+      route_back='/reservation/availability' info={1}/>
     </div>
   );
 };
@@ -54,11 +32,7 @@ Function to show the review page
 export const Review = ({UserData}) => {
   return (
     <div>
-      <From_until date_from={UserData.start_date.toDateString()}
-      date_until={UserData.end_date.toDateString()}/>
-      <br />
-      <Reservation_type />
-      <br />
+      <Dates_type_info userData={UserData} />
       <NavBar_PIR selected={"review"}/>
       <br />
       <Next_link route_next='/'
@@ -74,17 +48,15 @@ export const Availability_page = ({UserData}) => {
   let quantity = 100;
   return (
     <div>
-      <From_until date_from={UserData.start_date.toDateString()}
-      date_until={UserData.end_date.toDateString()}/>
-      <br />
-      <Reservation_type />
-      <br />
-      <Availability_title />
-      <br />
-      <Spaces_left quantity={quantity}/>
-      <br />
-      <Party_title UserData={UserData}/>
-      <Next_link route_next='/reservation/lot'
+      <div className='flex flex-col justify-center items-center'>
+        <Dates_type_info userData={UserData} />
+        <Availability_title />
+        <br />
+        <Spaces_left quantity={quantity}/>
+        <br />
+        <Party_title UserData={UserData}/>
+      </div>
+      <Next_link route_next='/reservation/info'
       route_back='/reservation/'/>
     </div>
   );
@@ -95,14 +67,9 @@ export const Availability_page = ({UserData}) => {
  */
 
 export const Select_dates_page = ({UserData}) => {
-  UserData.start_date = new Date();
-  UserData.end_date = new Date();
   return (
     <div>
-      <Select_dates_title />
-      <br/>
-      <Reservation_type />
-      <Date_selector userData={UserData}/>
+      <Start_reservation userData={UserData}/>
       <br/>
       <Next_link route_next='/reservation/availability'
       route_back='/' userData={UserData} check={1}/>
