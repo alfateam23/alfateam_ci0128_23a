@@ -1,7 +1,6 @@
 {
   "name": "source",
   "version": "0.1.0",
-  "proxy": "http://localhost:3030",
   "private": true,
   "dependencies": {
     "@fontsource/lexend": "^4.5.15",
@@ -12,11 +11,12 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "concurrently": "^8.0.1",
-    "flowbite": "^1.6.5",
     "react": "^18.2.0",
     "react-calendar": "^4.2.1",
     "react-dom": "^18.2.0",
+
     "react-fontawesome": "^1.7.1",
+
     "react-icons": "^4.8.0",
     "react-router-dom": "^6.11.1",
     "react-scripts": "^5.0.1",
