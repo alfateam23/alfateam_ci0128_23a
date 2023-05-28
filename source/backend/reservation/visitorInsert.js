@@ -6,14 +6,13 @@ Adult national
 */
 
 async function insertVisitorAdultNational(reservationCode, area, visitorQuantity,
-  paymentType='A', procedencia = 'UN') {
+  paymentType='No exonerado') {
   try {
     const query = `EXEC InsertVisitante
     @CodigoReservacion = ${reservationCode},
-    @TipoProcedencia = 'N',
+    @TipoProcedencia = 'Nacional',
     @TipoVisita = '${area}',
-    @Estatus = 'A',
-    @Procedencia = '${procedencia}',
+    @Estatus = 'Adulto',
     @CategoriaPago = '${paymentType}',
     @CantidadVisitantes = ${visitorQuantity};`
     await db.executeQuery(query);
@@ -27,14 +26,13 @@ Function to insert visitors Kids 0-6 y/o National
 */
 
 async function insertVisitorKid06National(reservationCode, area, visitorQuantity,
-  paymentType='A', procedencia = 'UN') {
+  paymentType='Exonerado') {
   try {
     const query = `EXEC InsertVisitante
     @CodigoReservacion = ${reservationCode},
-    @TipoProcedencia = 'N',
+    @TipoProcedencia = 'Nacional',
     @TipoVisita = '${area}',
-    @Estatus = 'C',
-    @Procedencia = '${procedencia}',
+    @Estatus = 'Niño 0 a 6 años',
     @CategoriaPago = '${paymentType}',
     @CantidadVisitantes = ${visitorQuantity};`
     await db.executeQuery(query);
@@ -48,14 +46,13 @@ Function to insert visitors, kids 6-12 y/o national
 */
 
 async function insertVisitorKids612National(reservationCode, area, visitorQuantity,
-  paymentType='A', procedencia = 'UN') {
+  paymentType='No exonerado') {
   try {
     const query = `EXEC InsertVisitante
     @CodigoReservacion = ${reservationCode},
-    @TipoProcedencia = 'N',
+    @TipoProcedencia = 'Nacional',
     @TipoVisita = '${area}',
-    @Estatus = 'A',
-    @Procedencia = '${procedencia}',
+    @Estatus = 'Niño 6 a 12 años',
     @CategoriaPago = '${paymentType}',
     @CantidadVisitantes = ${visitorQuantity};`
     await db.executeQuery(query);
@@ -69,14 +66,13 @@ Function to insert visitors elder (65+ y/o) nationals
 */
 
 async function insertVisitorElderNational(reservationCode, area, visitorQuantity,
-  paymentType='A', procedencia = 'UN') {
+  paymentType='Exonerado') {
   try {
     const query = `EXEC InsertVisitante
     @CodigoReservacion = ${reservationCode},
-    @TipoProcedencia = 'N',
+    @TipoProcedencia = 'Nacional',
     @TipoVisita = '${area}',
-    @Estatus = 'C',
-    @Procedencia = '${procedencia}',
+    @Estatus = 'Adulto 65 años o más',
     @CategoriaPago = '${paymentType}',
     @CantidadVisitantes = ${visitorQuantity};`
     await db.executeQuery(query);
@@ -84,20 +80,20 @@ async function insertVisitorElderNational(reservationCode, area, visitorQuantity
     throw error;
   }
 };
+
 /*
 Function to insert visitors
-Adult f
+Adult foreigner
 */
 
 async function insertVisitorAdultForeign(reservationCode, area, visitorQuantity,
-  paymentType='A', procedencia = 'UN') {
+  paymentType='No exonerado') {
   try {
     const query = `EXEC InsertVisitante
     @CodigoReservacion = ${reservationCode},
-    @TipoProcedencia = 'E',
+    @TipoProcedencia = 'Extranjero',
     @TipoVisita = '${area}',
-    @Estatus = 'A',
-    @Procedencia = '${procedencia}',
+    @Estatus = 'Adulto',
     @CategoriaPago = '${paymentType}',
     @CantidadVisitantes = ${visitorQuantity};`
     await db.executeQuery(query);
@@ -107,18 +103,17 @@ async function insertVisitorAdultForeign(reservationCode, area, visitorQuantity,
 };
 
 /*
-Function to insert visitors Kids 0-6 y/o Foreign
+Function to insert visitors Kids 0-6 y/o foreigner
 */
 
 async function insertVisitorKid06Foreign(reservationCode, area, visitorQuantity,
-  paymentType='A', procedencia = 'UN') {
+  paymentType='Exonerado') {
   try {
     const query = `EXEC InsertVisitante
     @CodigoReservacion = ${reservationCode},
-    @TipoProcedencia = 'E',
+    @TipoProcedencia = 'Extranjero',
     @TipoVisita = '${area}',
-    @Estatus = 'C',
-    @Procedencia = '${procedencia}',
+    @Estatus = 'Niño 0 a 6 años',
     @CategoriaPago = '${paymentType}',
     @CantidadVisitantes = ${visitorQuantity};`
     await db.executeQuery(query);
@@ -128,18 +123,17 @@ async function insertVisitorKid06Foreign(reservationCode, area, visitorQuantity,
 };
 
 /*
-Function to insert visitors, kids 6-12 y/o Foreign
+Function to insert visitors, kids 6-12 y/o foreigner
 */
 
 async function insertVisitorKids612Foreign(reservationCode, area, visitorQuantity,
-  paymentType='A', procedencia = 'UN') {
+  paymentType='No exonerado') {
   try {
     const query = `EXEC InsertVisitante
     @CodigoReservacion = ${reservationCode},
-    @TipoProcedencia = 'E',
+    @TipoProcedencia = 'Extranjero',
     @TipoVisita = '${area}',
-    @Estatus = 'A',
-    @Procedencia = '${procedencia}',
+    @Estatus = 'Niño 6 a 12 años',
     @CategoriaPago = '${paymentType}',
     @CantidadVisitantes = ${visitorQuantity};`
     await db.executeQuery(query);
@@ -149,18 +143,17 @@ async function insertVisitorKids612Foreign(reservationCode, area, visitorQuantit
 };
 
 /*
-Function to insert visitors elder (65+ y/o) Foreigns
+Function to insert visitors elder (65+ y/o) foreigner
 */
 
 async function insertVisitorElderForeign(reservationCode, area, visitorQuantity,
-  paymentType='A', procedencia = 'UN') {
+  paymentType='Exonerado') {
   try {
     const query = `EXEC InsertVisitante
     @CodigoReservacion = ${reservationCode},
-    @TipoProcedencia = 'E',
+    @TipoProcedencia = 'Extranjero',
     @TipoVisita = '${area}',
-    @Estatus = 'C',
-    @Procedencia = '${procedencia}',
+    @Estatus = 'Adulto 65 años o más',
     @CategoriaPago = '${paymentType}',
     @CantidadVisitantes = ${visitorQuantity};`
     await db.executeQuery(query);
@@ -168,6 +161,8 @@ async function insertVisitorElderForeign(reservationCode, area, visitorQuantity,
     throw error;
   }
 };
+
+
 
 module.exports = {
   insertVisitorAdultNational,

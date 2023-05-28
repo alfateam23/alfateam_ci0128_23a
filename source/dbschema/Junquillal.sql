@@ -124,7 +124,6 @@ CREATE TABLE DiaInactivo
 
 -- Límite diario de visitantes
 
-
 CREATE TABLE LimiteVisitantes
 (
   TipoArea CHAR,
@@ -133,7 +132,9 @@ CREATE TABLE LimiteVisitantes
   CupoOnlineDia INT NOT NULL,
   CONSTRAINT PK_LimiteVisitantes PRIMARY KEY(TipoArea, Fecha),
   CONSTRAINT FK_LimiteVisitantes_Area FOREIGN KEY(TipoArea)
-  REFERENCES Area(Tipo)
+  REFERENCES Area(Tipo),
+  CHECK (CupoTotalDia>0),
+  CHECK (CupoOnlineDia>0)
 );
 
 -- Reservación genérica

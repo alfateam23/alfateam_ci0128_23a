@@ -20,8 +20,8 @@ app.get('/backend/visitordata/:id', (req, res) => {
 });
 
 let reservation = {
-    start_date: new Date(),
-    end_date: new Date(),
+    start_date: new Date(2023, 6, 15),
+    end_date: new Date(2023, 6, 18),
     num_guests: 3,
     nameUser: 'Esteban',
     secondName: '',
@@ -39,9 +39,11 @@ let reservation = {
     '',
     ''
     ], // Multiple plates
+    origin : 'Costa Rica',
+    province : 'San José',
     visitors: [
-        { countAdultNac: 0 },
-        { countAdultKids06Nac: 0 },
+        { countAdultNac: 4 },
+        { countAdultKids06Nac: 2 },
         { countAdultKids612Nac: 0 },
         { countElderNac: 0 },
         { countAdultExt: 0 },
@@ -49,7 +51,9 @@ let reservation = {
         { countAdultKids612Ext: 0 },
         { countElderExt: 0 }
     ],
-    area: 'C'
-  };
+    area: 'Camping'
+};
 
+reservationManager.insertDataReservation(reservation);
+//console.log(reservation.visitors[1].countAdultKids06Nac)
 app.listen(3030, ()=> console.log('Listening on port 3030...'));
