@@ -1,21 +1,18 @@
 const db = require('../DbConfig');
 
 /*
-Function to insert visitors with the code
-NA which means
-N: nacionales
-A: regular
+Function to insert visitors
+Adult national
 */
 
-async function insertVisitorNA(reservationCode, area, visitorQuantity,
-  paymentType='A', procedencia = 'UN') {
+async function insertVisitorAdultNational(reservationCode, area, visitorQuantity,
+  paymentType='No exonerado') {
   try {
     const query = `EXEC InsertVisitante
     @CodigoReservacion = ${reservationCode},
-    @TipoProcedencia = 'N',
+    @TipoProcedencia = 'Nacional',
     @TipoVisita = '${area}',
-    @Estatus = 'A',
-    @Procedencia = '${procedencia}',
+    @Estatus = 'Adulto',
     @CategoriaPago = '${paymentType}',
     @CantidadVisitantes = ${visitorQuantity};`
     await db.executeQuery(query);
@@ -25,21 +22,17 @@ async function insertVisitorNA(reservationCode, area, visitorQuantity,
 };
 
 /*
-Function to insert visitors with the code
-NB which means
-N: nacionales
-B: niño regular
+Function to insert visitors Kids 0-6 y/o National
 */
 
-async function insertVisitorNB(reservationCode, area, visitorQuantity,
-  paymentType='A', procedencia = 'UN') {
+async function insertVisitorKid06National(reservationCode, area, visitorQuantity,
+  paymentType='Exonerado') {
   try {
     const query = `EXEC InsertVisitante
     @CodigoReservacion = ${reservationCode},
-    @TipoProcedencia = 'N',
+    @TipoProcedencia = 'Nacional',
     @TipoVisita = '${area}',
-    @Estatus = 'B',
-    @Procedencia = '${procedencia}',
+    @Estatus = 'Niño 0 a 6 años',
     @CategoriaPago = '${paymentType}',
     @CantidadVisitantes = ${visitorQuantity};`
     await db.executeQuery(query);
@@ -49,21 +42,17 @@ async function insertVisitorNB(reservationCode, area, visitorQuantity,
 };
 
 /*
-Function to insert visitors with the code
-EA which means
-E: Extranjero
-A: regular
+Function to insert visitors, kids 6-12 y/o national
 */
 
-async function insertVisitorEA(reservationCode, area, visitorQuantity,
-  paymentType='A', procedencia = 'UN') {
+async function insertVisitorKids612National(reservationCode, area, visitorQuantity,
+  paymentType='No exonerado') {
   try {
     const query = `EXEC InsertVisitante
     @CodigoReservacion = ${reservationCode},
-    @TipoProcedencia = 'E',
+    @TipoProcedencia = 'Nacional',
     @TipoVisita = '${area}',
-    @Estatus = 'A',
-    @Procedencia = '${procedencia}',
+    @Estatus = 'Niño 6 a 12 años',
     @CategoriaPago = '${paymentType}',
     @CantidadVisitantes = ${visitorQuantity};`
     await db.executeQuery(query);
@@ -73,21 +62,17 @@ async function insertVisitorEA(reservationCode, area, visitorQuantity,
 };
 
 /*
-Function to insert visitors with the code
-EB which means
-E: Extranjero
-B: niño regular
+Function to insert visitors elder (65+ y/o) nationals
 */
 
-async function insertVisitorEB(reservationCode, area, visitorQuantity,
-  paymentType='A', procedencia = 'UN') {
+async function insertVisitorElderNational(reservationCode, area, visitorQuantity,
+  paymentType='Exonerado') {
   try {
     const query = `EXEC InsertVisitante
     @CodigoReservacion = ${reservationCode},
-    @TipoProcedencia = 'E',
+    @TipoProcedencia = 'Nacional',
     @TipoVisita = '${area}',
-    @Estatus = 'B',
-    @Procedencia = '${procedencia}',
+    @Estatus = 'Adulto 65 años o más',
     @CategoriaPago = '${paymentType}',
     @CantidadVisitantes = ${visitorQuantity};`
     await db.executeQuery(query);
@@ -95,10 +80,97 @@ async function insertVisitorEB(reservationCode, area, visitorQuantity,
     throw error;
   }
 };
+
+/*
+Function to insert visitors
+Adult foreigner
+*/
+
+async function insertVisitorAdultForeign(reservationCode, area, visitorQuantity,
+  paymentType='No exonerado') {
+  try {
+    const query = `EXEC InsertVisitante
+    @CodigoReservacion = ${reservationCode},
+    @TipoProcedencia = 'Extranjero',
+    @TipoVisita = '${area}',
+    @Estatus = 'Adulto',
+    @CategoriaPago = '${paymentType}',
+    @CantidadVisitantes = ${visitorQuantity};`
+    await db.executeQuery(query);
+  } catch (error) {
+    throw error;
+  }
+};
+
+/*
+Function to insert visitors Kids 0-6 y/o foreigner
+*/
+
+async function insertVisitorKid06Foreign(reservationCode, area, visitorQuantity,
+  paymentType='Exonerado') {
+  try {
+    const query = `EXEC InsertVisitante
+    @CodigoReservacion = ${reservationCode},
+    @TipoProcedencia = 'Extranjero',
+    @TipoVisita = '${area}',
+    @Estatus = 'Niño 0 a 6 años',
+    @CategoriaPago = '${paymentType}',
+    @CantidadVisitantes = ${visitorQuantity};`
+    await db.executeQuery(query);
+  } catch (error) {
+    throw error;
+  }
+};
+
+/*
+Function to insert visitors, kids 6-12 y/o foreigner
+*/
+
+async function insertVisitorKids612Foreign(reservationCode, area, visitorQuantity,
+  paymentType='No exonerado') {
+  try {
+    const query = `EXEC InsertVisitante
+    @CodigoReservacion = ${reservationCode},
+    @TipoProcedencia = 'Extranjero',
+    @TipoVisita = '${area}',
+    @Estatus = 'Niño 6 a 12 años',
+    @CategoriaPago = '${paymentType}',
+    @CantidadVisitantes = ${visitorQuantity};`
+    await db.executeQuery(query);
+  } catch (error) {
+    throw error;
+  }
+};
+
+/*
+Function to insert visitors elder (65+ y/o) foreigner
+*/
+
+async function insertVisitorElderForeign(reservationCode, area, visitorQuantity,
+  paymentType='Exonerado') {
+  try {
+    const query = `EXEC InsertVisitante
+    @CodigoReservacion = ${reservationCode},
+    @TipoProcedencia = 'Extranjero',
+    @TipoVisita = '${area}',
+    @Estatus = 'Adulto 65 años o más',
+    @CategoriaPago = '${paymentType}',
+    @CantidadVisitantes = ${visitorQuantity};`
+    await db.executeQuery(query);
+  } catch (error) {
+    throw error;
+  }
+};
+
+
 
 module.exports = {
-  insertVisitorNA,
-  insertVisitorNB,
-  insertVisitorEA,
-  insertVisitorEB
+  insertVisitorAdultNational,
+  insertVisitorKid06National,
+  insertVisitorKids612National,
+  insertVisitorElderNational,
+  insertVisitorAdultForeign,
+  insertVisitorKid06Foreign,
+  insertVisitorKids612Foreign,
+  insertVisitorElderForeign,
 };
