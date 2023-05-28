@@ -9,9 +9,13 @@ import {
 import { UserData } from './UserData';
 import { Visitors } from './visitors/Visitors';
 import { Page } from './reservation_page/Reservation_page';
-import Dashboard from './admin_dashboard/Dashboard';
-import DashboardHome from './admin_dashboard/dashboard_components/dashboard_home';
+import Dashboard from './admin_dashboard/layout/sidebar/Dashboard';
 import { useLocation } from 'react-router-dom';
+
+/* import for Centro de Control */
+import RootLayout from './admin_dashboard/layout/RootLayout';
+import AllApps from './admin_dashboard/pages/AllApss';
+import Settings from './admin_dashboard/pages/Settings';
 
 
 /**
@@ -33,35 +37,47 @@ const Home = () => {
    );
 }
 
+const AdminApp = () => {
+   return (
+      <div>
+         <RootLayout>
+            <Routes>
+               <Route path="/" element={<AllApps />} />
+               <Route path="/settings" element={<Settings />} />
+            </Routes>
+         </RootLayout>
+      </div>
+   );
+}
+
+const CustomerApp = () => {
+   const userData = new UserData();
+   return (
+      <div>
+         <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/reservation" element={<Select_dates_page UserData={userData} />} />
+            <Route path="/reservation/availability" element={<Availability_page UserData={userData} />} />
+            <Route path="/reservation/lot" element={<Parcel_page UserData={userData} />} />
+            <Route path="/reservation/info" element={<T_information UserData={userData} />} />
+            <Route path="/reservation/review" element={<Review UserData={userData} />} />
+            <Route path="/visitors" element={<Visitors />} />
+         </Routes>
+      </div>
+   );
+}
+
 /**
  * This is the component in charge of handling the routing for the whole
  * web application.
  */
 const App = () => {
-   const userData = new UserData();
-   // Varaibles to determine location and set navbar
-   const location = useLocation();
-   const isDashboardPage = location.pathname === '/Dashboard';
-   return (
-      <div>
-         {isDashboardPage ? <Dashboard /> : <Home />}
-         <Routes>
-            
-            <Route path="/reservation" element={<Select_dates_page
-               UserData={userData} />} />
-            <Route path="/reservation/availability" element={<Availability_page
-               UserData={userData} />} />
-            <Route path="/reservation/lot" element={<Parcel_page
-               UserData={userData} />} />
-            <Route path="/reservation/info" element={<T_information
-               UserData={userData} />} />
-            <Route path="/reservation/review" element={<Review
-               UserData={userData} />} />
-            <Route path="/visitors" element={<Visitors />} />
-            <Route path="/DashboardHome" element={<DashboardHome />} />
-         </Routes>
-      </div>
-   );
+   const runAdminApp = true; // Change for either admin or normal mode
+   if (runAdminApp) {
+      return (AdminApp());
+   } else {
+      return (CustomerApp());
+   }
 }
 
 export default App;
