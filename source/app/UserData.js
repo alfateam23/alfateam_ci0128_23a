@@ -6,29 +6,27 @@ export class UserData {
   constructor() {
     this.start_date = new Date();
     this.end_date = new Date();
-    this.totalPeople = 0;
-    
-    this.nameUser = '';
-    this.secondName = '';
-    this.firstSurname = '';
-    this.secondSurname = '';
-    this.id = '';
-    this.mail = '';
-    this.phone = [];
-    this.plates = [];
-    this.origin = '';
+    this.parcelaSeleccionada = new String();
+    this.num_guests = 0;
 
-    this.visitors = [
-        { countAdultNac: 0 },
-        { countAdultKids06Nac: 0 },
-        { countAdultKids612Nac: 0 },
-        { countElderNac: 0 },
-        { countAdultExt: 0 },
-        { countAdultKids06Ext: 0 },
-        { countAdultKids612Ext: 0 },
-        { countElderExt: 0 },
-    ];
-    this.area = '';
+    
+    this.nameUser = new String();
+    this.firstSurname = new String();
+    this.secondSurname = new String();
+    this.mail = new String();
+    this.totalPlates = 0;
+    this.plate1 = new String();
+    this.plate2 = new String();
+    this.plate3 = new String();
+    this.plate4 = new String();
+    this.plate5 = new String();
+    this.plate6 = new String();
+
+    this.TotalPeople = 0;
+    this.countAdultNac = 0;
+    this.countAdultKidsNac = 0;
+    this.countAdultFor = 0;
+    this.countAdultKidsFor = 0;
     
   }
 

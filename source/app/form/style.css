@@ -14,11 +14,3 @@ main {
   margin: auto;
   padding: 40px;
 }
-
-.linea {
-  height: 1px;
-  background-color: black;
-  width: 100%;
-  margin: 10px 0;
-  grid-column: span 2;
-}
