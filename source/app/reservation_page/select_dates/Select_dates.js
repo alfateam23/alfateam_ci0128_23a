@@ -37,11 +37,11 @@ export const Reservation_type = ({userData, handleTitleChange}) => {
   function activate_selection(id) {
     if (id === 1) { // lot
       setStyleLot(styleLot + active_shadow + active_color);
-      handleTitleChange(1);
+      handleTitleChange("Camping");
       setStylePicnic('mt-[0.05px] ' + common_style);
     } else if (id === 2) {
       setStylePicnic(stylePicnic + active_shadow + active_color);
-      handleTitleChange(2);
+      handleTitleChange("Picnic");
       setStyleLot(common_style);
     }
     setInsideDivStyle('bg-blueNormal w-80\
@@ -72,18 +72,25 @@ export const Reservation_type = ({userData, handleTitleChange}) => {
  */
 export const Date_selector = ({userData, activate}) => {
   const [active, setActive] = useState(false);
-  const [selection, setSelection] = useState(false);
+  const [selection, setSelection] = useState('');
 
   function clickIcon(event) {
     event.currentTarget.id === 'until' &&
-    userData.start_date.toDateString() === (new Date()).toDateString()
+    userData.start_date === ''
     ? alert('Por favor, seleccione primero la fecha de inicio') : setActive(!active);
+    setSelection(event.currentTarget.id);
   }
 
   function calendarClick(day) {
-    if (userData.start_date.toDateString() === (new Date()).toDateString()) {
+    if (userData.start_date === '') {
       userData.start_date = day;
-    } else if (userData.end_date.toDateString() === (new Date()).toDateString()){
+    } else if (userData.end_date === ''){
+      userData.start_date > day ? alert('Seleccione una fecha final válida') :
+      userData.end_date = day;
+    } else if (selection === 'from' && userData.start_date instanceof Date){
+      userData.end_date < day ? alert('Seleccione una fecha inicial válida') :
+      userData.start_date = day;
+    } else if (selection === 'until' && userData.end_date instanceof Date){
       userData.start_date > day ? alert('Seleccione una fecha final válida') :
       userData.end_date = day;
     }
@@ -92,8 +99,8 @@ export const Date_selector = ({userData, activate}) => {
   return (
     <div>
       <From_until handleClick={clickIcon}
-      date_from={userData.start_date.toDateString()}
-      date_until={userData.end_date.toDateString()}
+      date_from={userData.start_date}
+      date_until={userData.end_date}
       activate={activate} />
       <br/>
       <My_Calendar active={active}
@@ -118,7 +125,7 @@ export const Start_reservation = ({userData}) => {
 
   const handleTitleChange = (id) => {
     userData.reservation_type = id;
-    setSelectedDate(()=>id);
+    setSelectedDate(()=>1);
   };
 
   useEffect(() => {

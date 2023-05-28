@@ -10,9 +10,9 @@ import { BrowserRouter as Router, Routes, Route, Link,
   * show the date, if not it will show the text
   */
 const From_fill = ({date, handleClick}) => {
-  if (date !== (new Date()).toDateString()) {
+  if (date !== '') {
     return (
-      <From_fill_date date={date}
+      <From_fill_date date={date.toDateString()}
       handleClick={handleClick} />
     );
   }
@@ -27,9 +27,10 @@ const From_fill = ({date, handleClick}) => {
   * show the date, if not it will show the text
   */
 const Until_fill = ({date, handleClick}) => {
-  if (date !== (new Date()).toDateString()) {
+  if (date !== '') {
     return (
-      <Until_fill_date date={date} />
+      <Until_fill_date date={date.toDateString()}
+      handleClick={handleClick} />
     );
   }
   return (
@@ -82,10 +83,13 @@ const Until_fill_text = ({handleClick}) => {
 /**
  * Component to show the until date
  */
-const Until_fill_date = ({date}) => {
+const Until_fill_date = ({date, handleClick}) => {
   return (
     <div className='inline-block'>
-      <p className= "inline-block pl-5 text-sm">{date}</p>
+      <p className= "inline-block pl-5 text-sm pr-5">{date}</p>
+      <button id='until' onClick={handleClick}>
+        <CiCalendar size="1.4rem" className='inline-block'/>
+      </button>
     </div>
   );
 };

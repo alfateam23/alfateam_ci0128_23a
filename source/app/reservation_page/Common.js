@@ -20,8 +20,8 @@ export const Next_link = ({route_next, route_back,
   
   function checkDates (event) {
     event.preventDefault();
-    if (userData.start_date.toDateString() !== (new Date()).toDateString() &&
-    userData.end_date.toDateString() !== (new Date()).toDateString()) {
+    if (userData.start_date !== '' &&
+    userData.end_date !== '') {
       navigate(route_next);
     } else {
       alert('Por favor digite las fechas que desea antes de continuar')
@@ -118,27 +118,6 @@ export const NavBar_PIR = ({selected}) => {
       <Link to="/reservation/review" className={review_style}>
         Revisión
       </Link>
-    </div>
-  );
-};
-
-export const Dates_type_info = ({userData}) => {
-  let dates = (userData.end_date !== (new Date()).toDateString()) ?
-  'Fechas Seleccionadas: ' + userData.start_date.toDateString()
-  + ' - ' + userData.end_date.toDateString() :
-  'Fecha: ' + userData.start_date.toDateString();
-  let type = 'Tipo de reservación\n' + userData.reservation_type === 1 ?
-  'Parcela' : 'Picnic';
-
-  return (
-    <div className='flex flex-row justify-center items-center space-x-96
-    mt-10 outline-1 outline-dashed outline-red-500 bg-gr'>
-      <div className='bg-gray-800 text-white'>
-        {dates}
-      </div>
-      <div className=''>
-        {}
-      </div>
     </div>
   );
 };
