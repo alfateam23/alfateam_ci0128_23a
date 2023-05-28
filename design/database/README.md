@@ -44,6 +44,45 @@ Número es un consecutivo de 8 dígitos.
 - `B` Prepagado
 - `C` Exonerado
 
+## Códigos de visitante
+
+- desde N-C-A-00000001 hasta N-C-A-99999999
+- desde N-C-B-00000001 hasta N-C-B-99999999
+- desde N-C-C-00000001 hasta N-C-C-99999999
+- desde N-C-D-00000001 hasta N-C-D-99999999
+- desde N-C-E-00000001 hasta N-C-E-99999999
+- desde N-C-F-00000001 hasta N-C-F-99999999
+- desde N-C-G-00000001 hasta N-C-G-99999999
+- desde N-C-H-00000001 hasta N-C-H-99999999
+- desde N-C-I-00000001 hasta N-C-I-99999999
+- desde N-P-A-00000001 hasta N-P-A-99999999
+- desde N-P-B-00000001 hasta N-P-B-99999999
+- desde N-P-C-00000001 hasta N-P-C-99999999
+- desde N-P-D-00000001 hasta N-P-D-99999999
+- desde N-P-E-00000001 hasta N-P-E-99999999
+- desde N-P-F-00000001 hasta N-P-F-99999999
+- desde N-P-G-00000001 hasta N-P-G-99999999
+- desde N-P-H-00000001 hasta N-P-H-99999999
+- desde N-P-I-00000001 hasta N-P-I-99999999
+- desde E-C-A-00000001 hasta E-C-A-99999999
+- desde E-C-B-00000001 hasta E-C-B-99999999
+- desde E-C-C-00000001 hasta E-C-C-99999999
+- desde E-C-D-00000001 hasta E-C-D-99999999
+- desde E-C-E-00000001 hasta E-C-E-99999999
+- desde E-C-F-00000001 hasta E-C-F-99999999
+- desde E-C-G-00000001 hasta E-C-G-99999999
+- desde E-C-H-00000001 hasta E-C-H-99999999
+- desde E-C-I-00000001 hasta E-C-I-99999999
+- desde E-P-A-00000001 hasta E-P-A-99999999
+- desde E-P-B-00000001 hasta E-P-B-99999999
+- desde E-P-C-00000001 hasta E-P-C-99999999
+- desde E-P-D-00000001 hasta E-P-D-99999999
+- desde E-P-E-00000001 hasta E-P-E-99999999
+- desde E-P-F-00000001 hasta E-P-F-99999999
+- desde E-P-G-00000001 hasta E-P-G-99999999
+- desde E-P-H-00000001 hasta E-P-H-99999999
+- desde E-P-I-00000001 hasta E-P-I-99999999
+
 ## Tarifas
 
 Tarifa especial de picnic para grupos.
