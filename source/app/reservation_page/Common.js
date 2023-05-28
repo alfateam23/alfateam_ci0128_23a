@@ -91,33 +91,46 @@ export const NavBar_PIR = ({selected}) => {
   shadow-[0px_1px_1px_0px_rgba(0,0,0,0.50)]\
   hover:shadow-[0px_1px_3px_0px_rgba(0,0,0,0.50)_inset]\
   hover:rounded-t-2xl";
-  let lot_style = '';
   let traveller_style = '';
   let review_style = '';
 
-  if (selected === 'lot') {
-    lot_style = selected_style;
-    traveller_style = review_style = non_selected_style;
-  } else if (selected === 'traveller') {
+  if (selected === 'traveller') {
     traveller_style = selected_style;
-    lot_style = review_style = non_selected_style;
+    review_style = non_selected_style;
   } else {
     review_style = selected_style;
-    lot_style = traveller_style = non_selected_style;
+    traveller_style = non_selected_style;
   }
 
   return (
     <div className="flex justify-center items-center
     bg-OrangeNavBar w-full mt-48 pt-4">
-      <Link to="/reservation/lot" className={lot_style}>
-        Seleccion de Parcela
-      </Link>
       <Link to="/reservation/info" className={traveller_style}>
         Información del Visitante
       </Link>
       <Link to="/reservation/review" className={review_style}>
         Revisión
       </Link>
+    </div>
+  );
+};
+
+export const Dates_type_info = ({userData}) => {
+  return (
+    <div className="flex flex-col justify-center items-center mt-10
+    sm:flex-row sm:space-x-40 md:space-x-60">
+      <div className="bg-white divide-x px-8 py-4 rounded-2xl
+      lg:-translate-x-40">
+        <div className="inline-block">
+          <p className="mr-5">{userData.start_date.toDateString()}</p>
+        </div>
+        <div className="inline-block">
+          <p className="ml-5">{userData.end_date.toDateString()}</p>
+        </div>
+      </div>
+      <div className="bg-white px-8 py-4 rounded-2xl mt-4 sm:mt-0">
+        <p>{userData.reservation_type}</p>
+      </div>
     </div>
   );
 };
