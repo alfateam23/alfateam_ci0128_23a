@@ -3,7 +3,7 @@
 const express = require('express');
 const app = express();
 const reservationManager = require('./reservation/reservationInsert');
-const reports = require('reports/reportsSelect')
+const reports = require('./reports/reportsSelect')
 
 const visitorsRawData = {
     "visitors": [
@@ -22,14 +22,14 @@ app.get('/backend/visitordata/:id', (req, res) => {
 
 // Get visitors in date range
 app.get('/backend/reports/visits/:startdate/:enddate', (req, res) => {
-    const visitsData = (startdate, enddate) => selectVisitsInDateRange(startdate, enddate)
+    const visitsData = (startdate, enddate) => reports.selectVisitsInDateRange(startdate, enddate)
     if (!visitsData) res.status(404).send("Invalid date range for visitors report");
     res.send(visitsData);
 });
 
 // Get profits in date range
 app.get('/backend/reports/profits/:startdate/:enddate', (req, res) => {
-    const profitsData = (startdate, enddate) => selectProfitsInDateRange(startdate, enddate)
+    const profitsData = (startdate, enddate) => reports.selectProfitsInDateRange(startdate, enddate)
     if (!profitsData) res.status(404).send("Invalid date range for profits report");
     res.send(profitsData);
 });

@@ -2,8 +2,8 @@
 
 import { React } from 'react'
 
-export const VisitsReport = ({ startDate, endDate }) => {
-    const reportData = fetch(`/api/report/visits?start=${startDate}&end=${endDate}`)
+export const VisitsReport = ({ startdate, enddate }) => {
+    const reportData = fetch(`'/backend/reports/visits/:${startdate}/:${enddate}`)
         .then((res) => res.json())
         .catch((err) => console.warn(err))
 
