@@ -8,20 +8,19 @@ import {
 } from './reservation_page/Reservation_page';
 import { UserData } from './UserData';
 import { Visitors } from './visitors/Visitors';
-import { Page } from './reservation_page/Reservation_page';
-import Dashboard from './admin_dashboard/layout/sidebar/Dashboard';
 import { useLocation } from 'react-router-dom';
 
 /* import for Centro de Control */
 import RootLayout from './admin_dashboard/layout/RootLayout';
-import AllApps from './admin_dashboard/pages/AllApss';
 import Settings from './admin_dashboard/pages/Settings';
+import Home from './admin_dashboard/pages/Home';
+import Tarifas from './admin_dashboard/pages/Tarifas';
 
 
 /**
  * Temp navbar of project
  */
-const Home = () => {
+const Navbar = () => {
    return (
       <div className="background-color: rgb(254 243 199)" >
          <h1 className="flex justify-center items-center  text-4xl p-4"> navegation bar </h1>
@@ -38,12 +37,15 @@ const Home = () => {
 }
 
 const AdminApp = () => {
+   const userData = new UserData();
    return (
       <div>
          <RootLayout>
             <Routes>
-               <Route path="/" element={<AllApps />} />
+               <Route path="/" element={<Home />} />
                <Route path="/settings" element={<Settings />} />
+               <Route path="/reservation" element={<Select_dates_page UserData={userData} />} />
+               <Route path='/tarifas' element={<Tarifas />} />
             </Routes>
          </RootLayout>
       </div>
@@ -55,7 +57,7 @@ const CustomerApp = () => {
    return (
       <div>
          <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Navbar />} />
             <Route path="/reservation" element={<Select_dates_page UserData={userData} />} />
             <Route path="/reservation/availability" element={<Availability_page UserData={userData} />} />
             <Route path="/reservation/lot" element={<Parcel_page UserData={userData} />} />
