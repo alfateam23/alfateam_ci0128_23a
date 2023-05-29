@@ -135,41 +135,44 @@ const ComponenteInputIncDec = ({
   );
 };
 
+
 const ComponentDropDown = ({
   label,
   name,
   items,
+  leyenda,
   selectedItem,
   setSelectedItem,
-  leyenda,
 }) => {
   const handleMenuClick = (e) => {
-    const selected = items.find((item) => item.label === e.key);
-    setSelectedItem(selected);
+    const selected = items.find((item) => item.name === e.key);
+    const { name } = selected || {};
+    setSelectedItem(name);
   };
 
   const handleDropDownVisibleChange = (visible) => {
     if (visible && selectedItem) {
-      const selectedItemLabel = selectedItem.label;
-      const currentSelectedItemLabel = items.find(
-        (item) => item.label === selectedItemLabel
-      )?.label;
-      if (selectedItemLabel !== currentSelectedItemLabel) {
+      const selectedItemName = selectedItem.name;
+      const currentSelectedItemName = items.find(
+        (item) => item.name === selectedItemName
+      )?.name;
+      if (selectedItemName !== currentSelectedItemName) {
         setSelectedItem(null);
       }
     }
   };
 
   const shouldDisplayLeyenda =
-    !selectedItem || !items.some((item) => item.label === selectedItem.label);
+    !selectedItem || !items.some((item) => item.name === selectedItem.name);
 
   const menu = (
     <Menu onClick={handleMenuClick}>
-      {items.map((item) => (
-        <Menu.Item key={item.label}>{item.label}</Menu.Item>
+      {items.map((items) => (
+        <Menu.Item key={items.name}>{items.name}</Menu.Item>
       ))}
     </Menu>
   );
+
   return (
     <div>
       <label htmlFor={name}>{label}</label>
@@ -181,7 +184,7 @@ const ComponentDropDown = ({
         >
           <ButtonDropDown>
             <Space>
-              {shouldDisplayLeyenda ? leyenda : selectedItem.label}
+              {shouldDisplayLeyenda ? leyenda : selectedItem.name}
               <DownOutlined />
             </Space>
           </ButtonDropDown>
