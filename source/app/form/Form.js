@@ -57,7 +57,8 @@ export const FormularioView = ({ UserData }) => {
   const [counterAdultosMayorExt, setCounterAdultosMayorExt] = useState(0);
   const [mostrarErrorTotalPersonas, setMostrarErrorTotalPersonas] =
     useState(null);
-  const [selectOrigin, setSelectOrigin] = useState(null); // se usa para establecer el pais o provincia
+  const [selectOriginCountry, setSelectOriginCountry] = useState(""); // se usa para establecer el pais
+  const [selectOriginProvince, setSelectOriginPronvince] = useState(""); // se usa para establecer la provincia
   const [selectedOption, setSelectedOption] = useState(null); // se usa para selecionar entre nacional o extranjero
   const nationalityOptions = ["Nacional", "Extranjero"];
   const pais = [
@@ -124,8 +125,10 @@ export const FormularioView = ({ UserData }) => {
       );
       console.log("Telefono enviado: ", e.target.telefono.value);
       console.log("Correo enviado: ", e.target.correo.value);
-      const { label } = selectOrigin || {};
-      console.log("Procedencia: ", label);
+      const { label2 } = selectOriginCountry || {};
+      const { label } = selectOriginProvince || {};
+      console.log("Procedencia Pais: ", label2);
+      console.log("Procedencia provincia: ", label);
       console.log("Total Placas: ", counterPlacas);
       console.log("Placa enviada: ", placa.campo);
       console.log("Placa enviada: ", placa2.campo);
@@ -150,7 +153,8 @@ export const FormularioView = ({ UserData }) => {
       UserData.id = e.target.identificacionUsuario.value;
       UserData.phone = e.target.telefono.value;
       UserData.mail = e.target.correo.value;
-      UserData.origin = label;
+      UserData.originCountry = label;
+      UserData.originProvince = label2;
       UserData.plates = [
         placa.campo,
         placa2.campo,
@@ -178,7 +182,8 @@ export const FormularioView = ({ UserData }) => {
       console.log("UserData.id:", UserData.id);
       console.log("UserData.phone:", UserData.phone);
       console.log("UserData.mail:", UserData.mail);
-      console.log("UserData.origin:", UserData.origin);
+      console.log("UserData.originCountry:", UserData.originCountry);
+      console.log("UserData.originProvince:", UserData.originProvince);
       console.log("UserData.plates:", UserData.plates);
       console.log("UserData.visitors:", UserData.visitors);
       //reinicio los campos
@@ -197,7 +202,8 @@ export const FormularioView = ({ UserData }) => {
       cambiarPlaca4({ campo: "", valido: null });
       cambiarPlaca5({ campo: "", valido: null });
       cambiarPlaca6({ campo: "", valido: null });
-      setSelectOrigin(null);
+      setSelectOriginCountry(null);
+      setSelectOriginPronvince(null);
       setSelectedOption(null);
       //reinicio cantidad de personas que reservan
       setCounterNinos0a6Nac(0);
@@ -257,7 +263,7 @@ export const FormularioView = ({ UserData }) => {
           label="Segundo Apellido"
           name="apellido2"
           leyendaError="El apellido solo puede contener letras y espacios."
-          expresionRegulaGr={regularExpresions.expresiones.apellido2}
+          expresionRegular={regularExpresions.expresiones.apellido2}
         />
 
         <ComponenteInput
@@ -306,8 +312,8 @@ export const FormularioView = ({ UserData }) => {
             name="procedeciaPais"
             leyenda="Seleccione país"
             items={pais}
-            selectedItem={selectOrigin}
-            setSelectedItem={setSelectOrigin}
+            selectedItem={selectOriginCountry}
+            setSelectedItem={setSelectOriginCountry}
           ></ComponentDropDown>
         ) : (
           <ComponentDropDown
@@ -315,8 +321,8 @@ export const FormularioView = ({ UserData }) => {
             name="procedeciaProvincia"
             leyenda="Seleccione provincia"
             items={provincias}
-            selectedItem={selectOrigin}
-            setSelectedItem={setSelectOrigin}
+            selectedItem={selectOriginProvince}
+            setSelectedItem={setSelectOriginPronvince}
           ></ComponentDropDown>
         )}
 
