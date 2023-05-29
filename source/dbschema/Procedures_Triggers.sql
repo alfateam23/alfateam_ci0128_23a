@@ -309,6 +309,8 @@ select * from Visitante
 select * from Factura
 select * from LimiteVisitantes
 
+Select * Area
+
 delete from Factura
 delete from LimiteVisitantes
 delete from Visitante
