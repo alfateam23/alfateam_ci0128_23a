@@ -1,7 +1,7 @@
 import React from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
 import {
-   Availability_page, Parcel_page,
+   Availability_page,
    Review,
    Select_dates_page,
    T_information
