@@ -16,7 +16,8 @@ export class UserData {
     this.mail = '';
     this.phone = [];
     this.plates = [];
-    this.origin = '';
+    this.originCountry = '';
+    this.originProvince = '';
 
     this.visitors = [
         { countAdultNac: 0 },
