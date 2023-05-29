@@ -57,42 +57,42 @@ export const FormularioView = ({ UserData }) => {
   const [counterAdultosMayorExt, setCounterAdultosMayorExt] = useState(0);
   const [mostrarErrorTotalPersonas, setMostrarErrorTotalPersonas] =
     useState(null);
-  const [selectOriginCountry, setSelectOriginCountry] = useState(""); // se usa para establecer el pais
-  const [selectOriginProvince, setSelectOriginPronvince] = useState(""); // se usa para establecer la provincia
-  const [selectedOption, setSelectedOption] = useState(null); // se usa para selecionar entre nacional o extranjero
+    const [selectOriginCountry, setSelectOriginCountry] = useState(""); // se usa para establecer el pais 
+    const [selectOriginProvince, setSelectOriginProvince] = useState(""); // se usa para establecer provincia
+    const [selectedOption, setSelectedOption] = useState(null); // se usa para selecionar entre nacional o extranjero
   const nationalityOptions = ["Nacional", "Extranjero"];
   const pais = [
     {
-      label: "Costa Rica",
+      name: "Costa Rica",
     },
     {
-      label: "Nicaragua",
+      name: "Nicaragua",
     },
     {
-      label: "Panamá",
+      name: "Panamá",
     },
   ];
   const provincias = [
     {
-      label: "San Jose",
+      name: "San Jose",
     },
     {
-      label: "Heredia",
+      name: "Heredia",
     },
     {
-      label: "Alajuela",
+      name: "Alajuela",
     },
     {
-      label: "Cartago",
+      name: "Cartago",
     },
     {
-      label: "Puntarenas",
+      name: "Puntarenas",
     },
     {
-      label: "Limón",
+      name: "Limón",
     },
     {
-      label: "Guanacaste",
+      name: "Guanacaste",
     },
   ];
 
@@ -125,10 +125,8 @@ export const FormularioView = ({ UserData }) => {
       );
       console.log("Telefono enviado: ", e.target.telefono.value);
       console.log("Correo enviado: ", e.target.correo.value);
-      const { label2 } = selectOriginCountry || {};
-      const { label } = selectOriginProvince || {};
-      console.log("Procedencia Pais: ", label2);
-      console.log("Procedencia provincia: ", label);
+      console.log("Procedencia Extranjero: ", selectOriginCountry);
+      console.log("Procedencia Nacional: ", selectOriginProvince);
       console.log("Total Placas: ", counterPlacas);
       console.log("Placa enviada: ", placa.campo);
       console.log("Placa enviada: ", placa2.campo);
@@ -153,8 +151,8 @@ export const FormularioView = ({ UserData }) => {
       UserData.id = e.target.identificacionUsuario.value;
       UserData.phone = e.target.telefono.value;
       UserData.mail = e.target.correo.value;
-      UserData.originCountry = label;
-      UserData.originProvince = label2;
+      UserData.originCountry = selectOriginCountry;
+      UserData.originProvince = selectOriginProvince;
       UserData.plates = [
         placa.campo,
         placa2.campo,
@@ -202,8 +200,8 @@ export const FormularioView = ({ UserData }) => {
       cambiarPlaca4({ campo: "", valido: null });
       cambiarPlaca5({ campo: "", valido: null });
       cambiarPlaca6({ campo: "", valido: null });
-      setSelectOriginCountry(null);
-      setSelectOriginPronvince(null);
+      setSelectOriginCountry("");
+      setSelectOriginProvince("");
       setSelectedOption(null);
       //reinicio cantidad de personas que reservan
       setCounterNinos0a6Nac(0);
@@ -308,13 +306,13 @@ export const FormularioView = ({ UserData }) => {
 
         {selectedOption === null ? null : selectedOption === "Extranjero" ? (
           <ComponentDropDown
-            label="Procedecia"
-            name="procedeciaPais"
-            leyenda="Seleccione país"
-            items={pais}
-            selectedItem={selectOriginCountry}
-            setSelectedItem={setSelectOriginCountry}
-          ></ComponentDropDown>
+          label="Procedecia"
+          name="procedeciaPais"
+          leyenda="Seleccione país"
+          items={pais}
+          selectedItem={selectOriginCountry}
+          setSelectedItem={setSelectOriginCountry}
+        ></ComponentDropDown>
         ) : (
           <ComponentDropDown
             label="Procedecia"
@@ -322,7 +320,7 @@ export const FormularioView = ({ UserData }) => {
             leyenda="Seleccione provincia"
             items={provincias}
             selectedItem={selectOriginProvince}
-            setSelectedItem={setSelectOriginPronvince}
+            setSelectedItem={setSelectOriginProvince}
           ></ComponentDropDown>
         )}
 
