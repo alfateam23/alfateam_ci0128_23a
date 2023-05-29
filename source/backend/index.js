@@ -3,6 +3,9 @@
 const express = require('express');
 const app = express();
 const reservationManager = require('./reservation/reservationInsert');
+const reservationSelect = require('./reservation/AvailabilityReq')
+
+app.use("/backend/capacity", reservationSelect.router)
 
 const visitorsRawData = {
     "visitors": [
@@ -54,6 +57,11 @@ let reservation = {
     area: 'Camping'
 };
 
-reservationManager.insertDataReservation(reservation);
-//console.log(reservation.visitors[1].countAdultKids06Nac)
+//reservationManager.insertDataReservation(reservation);
+
+/* let date1 = new Date("2023-07-15T06:00:00.000Z");
+let date2 = new Date("2023-07-19T06:00:00.000Z"); 
+date1.setDate(date1.getDate()+1)
+if (date1 > new Date('2023-07-15T06:00:00.000Z')) console.log(true) */
+
 app.listen(3030, ()=> console.log('Listening on port 3030...'));

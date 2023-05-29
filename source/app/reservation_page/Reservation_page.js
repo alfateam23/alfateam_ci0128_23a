@@ -45,16 +45,19 @@ export const Review = ({UserData}) => {
 Page where the user can see the availability of the dates selected for the visit
 */
 export const Availability_page = ({UserData}) => {
-  let quantity = 100;
+  const [count, setCount] = useState(0);
   return (
     <div>
       <div className='flex flex-col justify-center items-center'>
         <Dates_type_info userData={UserData} />
         <Availability_title />
         <br />
-        <Spaces_left quantity={quantity}/>
+        <Spaces_left count={count}
+        userData={UserData}/>
         <br />
-        <Party_title UserData={UserData}/>
+        <Party_title count={count}
+        setCount={setCount}
+        UserData={UserData}/>
       </div>
       <Next_link route_next='/reservation/info'
       route_back='/reservation/'/>

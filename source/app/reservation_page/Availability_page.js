@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 /**
  * Component to show the title for the availability page
@@ -18,12 +19,57 @@ export const Availability_title = () => {
  * Component that will eventually receive the total amount of space left
  * as a parameter and display it.
  */
-export const Spaces_left = ({quantity}) => {
+export const Spaces_left = ({count, userData}) => {
+  const [datesCapacity,setDatesCapacity] = useState(null);
+  const [prevCount, setPrevCount] = useState(0);
+  useEffect(() => {
+    fetch(`/backend/capacity/${userData.start_date.toISOString()}/${userData.end_date.toISOString()}/${userData.reservation_type}`)
+    .then((res) => {
+      if (!res.ok) {
+        console.log('Network response was not ok');
+      }
+      return res.json();
+    })
+    .then((data) => setDatesCapacity(data))
+    .catch((error) => {
+      console.error('Error fetching data:', error);
+    });
+  }, []);
+  useEffect(()=>{
+    function updateCapacityValue () {
+      let operation = prevCount < count ? '+' : '-';
+      if (datesCapacity !== null) {
+        const newValues = datesCapacity.map(position => {
+          if (operation === '-') {
+            return {
+              ...position,
+              CupoOnlineDia: position.CupoOnlineDia + 1,
+            };
+          } else {
+            return {
+              ...position,
+              CupoOnlineDia: position.CupoOnlineDia - 1,
+            };
+          }
+        });
+        newValues.find((pos) => pos.CupoOnlineDia === 0) !== undefined ?
+        alert('No hay suficiente espacio') :
+        setDatesCapacity(newValues);
+      }
+    }
+    updateCapacityValue();
+    setPrevCount(count);
+  },[count])
   return (
-    <div className="">
-      <p className="font-lexend text-2xl text-center">
-        {quantity} espacios restantes
-      </p>
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      {!datesCapacity ?
+      "Loading..." :
+      datesCapacity.map((item) => (
+      <div key={item.Fecha}>
+        <p className='bg-white px-5 py-3 rounded-2xl rounded-b-none'>{(new Date(item.Fecha)).toDateString()}</p>
+        <p className='text-center bg-gray-300 py-2 rounded-2xl rounded-t-none'>{item.CupoOnlineDia}</p>
+      </div>
+      ))}
     </div>
   );
 };
@@ -32,8 +78,7 @@ export const Spaces_left = ({quantity}) => {
  * Title for the user to select how many people is coming with
  * him
  */
-export const Party_title = ({UserData}) => {
-  const [count, setCount] = useState(0);
+export const Party_title = ({count, setCount, UserData}) => {
 
   return (
     <div className="flex flex-col lg:w-1/2 sm:w-1/2 w-80">
@@ -41,7 +86,7 @@ export const Party_title = ({UserData}) => {
         ¿Cuántos lo acompañan?
       </p>
       <hr className="bg-black h-0.5"/>
-      <div className="bg-gray-200 flex flex-row justify-center items-center
+      <div className="flex flex-row justify-center items-center
       my-10">
         <p className="text-xl inline-block">
           Persona(s)
