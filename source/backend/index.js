@@ -3,9 +3,13 @@
 const express = require('express');
 const app = express();
 const reservationManager = require('./reservation/reservationInsert');
-const reservationSelect = require('./reservation/AvailabilityReq')
+const availabilityInfo = require('./reservation/AvailabilityReq');
+const origin = require('./reservation/OriginReq');
+const reservationDetails = require('./dashboard/ReservationDetailsReq')
 
-app.use("/backend/capacity", reservationSelect.router)
+app.use("/backend/capacity", availabilityInfo.router);
+app.use("/backend/geographicInfo", origin.router);
+app.use("/backend/reservationDetails", reservationDetails.router);
 
 const visitorsRawData = {
     "visitors": [
