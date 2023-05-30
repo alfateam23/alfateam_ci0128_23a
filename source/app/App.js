@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
 import {
    Availability_page,
@@ -59,8 +59,7 @@ const CustomerApp = () => {
          <Routes>
             <Route path="/" element={<Navbar />} />
             <Route path="/reservation" element={<Select_dates_page UserData={userData} />} />
-            <Route path="/reservation/availability" element={<Availability_page UserData={userData} />} />
-            <Route path="/reservation/lot" element={<Parcel_page UserData={userData} />} />
+            <Route path="/reservation/availability" element={<Availability_page UserData={userData} />} />  
             <Route path="/reservation/info" element={<T_information UserData={userData} />} />
             <Route path="/reservation/review" element={<Review UserData={userData} />} />
             <Route path="/visitors" element={<Visitors />} />
@@ -74,7 +73,7 @@ const CustomerApp = () => {
  * web application.
  */
 const App = () => {
-   const runAdminApp = true; // Change for either admin or normal mode
+   const runAdminApp = false; // Change for either admin or normal mode
    if (runAdminApp) {
       return (AdminApp());
    } else {

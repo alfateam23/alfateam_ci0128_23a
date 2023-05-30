@@ -5,7 +5,6 @@ const router = express.Router();
 router.get("/:start/:end/:area", async (req,res)=>{
   const result = await getAvailability(req.params.start,
     req.params.end, req.params.area);
-  console.log(result);
   res.json(result);
 })
 
