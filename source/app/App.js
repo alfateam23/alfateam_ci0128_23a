@@ -45,6 +45,9 @@ const AdminApp = () => {
                <Route path="/" element={<Home />} />
                <Route path="/settings" element={<Settings />} />
                <Route path="/reservation" element={<Select_dates_page UserData={userData} />} />
+               <Route path="/reservation/availability" element={<Availability_page UserData={userData} />} />  
+               <Route path="/reservation/info" element={<T_information UserData={userData} />} />
+               <Route path="/reservation/review" element={<Review UserData={userData} />} />
                <Route path='/tarifas' element={<Tarifas />} />
             </Routes>
          </RootLayout>

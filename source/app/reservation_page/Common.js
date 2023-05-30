@@ -23,6 +23,9 @@ export const Next_link = ({route_next, route_back,
     if (userData.start_date !== '' &&
     userData.end_date !== '') {
       navigate(route_next);
+    } else if (userData.reservation_type === 'Picnic' &&
+    userData.start_date !== '') {
+      navigate(route_next);
     } else {
       alert('Por favor digite las fechas que desea antes de continuar')
     }
@@ -30,7 +33,7 @@ export const Next_link = ({route_next, route_back,
 
   if (check != null) {
     return (
-      <footer className="bottom-0 absolute w-full">
+      <div className="bottom-0 absolute w-full">
       <Link to={route_back}
       className="font-sans bg-YellowButtonP float-left
       ml-[10%] mb-[5%] px-8 py-2 shadow-lg hover:bg-YellowButton
@@ -42,18 +45,18 @@ export const Next_link = ({route_next, route_back,
       inline-block">
         Siguiente
       </Link>
-    </footer>
+    </div>
     );
   } else if (info != null) {
     return (
       <div className='flex flex-col'>
-        <footer className="">
+        <div className="">
           <Link to={route_back} className="font-sans bg-YellowButtonP float-left
           ml-[10%] mb-[5%] px-8 py-2 shadow-lg hover:bg-YellowButton
           inline-block">
             Atrás
           </Link>
-        </footer>
+        </div>
       </div>
     );
   }
@@ -116,16 +119,32 @@ export const NavBar_PIR = ({selected}) => {
 };
 
 export const Dates_type_info = ({userData}) => {
+  if (userData.reservation_type === "Camping") {
+    return (
+      <div className="flex flex-col justify-center items-center mt-10
+      sm:flex-row sm:space-x-40 md:space-x-60">
+        <div className="bg-white divide-x px-8 py-4 rounded-2xl
+        lg:-translate-x-40">
+          <div className="inline-block">
+            <p className="mr-5">{userData.start_date.toDateString()}</p>
+          </div>
+          <div className="inline-block">
+            <p className="ml-5">{userData.end_date.toDateString()}</p>
+          </div>
+        </div>
+        <div className="bg-white px-8 py-4 rounded-2xl mt-4 sm:mt-0">
+          <p>{userData.reservation_type}</p>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="flex flex-col justify-center items-center mt-10
     sm:flex-row sm:space-x-40 md:space-x-60">
-      <div className="bg-white divide-x px-8 py-4 rounded-2xl
+      <div className="bg-white px-8 py-4 rounded-2xl
       lg:-translate-x-40">
         <div className="inline-block">
           <p className="mr-5">{userData.start_date.toDateString()}</p>
-        </div>
-        <div className="inline-block">
-          <p className="ml-5">{userData.end_date.toDateString()}</p>
         </div>
       </div>
       <div className="bg-white px-8 py-4 rounded-2xl mt-4 sm:mt-0">
