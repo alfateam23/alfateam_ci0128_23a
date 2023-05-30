@@ -1,4 +1,3 @@
-// import { useState } from "react";
 export class RegularExpresions {
   constructor() {
     //this.nombre = { campo: "", valido: null };

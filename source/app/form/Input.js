@@ -145,17 +145,17 @@ const ComponentDropDown = ({
   setSelectedItem,
 }) => {
   const handleMenuClick = (e) => {
-    const selected = items.find((item) => item.name === e.key);
-    const { name } = selected || {};
-    setSelectedItem(name);
+    const selected = items.find((item) => item.Nombre === e.key);
+    const { Nombre } = selected || {};
+    setSelectedItem(Nombre);
   };
 
   const handleDropDownVisibleChange = (visible) => {
     if (visible && selectedItem) {
-      const selectedItemName = selectedItem.name;
+      const selectedItemName = selectedItem.Nombre;
       const currentSelectedItemName = items.find(
-        (item) => item.name === selectedItemName
-      )?.name;
+        (item) => item.Nombre === selectedItemName
+      )?.Nombre;
       if (selectedItemName !== currentSelectedItemName) {
         setSelectedItem(null);
       }
@@ -163,18 +163,19 @@ const ComponentDropDown = ({
   };
 
   const shouldDisplayLeyenda =
-    !selectedItem || !items.some((item) => item.name === selectedItem.name);
+    !selectedItem || !items.some((item) => item.Nombre === selectedItem.Nombre);
 
   const menu = (
     <Menu onClick={handleMenuClick}>
       {items.map((items) => (
-        <Menu.Item key={items.name}>{items.name}</Menu.Item>
+        <Menu.Item key={items.Nombre}>{items.Nombre}</Menu.Item>
       ))}
     </Menu>
   );
 
   return (
-    <div>
+    // className="overflow-y-scroll"
+    <div style={{  maxHeight: "70px"}}>
       <label htmlFor={name}>{label}</label>
       <div>
         <DropDown
@@ -184,7 +185,7 @@ const ComponentDropDown = ({
         >
           <ButtonDropDown>
             <Space>
-              {shouldDisplayLeyenda ? leyenda : selectedItem.name}
+              {shouldDisplayLeyenda ? leyenda : selectedItem.Nombre}
               <DownOutlined />
             </Space>
           </ButtonDropDown>

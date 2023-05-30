@@ -1,5 +1,5 @@
 //npm install react-modal
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   ComponenteInput,
   ComponenteInputIncDec,
@@ -61,6 +61,32 @@ export const FormularioView = ({ UserData }) => {
     const [selectOriginProvince, setSelectOriginProvince] = useState(""); // se usa para establecer provincia
     const [selectedOption, setSelectedOption] = useState(null); // se usa para selecionar entre nacional o extranjero
   const nationalityOptions = ["Nacional", "Extranjero"];
+  let pais = [];
+   let provincias = [];
+  const [countryData, setCountryData] = useState(null);
+   useEffect(() => {
+      fetch("/backend/geographicInfo/")
+      .then((res) => {
+        if (!res.ok) {
+          console.log('Network response was not ok');
+        }
+        const resClone = res.clone();
+        return resClone.json();
+      })
+      .then((data) => setCountryData(data))
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+   }, []);
+
+   if (countryData) {
+      pais = countryData.slice(0,countryData.length-1);
+      provincias = countryData[countryData.length-1];
+      //const provincias = countryData[countryData.length-1];
+   }
+   
+  /*
+  
   const pais = [
     {
       name: "Costa Rica",
@@ -94,7 +120,7 @@ export const FormularioView = ({ UserData }) => {
     {
       name: "Guanacaste",
     },
-  ];
+  ];*/
 
   // cambia que cuando de click de false a true
   const onChangeTerminos = (e) => {
@@ -325,6 +351,7 @@ export const FormularioView = ({ UserData }) => {
         )}
 
         <div className="linea"></div>
+        
         {/* Botones para incrementar y decrementar */}
         <ComponenteInputIncDec
           tipo="number"
@@ -337,6 +364,7 @@ export const FormularioView = ({ UserData }) => {
           setCounterTipoEntrada={setMostrarPlacas}
         ></ComponenteInputIncDec>
         <div></div>
+
 
         {/*Si el contador es mayor que un numero entonces muestro el boton, de lo contrario un espacio vacio */}
         {counterPlacas >= 1 ? (

@@ -2,9 +2,8 @@
 -- AlphaTeam: Jason Murillo, Jose Pereira, Marco Piedra, Josué Retana, Ariel Solís
 -- Proyecto Integrador de Ingeniería de Software y Bases de Datos
 -- Escuela de Ciencias de la Computación e Informática, Universidad de Costa Rica
--- Abril 2023
 
-use AlphaTeam;
+use AlphaTeam_Testing;
 
 -- Usuario genérico
 -- Cédula es una identificación personal oficial. Incluye pasaporte y carnet de residente o refugiado.
@@ -33,7 +32,7 @@ CREATE TABLE Telefono
 );
 
 -- Administrador de la aplicación
--- NUNCA guardar contraseñas en texto plano, sino solo el hash (e.g., con algoritmo Argon2).
+-- NUNCA guardar contraseñas en texto plano, sino solo el hash (e.g., con algoritmo bcrypt).
 -- En el inicio de sesión solo se valida si el hash de la clave ingresada coincide con el hash almacenado.
 -- No borrar administradores, sino solo desactivarlos (i.e., borrado lógico) en la columna EstadoActivo.
 -- Inicialmente el valor de EstadoActividad es activo.
@@ -41,7 +40,7 @@ CREATE TABLE Telefono
 CREATE TABLE Administrador
 (
   Email VARCHAR(60),
-  Clave VARCHAR(60) NOT NULL,
+  Clave VARCHAR(100) NOT NULL,
   CONSTRAINT PK_Administrador PRIMARY KEY(Email),
   CONSTRAINT FK_Administrador_Usuario FOREIGN KEY(Email)
   REFERENCES Usuario(Email) ON UPDATE CASCADE
@@ -80,51 +79,100 @@ CREATE TABLE Cliente
   REFERENCES Usuario(Email) ON UPDATE CASCADE
 );
 
--- Vehículo de cliente
-
-CREATE TABLE Vehiculo
-(
-  EmailCliente VARCHAR(60),
-  Placa VARCHAR(60),
-  CONSTRAINT PK_Vehiculo PRIMARY KEY(EmailCliente, Placa),
-  CONSTRAINT FK_Vehiculo_Cliente FOREIGN KEY(EmailCliente)
-  REFERENCES Cliente(Email) ON UPDATE CASCADE
-);
-
---Tipo de área, puede ser picnic o camping
+-- Tipo de área, puede ser picnic o camping
+-- C Camping, P picnic
 
 CREATE TABLE Area
 (
-  Tipo CHAR, -- C Camping, P picnic
-  Cupo INT NOT NULL,
-  Plazo SMALLINT NOT NULL,
+  Tipo CHAR,
+  CupoTotal INT NOT NULL,
+  CupoOnline INT NOT NULL,
+  Plazo INT NOT NULL,
   HoraApertura TIME NOT NULL,
   HoraCierre TIME NOT NULL
-  CONSTRAINT PK_Area PRIMARY KEY(Tipo)
+  CONSTRAINT PK_Area PRIMARY KEY(Tipo),
 );
 
--- Reservación genérica
+-- País asociado a reservación
 
-CREATE TABLE Reservacion
+CREATE TABLE Pais
 (
-  Codigo INT,
-  Email VARCHAR(60) NOT NULL,
-  TipoArea CHAR NOT NULL, -- C Camping, P picnic
-  FechaSolicitud DATETIME NOT NULL,
-  CONSTRAINT PK_Reservacion PRIMARY KEY(Codigo),
-  CONSTRAINT FK_Reservacion_Cliente FOREIGN KEY(Email)
-  REFERENCES Cliente(Email) ON UPDATE CASCADE,
-  CONSTRAINT FK_Tipo_Area FOREIGN KEY(TipoArea)
-  REFERENCES Area(Tipo) ON UPDATE CASCADE
+  Nombre VARCHAR(60),
+  CONSTRAINT PK_Pais PRIMARY KEY(Nombre),
+);
+
+
+-- Provincia de Costa Rica
+-- Alajuela, Cartago, Heredia, San José, Puntarenas, Guanacaste, Limón
+
+CREATE TABLE ProvinciaCRC
+(
+  Nombre VARCHAR(60),
+  CONSTRAINT PK_Provincia PRIMARY KEY (Nombre),
 );
 
 -- Dia inactivo, día que el refugio no trabaja
 
 CREATE TABLE DiaInactivo
 (
-  TipoArea BIT DEFAULT (1),
+  TipoArea CHAR,
   Fecha DATETIME,
-  CONSTRAINT FK_DiaInactivo PRIMARY KEY(TipoArea, Fecha)
+  CONSTRAINT PK_DiaInactivo PRIMARY KEY(TipoArea, Fecha),
+  CONSTRAINT FK_DiaInactivo_Area FOREIGN KEY(TipoArea)
+  REFERENCES Area(Tipo)
+);
+
+-- Límite diario de visitantes
+
+CREATE TABLE LimiteVisitantes
+(
+  TipoArea CHAR,
+  Fecha DATETIME,
+  CupoTotalDia INT NOT NULL,
+  CupoOnlineDia INT NOT NULL,
+  CONSTRAINT PK_LimiteVisitantes PRIMARY KEY(TipoArea, Fecha),
+  CONSTRAINT FK_LimiteVisitantes_Area FOREIGN KEY(TipoArea)
+  REFERENCES Area(Tipo),
+  CHECK (CupoTotalDia>0),
+  CHECK (CupoOnlineDia>0)
+);
+
+-- Reservación genérica
+-- C Camping, P picnic
+
+CREATE TABLE Reservacion
+(
+  Codigo INT,
+  Email VARCHAR(60) NOT NULL,
+  TipoArea CHAR NOT NULL,
+  FechaSolicitud DATETIME NOT NULL,
+  FechaInicio DATETIME NOT NULL,
+  FechaFin DATETIME NOT NULL,
+  EstadoActividad BIT DEFAULT (1) NOT NULL,
+  NombrePais VARCHAR(60),
+  NombreProvincia VARCHAR(60),
+  CONSTRAINT PK_Reservacion PRIMARY KEY(Codigo),
+  CONSTRAINT FK_Reservacion_Cliente FOREIGN KEY(Email)
+  REFERENCES Cliente(Email) ON UPDATE CASCADE,
+  CONSTRAINT FK_Reservacion_Area FOREIGN KEY(TipoArea)
+  REFERENCES Area(Tipo),
+  CONSTRAINT FK_Reservacion_Pais FOREIGN KEY(NombrePais)
+  REFERENCES Pais(Nombre),
+  CONSTRAINT FK_Reservacion_Provincia FOREIGN KEY(NombreProvincia)
+  REFERENCES ProvinciaCRC(Nombre),
+  CHECK (FechaSolicitud <= FechaInicio),
+  CHECK (FechaInicio <= FechaFin)
+);
+
+-- Vehículo de reservación
+
+CREATE TABLE Vehiculo
+(
+  CodigoReservacion INT,
+  Placa VARCHAR(60),
+  CONSTRAINT PK_Vehiculo PRIMARY KEY(CodigoReservacion, Placa),
+  CONSTRAINT FK_Vehiculo_Reservacion FOREIGN KEY(CodigoReservacion)
+  REFERENCES Reservacion(Codigo)
 );
 
 -- Tipo de visitante
@@ -133,13 +181,13 @@ CREATE TABLE DiaInactivo
 
 CREATE TABLE TipoVisitante
 (
-  TipoProcedencia CHAR,
-  TipoVisita CHAR,
-  Estatus CHAR,
+  TipoProcedencia VARCHAR(60),
+  TipoVisita VARCHAR(60),
+  Estatus VARCHAR(60),
+  CategoriaPago VARCHAR(60),
   Monto MONEY NOT NULL,
   Moneda CHAR(3) NOT NULL,
-  CONSTRAINT PK_TipoVisitante PRIMARY KEY(TipoProcedencia, TipoVisita, Estatus),
-  CHECK (Monto >= 0)
+  CONSTRAINT PK_TipoVisitante PRIMARY KEY(TipoProcedencia, TipoVisita, Estatus, CategoriaPago)
 );
 
 -- Uso de reservación
@@ -151,18 +199,16 @@ CREATE TABLE TipoVisitante
 CREATE TABLE Visitante
 (
   CodigoReservacion INT,
-  TipoProcedencia CHAR,
-  TipoVisita CHAR,
-  Estatus CHAR,
-  Procedencia VARCHAR(60) NOT NULL,
-  CategoriaPago CHAR NOT NULL,
-  CantidadVisitantes INT,
-  CONSTRAINT PK_UsoReservacion PRIMARY KEY(CodigoReservacion, TipoProcedencia, TipoVisita, Estatus),
-  CONSTRAINT FK_UsoReservacion_Reservacion FOREIGN KEY(CodigoReservacion)
+  TipoProcedencia VARCHAR(60),
+  TipoVisita VARCHAR(60),
+  Estatus VARCHAR(60),
+  CategoriaPago VARCHAR(60),
+  CantidadVisitantes INT NOT NULL,
+  CONSTRAINT PK_Visitante PRIMARY KEY(CodigoReservacion, TipoProcedencia, TipoVisita, Estatus, CategoriaPago),
+  CONSTRAINT FK_Visitante_Reservacion FOREIGN KEY(CodigoReservacion)
   REFERENCES Reservacion(Codigo),
-  CONSTRAINT FK_UsoReservacion_TipoVisitante FOREIGN KEY(TipoProcedencia, TipoVisita, Estatus)
-  REFERENCES TipoVisitante(TipoProcedencia, TipoVisita, Estatus),
-  CHECK (CantidadVisitantes > 0)
+  CONSTRAINT FK_Visitante_TipoVisitante FOREIGN KEY(TipoProcedencia, TipoVisita, Estatus, CategoriaPago)
+  REFERENCES TipoVisitante(TipoProcedencia, TipoVisita, Estatus, CategoriaPago)
 );
 
 -- Factura
@@ -172,22 +218,13 @@ CREATE TABLE Visitante
 
 CREATE TABLE Factura
 (
-  Codigo INT,
+  CodigoFactura INT,
   CodigoReservacion INT NOT NULL,
   EstadoPago BIT DEFAULT(0) NOT NULL,
   FechaFactura DATETIME NOT NULL,
   Monto MONEY NOT NULL,
   Moneda CHAR(3) NOT NULL,
-  CONSTRAINT PK_Factura PRIMARY KEY(Codigo),
+  CONSTRAINT PK_Factura PRIMARY KEY(CodigoFactura),
   CONSTRAINT FK_Factura_Reservacion FOREIGN KEY(CodigoReservacion)
-  REFERENCES Reservacion(Codigo),
-  CHECK(Monto >= 0)
+  REFERENCES Reservacion(Codigo)
 );
-
--- Consecutivos para los visitantes y las reservas.
-
-CREATE SEQUENCE ConsecutivoReservacion
-  START WITH 0
-  INCREMENT BY 1
-  MAXVALUE 9999999
-GO
