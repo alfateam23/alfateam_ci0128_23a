@@ -2,7 +2,7 @@
 
 const db = require('../DbConfig')
 
-export async function selectVisitsInDateRange(startdate, enddate) {
+async function selectVisitsInDateRange(startdate, enddate) {
     try {
         const query = `SELECT
         Reservacion.FechaInicio,
@@ -15,16 +15,16 @@ export async function selectVisitsInDateRange(startdate, enddate) {
         JOIN Reservacion
         ON Codigo=Visitante.CodigoReservacion
         WHERE Reservacion.FechaInicio
-        BETWEEN ${startdate} AND ${enddate}`
+        BETWEEN '${startdate}' AND '${enddate}'`
         const result = await db.executeQuery(query)
-        return result
+        return result.recordset
     }
     catch (error) {
         throw error;
     }
 }
 
-export async function selectProfitsInDateRange(startdate, enddate) {
+async function selectProfitsInDateRange(startdate, enddate) {
     try {
         const query = `SELECT
         Reservacion.FechaInicio,
@@ -42,11 +42,16 @@ export async function selectProfitsInDateRange(startdate, enddate) {
         AND TipoVisitante.Estatus=Visitante.Estatus
         AND TipoVisitante.CategoriaPago=Visitante.CategoriaPago
         WHERE Reservacion.FechaInicio
-        BETWEEN ${startdate} AND ${enddate}`
+        BETWEEN '${startdate}' AND '${enddate}'`
         const result = await db.executeQuery(query)
-        return result
+        return result.recordset
     }
     catch (error) {
         throw error;
     }
 }
+
+module.exports = {
+    selectVisitsInDateRange,
+    selectProfitsInDateRange
+};

@@ -2,6 +2,8 @@
 
 import { React } from 'react'
 
+
+
 export const VisitsReport = ({ startdate, enddate }) => {
     const reportData = fetch(`'/backend/reports/visits/:${startdate}/:${enddate}`)
         .then((res) => res.json())
