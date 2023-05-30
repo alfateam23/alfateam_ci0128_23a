@@ -1,22 +1,69 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
-import {Availability_page, Parcel_page,
-      Review,
-      Select_dates_page,
-      T_information} from './reservation_page/Reservation_page';
+import {
+   Availability_page,
+   Review,
+   Select_dates_page,
+   T_information
+} from './reservation_page/Reservation_page';
 import { UserData } from './UserData';
 import { Visitors } from './visitors/Visitors';
-import { Page } from './reservation_page/Reservation_page';
+import { useLocation } from 'react-router-dom';
+
+/* import for Centro de Control */
+import RootLayout from './admin_dashboard/layout/RootLayout';
+import Settings from './admin_dashboard/pages/Settings';
+import Home from './admin_dashboard/pages/Home';
+import Tarifas from './admin_dashboard/pages/Tarifas';
+
 
 /**
- * Home component, for now it just shows a button to send the user to the reserve
- * module
+ * Temp navbar of project
  */
-const Home = () => {
+const Navbar = () => {
+   return (
+      <div className="background-color: rgb(254 243 199)" >
+         <h1 className="flex justify-center items-center  text-4xl p-4"> navegation bar </h1>
+         <ul className="hidden md:flex">
+            <li className="p-4">
+               <a className="transition ease-in-out hover:text-[#ffaf00] hover:duration-700 cursor-pointer" href="/Dashboard">Dashboard</a>
+            </li>
+            <li className="p-4">
+               <a className="transition ease-in-out hover:text-[#ffaf00] hover:duration-700 cursor-pointer" href="/reservation">Reserva Ahora</a>
+            </li>
+         </ul>
+      </div>
+   );
+}
+
+const AdminApp = () => {
+   const userData = new UserData();
    return (
       <div>
-         <Link to="/reservation" className="bg-blue-500 hover:bg-blue-700
-         text-white font-bold py-2 px-4 rounded">Reserva Ahora</Link>
+         <RootLayout>
+            <Routes>
+               <Route path="/" element={<Home />} />
+               <Route path="/settings" element={<Settings />} />
+               <Route path="/reservation" element={<Select_dates_page UserData={userData} />} />
+               <Route path='/tarifas' element={<Tarifas />} />
+            </Routes>
+         </RootLayout>
+      </div>
+   );
+}
+
+const CustomerApp = () => {
+   const userData = new UserData();
+   return (
+      <div>
+         <Routes>
+            <Route path="/" element={<Navbar />} />
+            <Route path="/reservation" element={<Select_dates_page UserData={userData} />} />
+            <Route path="/reservation/availability" element={<Availability_page UserData={userData} />} />  
+            <Route path="/reservation/info" element={<T_information UserData={userData} />} />
+            <Route path="/reservation/review" element={<Review UserData={userData} />} />
+            <Route path="/visitors" element={<Visitors />} />
+         </Routes>
       </div>
    );
 }
@@ -26,26 +73,12 @@ const Home = () => {
  * web application.
  */
 const App = () => {
-   const userData = new UserData();
-  return (
-   <div>
-      <Routes>
-         <Route exact path="/" element={<Home />} />
-         <Route path="/reservation" element={<Select_dates_page
-            UserData={userData}/>} />
-         <Route path="/reservation/availability" element={<Availability_page
-         UserData={userData} />} />
-         <Route path="/reservation/lot" element={<Parcel_page
-         UserData={userData} />} />
-         <Route path="/reservation/info" element={<T_information
-         UserData={userData} />}/>
-         <Route path="/reservation/review" element={<Review
-         UserData={userData} />}/>
-         <Route path="/visitors" element={<Visitors />} />
-
-      </Routes>
-   </div>
-  );
+   const runAdminApp = false; // Change for either admin or normal mode
+   if (runAdminApp) {
+      return (AdminApp());
+   } else {
+      return (CustomerApp());
+   }
 }
 
 export default App;

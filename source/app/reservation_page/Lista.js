@@ -28,9 +28,9 @@ const useStyles = createUseStyles({
   },
 });
 
-function Lista() {
+function App() {
   const classes = useStyles();
-   // Setear los datos de initial data con la base de datos
+
   const initialData = [
     { codigo: 11211, tipo: 'Camping', personas: '9', fechaInicio: "2023-05-30" , fechaFinal: "2023-06-05", estado: 'Pendiente'},
     { codigo: 38382, tipo: 'Picnic', personas: '6', fechaInicio: "2023-05-30" , fechaFinal: "2023-05-30", estado: 'Pendiente'},
@@ -45,19 +45,22 @@ function Lista() {
   const [sortOrder, setSortOrder] = useState('asc');
 
 
+  // Al eliminar se debe invocar una funcion que envia el ID de la rserva a eliminar junto al token para eliminarlo en la DB
   const handleFilter = (field, value) => {
     let filteredData = [...initialData];
-
+  
     if (field === 'filterValue') {
       setFilterValue(value);
-      filteredData = filteredData.filter((item) => item.id === parseInt(value));
+      filteredData = filteredData.filter((item) => item.codigo === parseInt(value)); 
     } else if (field === 'selectedNameFilter') {
       setSelectedNameFilter(value);
       if (value !== '') {
-        filteredData = filteredData.filter((item) => item.name === value);
+        filteredData = filteredData.filter((item) => item.tipo === value); 
       }
-  }
-  }
+    }
+  
+    setData(filteredData); 
+  };
 
   const handleSort = (field) => {
     let sortedData = [...data];
@@ -87,9 +90,6 @@ function Lista() {
     setSortField(field);
     setData(sortedData);
   };
-    // Al cancelar se debe invocar una funcion que envia el ID de la reserva a 
-    //cancelar junto al token para eliminarlo en la DB
-
   const handleCancelEstado = (codigo) => {
     const updatedData = data.map((item) => {
       if (item.codigo === codigo && item.estado === 'Pendiente') {
@@ -99,8 +99,6 @@ function Lista() {
     });
     setData(updatedData);
   };
-     // Al aprobar se debe invocar una funcion que envia el ID de la reserva a 
-    //aprobar junto al token para eliminarlo en la DB
   const handleAprobeEstado = (codigo) => {
     const updatedData = data.map((item) => {
       if (item.codigo === codigo && item.estado === 'Pendiente') {
@@ -196,4 +194,5 @@ function Lista() {
     </div>
   );
 }
-export default Lista;
+
+export default App;
