@@ -32,8 +32,9 @@ async function selectProfitsInDateRange(startdate, enddate) {
         TipoVisitante.TipoVisita,
         TipoVisitante.Estatus,
         TipoVisitante.CategoriaPago,
-        TipoVisitante.Monto * Visitante.CantidadVisitantes AS Ingresos,
-        TipoVisitante.Moneda FROM Visitante
+        Visitante.Subtotal,
+        TipoVisitante.Moneda
+        FROM Visitante
         JOIN Reservacion
         ON Codigo=Visitante.CodigoReservacion
         JOIN TipoVisitante
