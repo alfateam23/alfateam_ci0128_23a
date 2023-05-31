@@ -66,8 +66,14 @@ export const Spaces_left = ({count, userData}) => {
     updateCapacityValue();
     setPrevCount(count);
   },[count])
+  if (datesCapacity) console.log(datesCapacity.length%4)
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className={`grid grid-cols-${
+      datesCapacity && datesCapacity.length === 1 ? 1 : 2
+    } lg:grid-cols-${
+      datesCapacity && datesCapacity.length < 4 ?
+      datesCapacity.length%4 : 4
+    } gap-4`}>
       {!datesCapacity ?
       "Loading..." :
       datesCapacity.map((item) => (

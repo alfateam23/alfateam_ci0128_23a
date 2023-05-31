@@ -13,7 +13,7 @@ Function to add the form for the traveller to fill
 */
 export const T_information = ({UserData}) => {
   return (
-    <div>
+    <div className='flex flex-col space-y-8'>
       <Dates_type_info userData={UserData} />
       <br />
       <NavBar_PIR selected={"traveller"}/>
@@ -47,18 +47,16 @@ Page where the user can see the availability of the dates selected for the visit
 export const Availability_page = ({UserData}) => {
   const [count, setCount] = useState(0);
   return (
-    <div>
-      <div className='flex flex-col justify-center items-center'>
-        <Dates_type_info userData={UserData} />
-        <Availability_title />
-        <br />
-        <Spaces_left count={count}
-        userData={UserData}/>
-        <br />
-        <Party_title count={count}
-        setCount={setCount}
-        UserData={UserData}/>
-      </div>
+    <div className='flex flex-col justify-center items-center'>
+      <Dates_type_info userData={UserData} />
+      <Availability_title />
+      <br />
+      <Spaces_left count={count}
+      userData={UserData}/>
+      <br />
+      <Party_title count={count}
+      setCount={setCount}
+      UserData={UserData}/>
       <Next_link route_next='/reservation/info'
       route_back='/reservation/'/>
     </div>
@@ -71,9 +69,8 @@ export const Availability_page = ({UserData}) => {
 
 export const Select_dates_page = ({UserData}) => {
   return (
-    <div>
+    <div className='flex flex-col justify-center items-center'>
       <Start_reservation userData={UserData}/>
-      <br/>
       <Next_link route_next='/reservation/availability'
       route_back='/' userData={UserData} check={1}/>
     </div>
