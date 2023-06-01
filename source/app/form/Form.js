@@ -101,16 +101,7 @@ export const FormularioView = ({ UserData }) => {
       terminos &&
       counterFuera === totalPersonas &&
       selectedOption !== null
-    ) {
-      //Imprime los datos que va enviar al backend
-      console.log("Nombre enviado: ", e.target.nombre.value);
-      console.log("secondName: ", e.target.secondName.value);
-      console.log("Apellido enviado: ", e.target.apellido.value);
-      console.log("Apellido 2 enviado: ", e.target.apellido2.value);
-      console.log(
-        "Numero de identificación enviado: ",
-        e.target.identificacionUsuario.value
-      );
+    ) {      
       UserData.nameUser = e.target.nombre.value;
       UserData.secondName = e.target.secondName.value;
       UserData.firstSurname = e.target.apellido.value;
