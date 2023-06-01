@@ -1,6 +1,9 @@
 // Profits report in a range of dates
 
-import { React } from 'react'
+'use client';
+
+import { React, useEffect } from 'react'
+import {Table } from 'flowbite-react';
 
 export const ProfitsReport = ({ startdate, enddate }) => {
     const reportData = fetch(`'/backend/reports/visits/:${startdate}/:${enddate}`)
@@ -8,10 +11,10 @@ export const ProfitsReport = ({ startdate, enddate }) => {
         .catch((err) => console.warn(err))
 
     return (
-        <div>
-            <table>
+        <Table>
+            <Table.Head>
 
-            </table>
-        </div>
+            </Table.Head>
+        </Table>
     );
 }
