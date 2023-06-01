@@ -57,70 +57,32 @@ export const FormularioView = ({ UserData }) => {
   const [counterAdultosMayorExt, setCounterAdultosMayorExt] = useState(0);
   const [mostrarErrorTotalPersonas, setMostrarErrorTotalPersonas] =
     useState(null);
-    const [selectOriginCountry, setSelectOriginCountry] = useState(""); // se usa para establecer el pais 
-    const [selectOriginProvince, setSelectOriginProvince] = useState(""); // se usa para establecer provincia
-    const [selectedOption, setSelectedOption] = useState(null); // se usa para selecionar entre nacional o extranjero
+  const [selectOriginCountry, setSelectOriginCountry] = useState(""); // se usa para establecer el pais
+  const [selectOriginProvince, setSelectOriginProvince] = useState(""); // se usa para establecer provincia
+  const [selectedOption, setSelectedOption] = useState(null); // se usa para selecionar entre nacional o extranjero
   const nationalityOptions = ["Nacional", "Extranjero"];
   let pais = [];
-   let provincias = [];
+  let provincias = [];
   const [countryData, setCountryData] = useState(null);
-   useEffect(() => {
-      fetch("/backend/geographicInfo/")
+  useEffect(() => {
+    fetch("/backend/geographicInfo/")
       .then((res) => {
         if (!res.ok) {
-          console.log('Network response was not ok');
+          console.log("Network response was not ok");
         }
         const resClone = res.clone();
         return resClone.json();
       })
       .then((data) => setCountryData(data))
       .catch((error) => {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       });
-   }, []);
+  }, []);
 
-   if (countryData) {
-      pais = countryData.slice(0,countryData.length-1);
-      provincias = countryData[countryData.length-1];
-      //const provincias = countryData[countryData.length-1];
-   }
-   
-  /*
-  
-  const pais = [
-    {
-      name: "Costa Rica",
-    },
-    {
-      name: "Nicaragua",
-    },
-    {
-      name: "Panamá",
-    },
-  ];
-  const provincias = [
-    {
-      name: "San Jose",
-    },
-    {
-      name: "Heredia",
-    },
-    {
-      name: "Alajuela",
-    },
-    {
-      name: "Cartago",
-    },
-    {
-      name: "Puntarenas",
-    },
-    {
-      name: "Limón",
-    },
-    {
-      name: "Guanacaste",
-    },
-  ];*/
+  if (countryData) {
+    pais = countryData.slice(0, countryData.length - 1);
+    provincias = countryData[countryData.length - 1];
+  }
 
   // cambia que cuando de click de false a true
   const onChangeTerminos = (e) => {
@@ -149,27 +111,6 @@ export const FormularioView = ({ UserData }) => {
         "Numero de identificación enviado: ",
         e.target.identificacionUsuario.value
       );
-      console.log("Telefono enviado: ", e.target.telefono.value);
-      console.log("Correo enviado: ", e.target.correo.value);
-      console.log("Procedencia Extranjero: ", selectOriginCountry);
-      console.log("Procedencia Nacional: ", selectOriginProvince);
-      console.log("Total Placas: ", counterPlacas);
-      console.log("Placa enviada: ", placa.campo);
-      console.log("Placa enviada: ", placa2.campo);
-      console.log("Placa enviada: ", placa3.campo);
-      console.log("Placa enviada: ", placa4.campo);
-      console.log("Placa enviada: ", placa5.campo);
-      console.log("Placa enviada: ", placa6.campo);
-      console.log("Total Personas: ", counterFuera);
-      console.log("totalNinos0a6Nac: ", counterNinos0a6Nac);
-      console.log("totalNinos6a12Nac: ", counterNinos6a12Nac);
-      console.log("totalAdultosNac: ", counterAdultosNac);
-      console.log("totalAdultosMayorNac: ", counterAdultosMayorNac);
-      console.log("totalNinos0a6Ext: ", counterNinos0a6Ext);
-      console.log("totalNinos6a12Ext: ", counterNinos6a12Ext);
-      console.log("totalAdultosExtranjeros: ", counterAdultosExt);
-      console.log("totalAdultosMayorExt: ", counterAdultosMayorExt);
-
       UserData.nameUser = e.target.nombre.value;
       UserData.secondName = e.target.secondName.value;
       UserData.firstSurname = e.target.apellido.value;
@@ -198,18 +139,6 @@ export const FormularioView = ({ UserData }) => {
         counterAdultosExt,
         counterAdultosMayorExt,
       ];
-
-      console.log("UserData.nameUser:", UserData.nameUser);
-      console.log("UserData.secondName:", UserData.secondName);
-      console.log("UserData.firstSurname:", UserData.firstSurname);
-      console.log("UserData.secondSurname:", UserData.secondSurname);
-      console.log("UserData.id:", UserData.id);
-      console.log("UserData.phone:", UserData.phone);
-      console.log("UserData.mail:", UserData.mail);
-      console.log("UserData.originCountry:", UserData.originCountry);
-      console.log("UserData.originProvince:", UserData.originProvince);
-      console.log("UserData.plates:", UserData.plates);
-      console.log("UserData.visitors:", UserData.visitors);
       //reinicio los campos
       cambiarFormularioValido(true);
       cambiarNombre({ campo: "", valido: null });
@@ -332,13 +261,13 @@ export const FormularioView = ({ UserData }) => {
 
         {selectedOption === null ? null : selectedOption === "Extranjero" ? (
           <ComponentDropDown
-          label="Procedecia"
-          name="procedeciaPais"
-          leyenda="Seleccione país"
-          items={pais}
-          selectedItem={selectOriginCountry}
-          setSelectedItem={setSelectOriginCountry}
-        ></ComponentDropDown>
+            label="Procedecia"
+            name="procedeciaPais"
+            leyenda="Seleccione país"
+            items={pais}
+            selectedItem={selectOriginCountry}
+            setSelectedItem={setSelectOriginCountry}
+          ></ComponentDropDown>
         ) : (
           <ComponentDropDown
             label="Procedecia"
@@ -351,7 +280,7 @@ export const FormularioView = ({ UserData }) => {
         )}
 
         <div className="linea"></div>
-        
+
         {/* Botones para incrementar y decrementar */}
         <ComponenteInputIncDec
           tipo="number"
@@ -364,7 +293,6 @@ export const FormularioView = ({ UserData }) => {
           setCounterTipoEntrada={setMostrarPlacas}
         ></ComponenteInputIncDec>
         <div></div>
-
 
         {/*Si el contador es mayor que un numero entonces muestro el boton, de lo contrario un espacio vacio */}
         {counterPlacas >= 1 ? (

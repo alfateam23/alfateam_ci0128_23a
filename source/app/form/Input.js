@@ -135,7 +135,7 @@ const ComponenteInputIncDec = ({
   );
 };
 
-
+// componente para desplegar paises y provincias
 const ComponentDropDown = ({
   label,
   name,
@@ -175,7 +175,7 @@ const ComponentDropDown = ({
 
   return (
     // className="overflow-y-scroll"
-    <div style={{  maxHeight: "70px"}}>
+    <div style={{ maxHeight: "70px" }}>
       <label htmlFor={name}>{label}</label>
       <div>
         <DropDown
@@ -208,7 +208,6 @@ const ComponentCheckBox = ({
       value = checkedValues[checkedValues.length - 1];
     }
     setSelectedOption(value);
-    //console.log("checked =", value);
   };
   return (
     <div>
