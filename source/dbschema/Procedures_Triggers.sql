@@ -140,7 +140,6 @@ END;
   @Placa = 'ABC123';*/
 
 -- Insertar Visitantes
-
 go
 CREATE PROCEDURE InsertVisitante
   @CodigoReservacion INT,
@@ -151,9 +150,21 @@ CREATE PROCEDURE InsertVisitante
   @CantidadVisitantes INT
 AS
 BEGIN
-  INSERT INTO Visitante (CodigoReservacion, TipoProcedencia, TipoVisita, Estatus, CategoriaPago, CantidadVisitantes)
-  VALUES (@CodigoReservacion, @TipoProcedencia, @TipoVisita, @Estatus, @CategoriaPago, @CantidadVisitantes);
+  DECLARE @Subtotal MONEY;
+
+  -- Calculate the Subtotal based on TipoVisitante
+  SELECT @Subtotal = Monto * @CantidadVisitantes
+  FROM TipoVisitante
+  WHERE TipoProcedencia = @TipoProcedencia
+    AND TipoVisita = @TipoVisita
+    AND Estatus = @Estatus
+    AND CategoriaPago = @CategoriaPago;
+
+  -- Insert into Visitante table with Subtotal
+  INSERT INTO Visitante (CodigoReservacion, TipoProcedencia, TipoVisita, Estatus, CategoriaPago, CantidadVisitantes, Subtotal)
+  VALUES (@CodigoReservacion, @TipoProcedencia, @TipoVisita, @Estatus, @CategoriaPago, @CantidadVisitantes, @Subtotal);
 END;
+
 
 /*EXEC InsertVisitante 
   @CodigoReservacion = 1,
@@ -188,28 +199,9 @@ BEGIN
   -- Inicializar Monto
   SET @Monto = 0;
 
-  DECLARE @MontoSum MONEY;
-  DECLARE @CantidadVisitantes INT;
-
-  DECLARE MontoCursor CURSOR FOR
-  SELECT tv.Monto, v.CantidadVisitantes
-  FROM TipoVisitante tv
-  INNER JOIN Visitante v ON tv.TipoProcedencia = v.TipoProcedencia
-    AND tv.TipoVisita = v.TipoVisita
-    AND tv.Estatus = v.Estatus
+  SELECT @Monto = SUM(v.Subtotal)
+  FROM Visitante v
   WHERE v.CodigoReservacion = @CodigoReservacion;
-
-  OPEN MontoCursor;
-  FETCH NEXT FROM MontoCursor INTO @MontoSum, @CantidadVisitantes;
-
-  WHILE @@FETCH_STATUS = 0
-  BEGIN
-    SET @Monto = @Monto + (@MontoSum * @CantidadVisitantes);
-    FETCH NEXT FROM MontoCursor INTO @MontoSum, @CantidadVisitantes;
-  END;
-
-  CLOSE MontoCursor;
-  DEALLOCATE MontoCursor;
 
   -- Se toma el valor de la moneda
   SET @Moneda = (SELECT TOP 1 Moneda
