@@ -1,7 +1,7 @@
 export class UserData {
   constructor() {
-    this.start_date = new Date();
-    this.end_date = new Date();
+    this.start_date = "";
+    this.end_date = "";
     this.totalPeople = 0;
     
     this.nameUser = '';
