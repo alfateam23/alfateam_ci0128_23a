@@ -124,7 +124,7 @@ export const Start_reservation = ({userData}) => {
   const [selectedDate, setSelectedDate] = useState(0);
 
   const handleTitleChange = (id) => {
-    userData.reservation_type = id;
+    userData.area = id;
     if (id === "Camping") setSelectedDate(()=>1);
     else setSelectedDate(()=>2)
   };

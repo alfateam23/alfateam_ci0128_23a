@@ -45,7 +45,7 @@ export const FormularioView = ({ UserData }) => {
   const [counterFuera, setCounter] = useState(0); //variable para llevar el total de personas
   const [counterPlacas, setCounterPlacas] = useState(0); // variable para llevar cantidad de placas ingresadas
   const [mostrarPlacas, setMostrarPlacas] = useState(0);
-  const [totalPersonas, setTotalPersonas] = useState(UserData.num_guests + 1);
+  const [totalPersonas, setTotalPersonas] = useState(UserData.totalPeople);
   const [totalPlacas, setTotalPlacas] = useState(6); //totalPlacas = 6;
   const [counterNinos0a6Nac, setCounterNinos0a6Nac] = useState(0);
   const [counterNinos6a12Nac, setCounterNinos6a12Nac] = useState(0);

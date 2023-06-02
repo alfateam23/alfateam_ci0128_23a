@@ -23,7 +23,7 @@ export const Next_link = ({route_next, route_back,
     if (userData.start_date !== '' &&
     userData.end_date !== '') {
       navigate(route_next);
-    } else if (userData.reservation_type === 'Picnic' &&
+    } else if (userData.area === 'Picnic' &&
     userData.start_date !== '') {
       navigate(route_next);
     } else {
@@ -118,7 +118,7 @@ export const NavBar_PIR = ({selected}) => {
 };
 
 export const Dates_type_info = ({userData}) => {
-  if (userData.reservation_type === "Camping") {
+  if (userData.area === "Camping") {
     return (
       <div className="flex flex-col justify-center items-center mt-10
       sm:flex-row sm:space-x-40 md:space-x-60">
@@ -132,7 +132,7 @@ export const Dates_type_info = ({userData}) => {
           </div>
         </div>
         <div className="bg-white px-8 py-4 rounded-2xl mt-4 sm:mt-0">
-          <p>{userData.reservation_type}</p>
+          <p>{userData.area}</p>
         </div>
       </div>
     );
@@ -147,7 +147,7 @@ export const Dates_type_info = ({userData}) => {
         </div>
       </div>
       <div className="bg-white px-8 py-4 rounded-2xl mt-4 sm:mt-0">
-        <p>{userData.reservation_type}</p>
+        <p>{userData.area}</p>
       </div>
     </div>
   );

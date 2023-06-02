@@ -119,7 +119,7 @@ export const Party_title = ({count, setCount, UserData}) => {
             prevCount+1)}>
               +
           </button>
-          <p className='hidden'>{UserData.num_guests=count}</p>
+          <p className='hidden'>{UserData.totalPeople+=count}</p>
         </div>
       </div>
     </div>
