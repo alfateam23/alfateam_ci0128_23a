@@ -1,5 +1,29 @@
 const db = require('../DbConfig');
-const visitorManager = require('./visitorInsert')
+const visitorManager = require('./visitorInsert');
+const express = require('express');
+const router = express.Router();
+
+router.use(express.json())
+
+let prevData = null;
+router.post("/", async (req,res)=>{
+  try {
+    if (prevData !== null) {
+      if (prevData.nameUser !== req.body.UserData.nameUser) {
+        prevData = req.body.UserData;
+        await insertDataReservation(req.body.UserData);
+        res.json("Inserted");
+      }
+    } else if (prevData === null) {
+      prevData = req.body.UserData;
+      await insertDataReservation(req.body.UserData);
+      res.json("Inserted");
+    }
+  } catch (error) {
+    console.log("Error while creating a reservation", error); 
+  }
+  //console.log(req.body.UserData)
+})
 
 /**
  * This function creates a reservation.
@@ -14,17 +38,21 @@ async function insertDataReservation(reservation) {
     await insertUser(reservation.mail,reservation.id,
       reservation.nameUser, reservation.secondName,
       reservation.firstSurname, reservation.secondSurname);
-    
-    for (const phone of reservation.phone) {
-      await insertPhone(phone, reservation.mail);
+    if (Array.isArray(reservation.phone)) {
+      for (const phone of reservation.phone) {
+        await insertPhone(phone, reservation.mail);
+      }
+    } else {
+      await insertPhone(reservation.phone, reservation.mail);
     }
 
     await insertClient(reservation.mail);
-
+    if (reservation.originCountry === '') reservation.originCountry = 'Costa Rica';
+    if (reservation.end_date === '') reservation.end_date = reservation.start_date;
     const reservationCode = await insertReservation(
       reservation.mail,reservation.start_date,
-      reservation.end_date, reservation.origin,
-      reservation.province, reservation.area);
+      reservation.end_date, reservation.originCountry,
+      reservation.originProvince, reservation.area);
     for (const plate of reservation.plates) {
       if (plate!=='') await insertVehicle(reservationCode, plate);
     }
@@ -32,7 +60,7 @@ async function insertDataReservation(reservation) {
       reservation.area)
     await insertReceipt(reservationCode)
   } catch (error) {
-    console.log(error);
+    throw error;
   }
 };
 
@@ -87,10 +115,8 @@ async function insertReservation(email, start_date, end_date,
     EXEC InsertReservation 
       @Email = '${email}',
       @TipoArea = '${area[0]}',
-      @FechaInicio = '${
-        start_date.toISOString().replace(/T|Z/g, ' ').slice(0, -5)}',
-      @FechaFin = '${
-        end_date.toISOString().replace(/T|Z/g, ' ').slice(0, -5)}',
+      @FechaInicio = '${start_date}',
+      @FechaFin = '${end_date}',
       @NombrePais = '${origin}',
       @NombreProvincia = '${province}',
       @OutputParameter = @Output OUTPUT;
@@ -119,44 +145,44 @@ async function insertVehicle(reservationCode, plate) {
 async function insertVisitors(reservationCode, visitors,
   area) {
   // Visitor Adult national
-  if (visitors[0].countAdultNac) {
+  if (visitors[0]) {
     await visitorManager.insertVisitorAdultNational(reservationCode, area,
-      visitors[0].countAdultNac);
+      visitors[0]);
   }
   // Visitor kid 0-6 y/o national
-  if (visitors[1].countAdultKids06Nac) {
+  if (visitors[1]) {
     await visitorManager.insertVisitorKid06National(reservationCode, area,
-      visitors[1].countAdultKids06Nac);
+      visitors[1]);
   }
   // Visitor kid 6-12 y/o national
-  if (visitors[2].countAdultKids612Nac) {
+  if (visitors[2]) {
     await visitorManager.insertVisitorKids612National(reservationCode, area,
-      visitors[2].countAdultKids612Nac);
+      visitors[2]);
   }
   // Visitor elder 65+ y/o national
-  if (visitors[3].countElderNac) {
+  if (visitors[3]) {
     await visitorManager.insertVisitorElderNational(reservationCode, area,
-      visitors[3].countElderNac);
+      visitors[3]);
   }
   // Visitor Adult foreigner
-  if (visitors[4].countAdultExt) {
+  if (visitors[4]) {
     await visitorManager.insertVisitorAdultForeign(reservationCode, area,
-      visitors[4].countAdultExt);
+      visitors[4]);
   }
   // Visitor kid 0-6 y/o foreigner
-  if (visitors[5].countAdultKids06Ext) {
+  if (visitors[5]) {
     await visitorManager.insertVisitorKid06Foreign(reservationCode, area,
-      visitors[5].countAdultKids06Ext);
+      visitors[5]);
   }
   // Visitor kid 6-12 y/o foreigner
-  if (visitors[6].countAdultKids612Ext) {
+  if (visitors[6]) {
     await visitorManager.insertVisitorKids612Foreign(reservationCode, area,
-      visitors[6].countAdultKids612Ext);
+      visitors[6]);
   }
   // Visitor elder 65+ y/o foreigner
-  if (visitors[7].countElderExt) {
+  if (visitors[7]) {
     await visitorManager.insertVisitorElderForeign(reservationCode, area,
-      visitors[7].countElderExt);
+      visitors[7]);
   }
 }
 
@@ -175,5 +201,5 @@ async function insertReceipt(reservationCode) {
 };
 
 module.exports = {
-  insertDataReservation,
+  router
 };

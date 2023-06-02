@@ -17,6 +17,8 @@ import {
   MensajeError,
 } from "./Elementos/ElementosFormulario";
 
+import { useNavigate } from 'react-router-dom'
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
@@ -61,6 +63,7 @@ export const FormularioView = ({ UserData }) => {
   const [selectOriginProvince, setSelectOriginProvince] = useState(""); // se usa para establecer provincia
   const [selectedOption, setSelectedOption] = useState(null); // se usa para selecionar entre nacional o extranjero
   const nationalityOptions = ["Nacional", "Extranjero"];
+  const navigate = useNavigate();
   let pais = [];
   let provincias = [];
   const [countryData, setCountryData] = useState(null);
@@ -130,7 +133,7 @@ export const FormularioView = ({ UserData }) => {
         counterAdultosExt,
         counterAdultosMayorExt,
       ];
-      console.log("Name User:", UserData.nameUser);
+      /**console.log("Name User:", UserData.nameUser);
       console.log("Second Name:", UserData.secondName);
       console.log("First Surname:", UserData.firstSurname);
       console.log("Second Surname:", UserData.secondSurname);
@@ -140,7 +143,7 @@ export const FormularioView = ({ UserData }) => {
       console.log("Origin Country:", UserData.originCountry);
       console.log("Origin Province:", UserData.originProvince);
       console.log("Plates:", UserData.plates);
-      console.log("Visitors:", UserData.visitors);
+      console.log("Visitors:", UserData.visitors);*/
       //reinicio los campos
       cambiarFormularioValido(true);
       cambiarNombre({ campo: "", valido: null });
@@ -173,6 +176,7 @@ export const FormularioView = ({ UserData }) => {
       setCounterPlacas(0);
       setMostrarPlacas(0);
       cambiarTerminos(false);
+      navigate('/reservation/review');
     } else {
       cambiarFormularioValido(false);
     }

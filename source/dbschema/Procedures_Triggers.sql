@@ -159,12 +159,12 @@ BEGIN
     AND TipoVisita = @TipoVisita
     AND Estatus = @Estatus
     AND CategoriaPago = @CategoriaPago;
+  print @Estatus
 
   -- Insert into Visitante table with Subtotal
   INSERT INTO Visitante (CodigoReservacion, TipoProcedencia, TipoVisita, Estatus, CategoriaPago, CantidadVisitantes, Subtotal)
   VALUES (@CodigoReservacion, @TipoProcedencia, @TipoVisita, @Estatus, @CategoriaPago, @CantidadVisitantes, @Subtotal);
 END;
-
 
 /*EXEC InsertVisitante 
   @CodigoReservacion = 1,
@@ -177,9 +177,9 @@ END;
   @CodigoReservacion = 1,
   @TipoProcedencia = 'Nacional',
   @TipoVisita = 'Camping',
-  @Estatus = 'Niño 6 a 12 años',
-  @CategoriaPago = 'No exonerado',
-  @CantidadVisitantes = 2;*/
+  @Estatus = 'Adulto 65 años o más',
+  @CategoriaPago = 'Exonerado',
+  @CantidadVisitantes = 1;*/
 
 -- Insertar la factura
 
