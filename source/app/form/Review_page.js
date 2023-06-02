@@ -38,10 +38,8 @@ export const Review_info = ({ UserData }) => {
   }, []);
 
   if (costData) {
-    console.log(costData);
-  }
-
-    
+    console.log("costData", costData);
+  }   
  
   return (
     <div className="flex justify-center">

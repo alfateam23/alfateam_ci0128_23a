@@ -134,7 +134,7 @@ export const FormularioView = ({ UserData }) => {
         counterAdultosExt,
         counterAdultosMayorExt,
       ];
-      /**console.log("Name User:", UserData.nameUser);
+      console.log("Name User:", UserData.nameUser);
       console.log("Second Name:", UserData.secondName);
       console.log("First Surname:", UserData.firstSurname);
       console.log("Second Surname:", UserData.secondSurname);
@@ -144,7 +144,7 @@ export const FormularioView = ({ UserData }) => {
       console.log("Origin Country:", UserData.originCountry);
       console.log("Origin Province:", UserData.originProvince);
       console.log("Plates:", UserData.plates);
-      console.log("Visitors:", UserData.visitors);*/
+      console.log("Visitors:", UserData.visitors);
       //reinicio los campos
       cambiarFormularioValido(true);
       cambiarNombre({ campo: "", valido: null });
