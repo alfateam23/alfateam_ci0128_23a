@@ -204,6 +204,7 @@ CREATE TABLE Visitante
   Estatus VARCHAR(60),
   CategoriaPago VARCHAR(60),
   CantidadVisitantes INT NOT NULL,
+  Subtotal MONEY,
   CONSTRAINT PK_Visitante PRIMARY KEY(CodigoReservacion, TipoProcedencia, TipoVisita, Estatus, CategoriaPago),
   CONSTRAINT FK_Visitante_Reservacion FOREIGN KEY(CodigoReservacion)
   REFERENCES Reservacion(Codigo),

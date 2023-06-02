@@ -234,6 +234,7 @@ INSERT INTO ProvinciaCRC(Nombre) VALUES ('Alajuela');
 INSERT INTO ProvinciaCRC(Nombre) VALUES ('Heredia');
 INSERT INTO ProvinciaCRC(Nombre) VALUES ('San José');
 INSERT INTO ProvinciaCRC(Nombre) VALUES ('Puntareans');
+INSERT INTO ProvinciaCRC(Nombre) VALUES ('');
 
 /*
 Insertar todos los tipos de visitante posibles.
@@ -246,7 +247,7 @@ VALUES ('Nacional', 'Camping', 'Niño 6 a 12 años', 'No exonerado', 3390, 'CRC'
 INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, CategoriaPago, Monto, Moneda)
 VALUES ('Nacional', 'Camping', 'Adulto', 'No exonerado', 4520, 'CRC');
 INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, CategoriaPago, Monto, Moneda)
-VALUES ('Nacional', 'Camping', 'Adulto 65 años o más', 'No exonerado', 0, 'CRC');
+VALUES ('Nacional', 'Camping', 'Adulto 65 años o más', 'Exonerado', 0, 'CRC');
 INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, CategoriaPago, Monto, Moneda)
 VALUES ('Extranjero', 'Camping', 'Niño 0 a 6 años', 'Exonerado', 0, 'USD');
 INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, CategoriaPago, Monto, Moneda)
@@ -254,7 +255,7 @@ VALUES ('Extranjero', 'Camping', 'Niño 6 a 12 años', 'No exonerado', 10.17, 'U
 INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, CategoriaPago, Monto, Moneda)
 VALUES ('Extranjero', 'Camping', 'Adulto', 'No exonerado', 18.08, 'USD');
 INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, CategoriaPago, Monto, Moneda)
-VALUES ('Extranjero', 'Camping', 'Adulto 65 años o más', 'No exonerado', 0, 'USD');
+VALUES ('Extranjero', 'Camping', 'Adulto 65 años o más', 'Exonerado', 0, 'USD');
 INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, CategoriaPago, Monto, Moneda)
 VALUES ('Nacional', 'Picnic', 'Niño 0 a 6 años', 'Exonerado', 0, 'CRC');
 INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, CategoriaPago, Monto, Moneda)
@@ -262,7 +263,7 @@ VALUES ('Nacional', 'Picnic', 'Niño 6 a 12 años', 'No exonerado', 1130, 'CRC')
 INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, CategoriaPago, Monto, Moneda)
 VALUES ('Nacional', 'Picnic', 'Adulto', 'No exonerado', 2260, 'CRC');
 INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, CategoriaPago, Monto, Moneda)
-VALUES ('Nacional', 'Picnic', 'Adulto 65 años o más', 'No exonerado', 0, 'CRC');
+VALUES ('Nacional', 'Picnic', 'Adulto 65 años o más', 'Exonerado', 0, 'CRC');
 INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, CategoriaPago, Monto, Moneda)
 VALUES ('Extranjero', 'Picnic', 'Niño 0 a 6 años', 'Exonerado', 0, 'USD');
 INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, CategoriaPago, Monto, Moneda)
@@ -270,4 +271,6 @@ VALUES ('Extranjero', 'Picnic', 'Niño 6 a 12 años', 'No exonerado', 5.65, 'USD
 INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, CategoriaPago, Monto, Moneda)
 VALUES ('Extranjero', 'Picnic', 'Adulto', 'No exonerado', 13.56, 'USD');
 INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, CategoriaPago, Monto, Moneda)
-VALUES ('Extranjero', 'Picnic', 'Adulto 65 años o más', 'No exonerado', 0, 'USD');
+VALUES ('Extranjero', 'Picnic', 'Adulto 65 años o más', 'Exonerado', 0, 'USD');
+
+

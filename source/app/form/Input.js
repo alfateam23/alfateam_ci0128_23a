@@ -166,7 +166,8 @@ const ComponentDropDown = ({
     !selectedItem || !items.some((item) => item.Nombre === selectedItem.Nombre);
 
   const menu = (
-    <Menu onClick={handleMenuClick}>
+    <Menu onClick={handleMenuClick} 
+    className="h-52 overflow-y-scroll">
       {items.map((items) => (
         <Menu.Item key={items.Nombre}>{items.Nombre}</Menu.Item>
       ))}
