@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { createUseStyles } from 'react-jss';
+import {My_Calendar} from './reservation_page/Calendar';
+
+
 const useStyles = createUseStyles({
   tableContainer: {
     maxWidth: '1500px',
@@ -30,14 +33,16 @@ const useStyles = createUseStyles({
 
 function Lista() {
   const classes = useStyles();
+  const [initialData, setInitialData] = useState([]);
   const [data, setData] = useState(null);
   const [filterValue, setFilterValue] = useState('');
-  const [selectedNameFilter, setSelectedNameFilter] = useState('');
+  const [selectedTypeFilter, setselectedTypeFilter] = useState('');
   const [sortField, setSortField] = useState('');
   const [sortOrder, setSortOrder] = useState('asc');
   const [aprobado,setAprobado] = useState(false);
   const [cancelado,setCancelado] = useState(0);
-
+  const [isCalendarVisible, setCalendarVisible] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
 
 
 useEffect(() => {
@@ -59,22 +64,20 @@ useEffect(() => {
 
 // Verificar si los datos se han cargado
 
-  const handleFilter = (field, value) => {
-    let filteredData = [...data];
-    if (field === 'filterValue') {
-      setFilterValue(value);
-      filteredData.forEach(item=>console.log(item.ReservacionCodigo))
-      filteredData.forEach(item=>console.log(parseInt(value)))
-      filteredData = filteredData.filter((item) => item.ReservacionCodigo === parseInt(value)); 
-    } else if (field === 'selectedNameFilter') {
-      setSelectedNameFilter(value);
-      if (value !== '') {
-        filteredData = filteredData.filter((item) => item.TipoArea === value); 
-      }
-    }
+const handleFilter = (field, value) => {
+  let filteredData = [...initialData]; // Utiliza una copia del conjunto de datos original
 
-    setData(filteredData); 
-  };
+  if (field === 'filterValue') {
+    setFilterValue(value);
+    filteredData = filteredData.filter((item) => item.ReservacionCodigo === parseInt(value));
+  } else if (field === 'selectedTypeFilter') {
+    setselectedTypeFilter(value);
+    if (value !== '') {
+      filteredData = filteredData.filter((item) => item.TipoArea === value);
+    }
+  }
+  setData(filteredData);
+};
 
   const handleSort = (field) => {
     let sortedData = [...data];
@@ -109,8 +112,8 @@ useEffect(() => {
   const handleCancelEstado = (ReservacionCodigo) => {
     const updatedData = data.map((item) => {
       if (item.ReservacionCodigo === ReservacionCodigo && item.EstadoActividad === 'Pendiente') {
-          return { ...item, EstadoActividad: 'Cancelado' };
           setCancelado(ReservacionCodigo);
+          return { ...item, EstadoActividad: 'Cancelado' };
       }
       return item;
     });
@@ -139,8 +142,8 @@ useEffect(() => {
   const handleAprobeEstado = (ReservacionCodigo) => {
     const updatedData = data.map((item) => {
       if (item.ReservacionCodigo === ReservacionCodigo && item.EstadoPago === 'Pendiente') {
-          return { ...item, EstadoPago: 'Aprobado' };
-          setAprobado(ReservacionCodigo);
+        setAprobado(ReservacionCodigo);
+        return { ...item, EstadoPago: 'Aprobado' };
       }
       return item;
     });
@@ -169,6 +172,23 @@ useEffect(() => {
   if (data === null) {
     return <div>Cargando datos...</div>;
   }
+
+  const mostrarCalendario = () => {
+    setCalendarVisible(!isCalendarVisible);
+  };
+
+  const handleSelectDate = (day) => {
+    let filteredData = [...initialData]; 
+      setFilterValue(day);
+      filteredData = filteredData.filter((item) => item.FechaInicio === day);
+  setData(filteredData);  
+};
+
+  const ocultarCalendario = () => {
+    setCalendarVisible(false);
+  };
+
+  
   return (
     <div className='{{ backgroundColor: gray }}'>
       <h1 className='col' >Lista de Reservas</h1>
@@ -179,21 +199,29 @@ useEffect(() => {
           onChange={(event) => handleFilter('filterValue', event.target.value)}
           placeholder="Filtrar por Código"
         />
-        <button onClick={() => handleFilter('filterValue', filterValue)}>Buscar por ReservacionCodigo</button>
       </div>
       <div>
         <select
-          value={selectedNameFilter}
-          onChange={(event) => handleFilter('selectedNameFilter', event.target.value)}
+          value={selectedTypeFilter}
+          onChange={(event) => handleFilter('selectedTypeFilter', event.target.value)}
         >
           <option value="">Ambos</option>
-          <option value="Picnic">Picnic</option>
-          <option value="Camping">Camping</option>
+          <option value="P">Picnic</option>
+          <option value="C">Camping</option>
         </select>
-        <button onClick={() => handleFilter('selectedNameFilter', selectedNameFilter)}>
-          Filtrar
-        </button>
       </div>
+
+      <div>
+      <button onClick={mostrarCalendario}>Mostrar Calendario</button>
+      {isCalendarVisible && (
+        <My_Calendar
+          active={true}
+          handleClick={handleSelectDate}
+        />
+      )}
+      <button onClick={ocultarCalendario}>Ocultar Calendario</button>
+    </div>
+
       <div className={classes.tableContainer}>
       <table className={classes.table}>
         <thead>
@@ -240,7 +268,7 @@ useEffect(() => {
               <td>{item.TotalCantidadVisitantes}</td>
               <td>{(new Date (item.FechaInicio)).toDateString()}</td>
               <td>{(new Date (item.FechaInicio)).toDateString()}</td>
-              <td>{item.EstadoPago == true ? 'Aprobado' : 'Pendiente'}</td>
+              <td>{item.EstadoPago == true ? 'Aprobado' : item.EstadoActividad == false ? 'Cancelado' : 'Pendiente'}</td>
               <td>
                <button onClick={() => handleCancelEstado(item.ReservacionCodigo)}>Cancelar</button>
               </td>              
@@ -251,6 +279,7 @@ useEffect(() => {
           ))}
         </tbody>
       </table>
+     
       </div>
     </div>
   );
