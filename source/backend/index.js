@@ -4,12 +4,14 @@ const express = require('express');
 const app = express();
 const reservationManager = require('./reservation/reservationInsert');
 const availabilityInfo = require('./reservation/AvailabilityReq');
+const reservationCost = require('./reservation/CostConsult')
 const origin = require('./reservation/OriginReq');
 const reservationDetails = require('./dashboard/ReservationDetailsReq')
 
 app.use("/backend/capacity", availabilityInfo.router);
 app.use("/backend/geographicInfo", origin.router);
 app.use("/backend/reservationDetails", reservationDetails.router);
+app.use("/backend/reservationCost", reservationCost.router);
 
 const visitorsRawData = {
     "visitors": [
