@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { My_Calendar } from "./Calendar";
 import { Next_link, NavBar_PIR, Dates_type_info } from './Common';
 import { From_until } from './select_dates/From_until'
@@ -31,7 +31,7 @@ Function to show the review page
 
 export const Review = ({UserData}) => {
   return (
-    <div>
+    <div className='flex flex-col space-y-8'>
       <Dates_type_info userData={UserData} />
       <NavBar_PIR selected={"review"}/>
       <br />
