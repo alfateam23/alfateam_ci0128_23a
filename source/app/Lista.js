@@ -30,41 +30,49 @@ const useStyles = createUseStyles({
 
 function Lista() {
   const classes = useStyles();
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useState(null);
   const [filterValue, setFilterValue] = useState('');
   const [selectedNameFilter, setSelectedNameFilter] = useState('');
   const [sortField, setSortField] = useState('');
   const [sortOrder, setSortOrder] = useState('asc');
-  const [initialData, setInitialData] = useState(null);
+  const [aprobado,setAprobado] = useState(false);
+  const [cancelado,setCancelado] = useState(0);
 
-  useEffect(() => {
-    fetch("/backend/reservationDetails/getReservations")
+
+
+useEffect(() => {
+  fetch("/backend/reservationDetails/getReservations")
     .then((res) => {
       if (!res.ok) {
         console.log('Network response was not ok');
       }
       return res.json();
     })
-    .then((data) => setInitialData(data))
+    .then((data) => {
+      console.log(data);
+      setData(data);
+    })
     .catch((error) => {
       console.error('Error fetching data:', error);
     });
-  }, []);
+}, []);
 
-  // Al eliminar se debe invocar una funcion que envia el ID de la rserva a eliminar junto al token para eliminarlo en la DB
+// Verificar si los datos se han cargado
+
   const handleFilter = (field, value) => {
-    let filteredData = [...initialData];
-  
+    let filteredData = [...data];
     if (field === 'filterValue') {
       setFilterValue(value);
-      filteredData = filteredData.filter((item) => item.codigo === parseInt(value)); 
+      filteredData.forEach(item=>console.log(item.ReservacionCodigo))
+      filteredData.forEach(item=>console.log(parseInt(value)))
+      filteredData = filteredData.filter((item) => item.ReservacionCodigo === parseInt(value)); 
     } else if (field === 'selectedNameFilter') {
       setSelectedNameFilter(value);
       if (value !== '') {
-        filteredData = filteredData.filter((item) => item.tipo === value); 
+        filteredData = filteredData.filter((item) => item.TipoArea === value); 
       }
     }
-  
+
     setData(filteredData); 
   };
 
@@ -97,57 +105,70 @@ function Lista() {
     setData(sortedData);
   };
 
-  const handleCancelEstado = (codigo) => {
+
+  const handleCancelEstado = (ReservacionCodigo) => {
     const updatedData = data.map((item) => {
-      if (item.codigo === codigo && item.estado === 'Pendiente') {
-          return { ...item, estado: 'Cancelado' };
+      if (item.ReservacionCodigo === ReservacionCodigo && item.EstadoActividad === 'Pendiente') {
+          return { ...item, EstadoActividad: 'Cancelado' };
+          setCancelado(ReservacionCodigo);
       }
       return item;
     });
     setData(updatedData);
-    
-    useEffect(() => {
-      fetch('/cancelReservation/:id')
-      .then((res) => {
-        if (!res.ok) {
-          console.log('Network response was not ok');
-        }
-        return res.json();
-      })
-      .then((updatedData) => setData(updatedData))
-      .catch((error) => {
-        console.error('Error fetching data:', error);
-      });
-    }, []);
   };
 
+  useEffect(() => {
+    if(cancelado !== 0){
+      const ReservacionCodigo=cancelado;
+    fetch(`/backend/reservationDetails/confirmReservation/${ReservacionCodigo}`)
+    .then((res) => {
+      if (!res.ok) {
+        console.log('Network response was not ok');
+      }
+      return res.json();
+    })
+    .then((updatedData) => setData(updatedData))
+    .catch((error) => {
+      console.error('Error fetching data:', error);
+    });
+    setCancelado(0);
+    }
+  }, [cancelado]);
 
-  const handleAprobeEstado = (codigo) => {
+  
+  const handleAprobeEstado = (ReservacionCodigo) => {
     const updatedData = data.map((item) => {
-      if (item.codigo === codigo && item.estado === 'Pendiente') {
-          return { ...item, estado: 'Aprobado' };
+      if (item.ReservacionCodigo === ReservacionCodigo && item.EstadoPago === 'Pendiente') {
+          return { ...item, EstadoPago: 'Aprobado' };
+          setAprobado(ReservacionCodigo);
       }
       return item;
     });
     setData(updatedData);
-
-    useEffect(() => {
-      fetch('/confirmReservation/:id')
-      .then((res) => {
-        if (!res.ok) {
-          console.log('Network response was not ok');
-        }
-        return res.json();
-      })
-      .then((updatedData) => setData(updatedData))
-      .catch((error) => {
-        console.error('Error fetching data:', error);
-      });
-    }, []);
   };
 
+  useEffect(() => {
+    if(aprobado !== 0){
+      const ReservacionCodigo=aprobado;
+    fetch(`/backend/reservationDetails/confirmReservation/${ReservacionCodigo}`)
+    .then((res) => {
+      if (!res.ok) {
+        console.log('Network response was not ok');
+      }
+      return res.json();
+    })
+    .then((updatedData) => setData(updatedData))
+    .catch((error) => {
+      console.error('Error fetching data:', error);
+    });
+    setAprobado(0);
+    }
+  }, [aprobado]);
 
 
+  if (data === null) {
+    return <div>Cargando datos...</div>;
+  }
   return (
     <div className='{{ backgroundColor: gray }}'>
       <h1 className='col' >Lista de Reservas</h1>
@@ -158,7 +179,7 @@ function Lista() {
           onChange={(event) => handleFilter('filterValue', event.target.value)}
           placeholder="Filtrar por Código"
         />
-        <button onClick={() => handleFilter('filterValue', filterValue)}>Buscar por Codigo</button>
+        <button onClick={() => handleFilter('filterValue', filterValue)}>Buscar por ReservacionCodigo</button>
       </div>
       <div>
         <select
@@ -178,19 +199,19 @@ function Lista() {
         <thead>
           <tr>
             <th>Codigo
-              <button onClick={() => handleSort('codigo')}>
-                {sortField === 'codigo' && sortOrder === 'asc' ? '▲' : '▼'}
+              <button onClick={() => handleSort('ReservacionCodigo')}>
+                {sortField === 'ReservacionCodigo' && sortOrder === 'asc' ? '▲' : '▼'}
               </button>
             </th>
             <th>Tipo
-              <button onClick={() => handleSort('tipo')}>
-                {sortField === 'tipo' && sortOrder === 'asc' ? '▲' : '▼'}
+              <button onClick={() => handleSort('TipoArea')}>
+                {sortField === 'TipoArea' && sortOrder === 'asc' ? '▲' : '▼'}
               </button>
             </th>
             <th>
-            Cantidad de Personas{' '}
-              <button onClick={() => handleSort('personas')}>
-                {sortField === 'personas' && sortOrder === 'asc' ? '▲' : '▼'}
+            Cantidad de Visitantes{' '}
+              <button onClick={() => handleSort('TotalCantidadVisitantes')}>
+                {sortField === 'TotalCantidadVisitantes' && sortOrder === 'asc' ? '▲' : '▼'}
               </button>
             </th>
             <th>Fecha entrada
@@ -203,9 +224,9 @@ function Lista() {
                 {sortField === 'fechaFinal' && sortOrder === 'asc' ? '▲' : '▼'}
               </button>
             </th>
-            <th>Estado
-              <button onClick={() => handleSort('estado')}>
-                {sortField === 'estado' && sortOrder === 'asc' ? '▲' : '▼'}
+            <th>EstadoPago
+              <button onClick={() => handleSort('EstadoPago')}>
+                {sortField === 'EstadoPago' && sortOrder === 'asc' ? '▲' : '▼'}
               </button>
             </th>
             
@@ -213,18 +234,18 @@ function Lista() {
         </thead>
         <tbody>
           {data.map((item) => (
-            <tr key={item.codigo}>
-              <td>{item.codigo}</td>
-              <td>{item.tipo}</td>
-              <td>{item.personas}</td>
-              <td>{item.fechaInicio}</td>
-              <td>{item.fechaFinal}</td>
-              <td>{item.estado}</td>
+            <tr key={item.ReservacionCodigo}>
+              <td>{item.ReservacionCodigo}</td>
+              <td>{item.TipoArea === 'C' ? 'Camping' : 'Picnic'}</td>
+              <td>{item.TotalCantidadVisitantes}</td>
+              <td>{(new Date (item.FechaInicio)).toDateString()}</td>
+              <td>{(new Date (item.FechaInicio)).toDateString()}</td>
+              <td>{item.EstadoPago == true ? 'Aprobado' : 'Pendiente'}</td>
               <td>
-                <button onClick={() => handleCancelEstado(item.codigo)}>Cancelar</button>
+               <button onClick={() => handleCancelEstado(item.ReservacionCodigo)}>Cancelar</button>
               </td>              
               <td>
-                <button onClick={() => handleAprobeEstado(item.codigo)}>Confirmar</button>
+                <button onClick={() => handleAprobeEstado(item.ReservacionCodigo)}>Confirmar</button>
               </td>
             </tr>
           ))}
