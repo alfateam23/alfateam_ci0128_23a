@@ -1,8 +1,10 @@
-import React from "react";
+
 import { Descriptions } from "antd";
 
+import React, { useState, useEffect } from "react";
+
 import "./style.css";
-import { ContenedorBotonCentrado, Boton } from "./ReviewElements";
+
 export const Review_info = ({ UserData }) => {
   const filteredPlates = UserData.plates.filter((plate) => plate.trim() !== "");
   const visitorLabels = [
@@ -15,7 +17,32 @@ export const Review_info = ({ UserData }) => {
     "Adultos extranjeros",
     "Adultos mayores extranjeros de 65",
   ];
+ 
+  const [totalPrice, settTotalPrice] = useState(null);
+  const [costData, setCostData] = useState(null);
 
+  const prueba = "1020102";
+  useEffect(() => {
+    fetch("/backend/reservationCost/1020102")
+      .then((res) => {
+        if (!res.ok) {
+          console.log("Network response was not ok");
+        }
+        const resClone = res.clone();
+        return resClone.json();
+      })
+      .then((data) => setCostData(data))
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
+
+  if (costData) {
+    console.log(costData);
+  }
+
+    
+ 
   return (
     <div className="flex justify-center">
       <a
