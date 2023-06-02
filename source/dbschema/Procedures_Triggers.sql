@@ -292,6 +292,58 @@ BEGIN
     SET @CurrentDate = DATEADD(DAY, 1, @CurrentDate);
   END
 END;
+
+go
+CREATE PROCEDURE CalculateSubtotal
+  @NacionalCampingNiño0a6 INT,
+  @NacionalCampingNiño6a12 INT,
+  @NacionalCampingAdulto INT,
+  @NacionalCampingAdulto65 INT,
+  @ExtranjeroCampingNiño0a6 INT,
+  @ExtranjeroCampingNiño6a12 INT,
+  @ExtranjeroCampingAdulto INT,
+  @ExtranjeroCampingAdulto65 INT
+AS
+BEGIN
+  DECLARE @Subtotals TABLE
+  (
+    TipoProcedencia VARCHAR(60),
+    TipoVisita VARCHAR(60),
+    Estatus VARCHAR(60),
+    CategoriaPago VARCHAR(60),
+    Cantidad INT,
+    Subtotal MONEY
+  );
+
+  -- Insertar todos los tipos de visitante y sus cantidades
+  INSERT INTO @Subtotals (TipoProcedencia, TipoVisita, Estatus, CategoriaPago, Cantidad)
+  VALUES
+    ('Nacional', 'Camping', 'Niño 0 a 6 años', 'Exonerado', @NacionalCampingNiño0a6),
+    ('Nacional', 'Camping', 'Niño 6 a 12 años', 'No exonerado', @NacionalCampingNiño6a12),
+    ('Nacional', 'Camping', 'Adulto', 'No exonerado', @NacionalCampingAdulto),
+    ('Nacional', 'Camping', 'Adulto 65 años o más', 'No exonerado', @NacionalCampingAdulto65),
+    ('Extranjero', 'Camping', 'Niño 0 a 6 años', 'Exonerado', @ExtranjeroCampingNiño0a6),
+    ('Extranjero', 'Camping', 'Niño 6 a 12 años', 'No exonerado', @ExtranjeroCampingNiño6a12),
+    ('Extranjero', 'Camping', 'Adulto', 'No exonerado', @ExtranjeroCampingAdulto),
+    ('Extranjero', 'Camping', 'Adulto 65 años o más', 'No exonerado', @ExtranjeroCampingAdulto65);
+
+  -- Calcular subtotales
+  UPDATE t
+  SET Subtotal = tv.Monto * t.Cantidad
+  FROM @Subtotals t
+  JOIN TipoVisitante tv ON t.TipoProcedencia = tv.TipoProcedencia
+                        AND t.TipoVisita = tv.TipoVisita
+                        AND t.Estatus = tv.Estatus
+                        AND t.CategoriaPago = tv.CategoriaPago;
+
+  -- Total
+  DECLARE @Total MONEY;
+  SELECT @Total = SUM(Subtotal)
+  FROM @Subtotals;
+
+  SELECT @Total AS Total;
+END;
+
 /*select * from Usuario
 select * from Telefono
 select * from Cliente
