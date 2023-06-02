@@ -111,6 +111,7 @@ export const FormularioView = ({ UserData }) => {
       UserData.mail = e.target.correo.value;
       UserData.originCountry = selectOriginCountry;
       UserData.originProvince = selectOriginProvince;
+      UserData.totalPeople = totalPersonas;
       UserData.plates = [
         placa.campo,
         placa2.campo,

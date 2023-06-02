@@ -6,7 +6,8 @@ import { Party_title,
   Availability_title,
   Spaces_left } from './Availability_page';
 import { Start_reservation, Reservation_type } from './select_dates/Select_dates';
-import {FormularioView} from "../form/Form"
+import {FormularioView} from "../form/Form";
+import {Review_info} from "../form/Review_page";
 
 /*
 Function to add the form for the traveller to fill
@@ -35,6 +36,7 @@ export const Review = ({UserData}) => {
       <Dates_type_info userData={UserData} />
       <NavBar_PIR selected={"review"}/>
       <br />
+      <Review_info UserData={UserData}/>
       <Next_link route_next='/'
       route_back='/reservation/info' />
     </div>
