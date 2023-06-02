@@ -23,7 +23,13 @@ export const Spaces_left = ({count, userData}) => {
   const [datesCapacity,setDatesCapacity] = useState(null);
   const [prevCount, setPrevCount] = useState(0);
   useEffect(() => {
-    fetch(`/backend/capacity/${userData.start_date.toISOString()}/${userData.end_date.toISOString()}/${userData.reservation_type}`)
+    let apiParameters = [];
+    apiParameters.push(userData.start_date.toISOString())
+    userData.end_date !== '' ? apiParameters.push(
+      userData.end_date.toISOString()) : apiParameters.push('no');
+    apiParameters.push(userData.reservation_type)
+    
+    fetch(`/backend/capacity/${apiParameters[0]}/${apiParameters[1]}/${apiParameters[2]}`)
     .then((res) => {
       if (!res.ok) {
         console.log('Network response was not ok');
@@ -60,8 +66,14 @@ export const Spaces_left = ({count, userData}) => {
     updateCapacityValue();
     setPrevCount(count);
   },[count])
+  if (datesCapacity) console.log(datesCapacity.length%4)
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className={`grid grid-cols-${
+      datesCapacity && datesCapacity.length === 1 ? 1 : 2
+    } lg:grid-cols-${
+      datesCapacity && datesCapacity.length < 4 ?
+      datesCapacity.length%4 : 4
+    } gap-4`}>
       {!datesCapacity ?
       "Loading..." :
       datesCapacity.map((item) => (

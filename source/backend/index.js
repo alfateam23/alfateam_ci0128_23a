@@ -2,6 +2,7 @@
 
 const express = require('express');
 const app = express();
+const db = require('./DbConfig')
 const reservationManager = require('./reservation/reservationInsert');
 const availabilityInfo = require('./reservation/AvailabilityReq');
 const reservationCost = require('./reservation/CostConsult')
@@ -22,10 +23,9 @@ const visitorsRawData = {
     ]
 };
 
-app.get('/backend/visitordata/:id', (req, res) => {
-    let visitor = visitorsRawData.visitors.find((v) => v.id === req.params.id);
-    if (!visitor) res.status(404).send("Visitor not found");
-    res.send(visitor);
+app.get('/backend/visitordata/',async (req, res) => {
+    let visitor = await db.executeQuery('SELECT * FROM TipoVisitante')
+    res.send(visitor.recordsets[0]);
 });
 
 let reservation = {

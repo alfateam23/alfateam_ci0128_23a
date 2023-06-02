@@ -3,8 +3,11 @@ const express = require('express');
 const router = express.Router();
 
 router.get("/:start/:end/:area", async (req,res)=>{
-  const result = await getAvailability(req.params.start,
-    req.params.end, req.params.area);
+  const result = req.params.end === 'no' ?
+    await getAvailability(req.params.start,
+      req.params.start, req.params.area) :
+    await getAvailability(req.params.start,
+      req.params.end, req.params.area)
   res.json(result);
 })
 
@@ -25,27 +28,6 @@ async function getAvailability (startDate, endDate, area) {
   }
 };
 
-function addDates (dates, startDate, endDate, areaCapacity) {
-  let start = new Date(new Date(startDate).setHours(0, 0, 0, 0));
-  let end = new Date(new Date(endDate).setHours(0, 0, 0, 0));
-  if (dates.length > 0) {
-    while (start < end) {
-      if (dates.find((position) => 
-      new Date(new Date(position.Fecha).setHours(0, 0, 0, 0)).toDateString()
-      === start.toDateString()) === undefined) {
-        dates.push({"Fecha":new Date(start),"CupoOnlineDia":areaCapacity})
-      }
-      start.setDate(start.getDate()+1);
-    }
-  } else {
-    while (start < end) {
-      dates.push({"Fecha":new Date(start),"CupoOnlineDia":areaCapacity})
-      start.setDate(start.getDate()+1);
-    }
-  }
-  return dates;
-};
-
 async function getCapacity (area) {
   try {
     const capacity = await db.executeQuery(`SELECT CupoOnline
@@ -55,6 +37,29 @@ async function getCapacity (area) {
   } catch (error) {
     throw error;
   }
+};
+
+function addDates (dates, startDate, endDate, areaCapacity) {
+  let start = new Date(new Date(startDate).setHours(0, 0, 0, 0));
+  let end = new Date(new Date(endDate).setHours(0, 0, 0, 0));
+  if (dates.length > 0) {
+    while (start < end) {
+      if (dates.find((position) =>
+      new Date(new Date(position.Fecha).setHours(0, 0, 0, 0)).toDateString()
+      === start.toDateString()) === undefined) {
+        dates.push({"Fecha":new Date(start),"CupoOnlineDia":areaCapacity})
+      }
+      start.setDate(start.getDate()+1);
+    }
+  } else if (start.toDateString() === end.toDateString()) {
+    dates.push({"Fecha":new Date(start),"CupoOnlineDia":areaCapacity})
+  } else {
+    while (start < end) {
+      dates.push({"Fecha":new Date(start),"CupoOnlineDia":areaCapacity})
+      start.setDate(start.getDate()+1);
+    }
+  }
+  return dates;
 };
 
 module.exports = {
