@@ -7,13 +7,15 @@ const reservationManager = require('./reservation/reservationInsert');
 const availabilityInfo = require('./reservation/AvailabilityReq');
 const reservationCost = require('./reservation/CostConsult')
 const origin = require('./reservation/OriginReq');
-const reservationDetails = require('./dashboard/ReservationDetailsReq')
+const reservationDetails = require('./dashboard/ReservationDetailsReq');
+const tarifas = require('./dashboard/Tarifas');
 
 app.use("/backend/capacity", availabilityInfo.router);
 app.use("/backend/geographicInfo", origin.router);
 app.use("/backend/reservationDetails", reservationDetails.router);
 app.use("/backend/reservationCost", reservationCost.router);
 app.use("/backend/insertReservation", reservationManager.router);
+app.use("/backend", tarifas.router);
 
 const visitorsRawData = {
     "visitors": [

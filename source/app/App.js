@@ -76,7 +76,7 @@ const CustomerApp = () => {
  * web application.
  */
 const App = () => {
-   const runAdminApp = false; // Change for either admin or normal mode
+   const runAdminApp = true; // Change for either admin or normal mode
    if (runAdminApp) {
       return (AdminApp());
    } else {
