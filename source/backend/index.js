@@ -8,12 +8,14 @@ const availabilityInfo = require('./reservation/AvailabilityReq');
 const reservationCost = require('./reservation/CostConsult')
 const origin = require('./reservation/OriginReq');
 const reservationDetails = require('./dashboard/ReservationDetailsReq')
+const reports = require('./reports/ReportsReq')
 
 app.use("/backend/capacity", availabilityInfo.router);
 app.use("/backend/geographicInfo", origin.router);
 app.use("/backend/reservationDetails", reservationDetails.router);
 app.use("/backend/reservationCost", reservationCost.router);
 app.use("/backend/insertReservation", reservationManager.router);
+app.use("/backend/reports", reports.router);
 
 const visitorsRawData = {
     "visitors": [
@@ -54,7 +56,7 @@ let reservation = {
         { countAdultKids612Nac: 1 },
         { countAdultNac: 2 },
         { countElderNac: 0 },
-        
+
         { countAdultKids06Ext: 0 },
         { countAdultKids612Ext: 0 },
         { countAdultExt: 0 },
@@ -66,7 +68,7 @@ let reservation = {
 //reservationManager.insertDataReservation(reservation);
 
 /* let date1 = new Date("2023-07-15T06:00:00.000Z");
-let date2 = new Date("2023-07-19T06:00:00.000Z"); 
+let date2 = new Date("2023-07-19T06:00:00.000Z");
 date1.setDate(date1.getDate()+1)
 if (date1 > new Date('2023-07-15T06:00:00.000Z')) console.log(true) */
 

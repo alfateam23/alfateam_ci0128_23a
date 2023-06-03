@@ -1,3 +1,25 @@
+const db = require('../DbConfig');
+const express = require('express');
+const router = express.Router();
+
+router.get('/visits/:startdate/:enddate', async (req, res) => {
+    try {
+        let visits = await selectVisitsInDateRange(req.params['startdate'], req.params['enddate']);
+        res.json(visits);
+    } catch (error) {
+        console.log('Error al obtener reporte de visitas', error);
+    }
+})
+
+router.get('/profits/:startdate/:enddate', async (req, res) => {
+    try {
+        let visits = await selectProfitsInDateRange(req.params['startdate'], req.params['enddate']);
+        res.json(visits);
+    } catch (error) {
+        console.log('Error al obtener reporte de ingresos', error);
+    }
+})
+
 // Endpoints for report datasets
 
 const db = require('../DbConfig')
@@ -17,7 +39,7 @@ async function selectVisitsInDateRange(startdate, enddate) {
         WHERE Reservacion.FechaInicio
         BETWEEN '${startdate}' AND '${enddate}'`
         const result = await db.executeQuery(query)
-        return result.recordset
+        return result.recordset;
     }
     catch (error) {
         throw error;
@@ -45,14 +67,11 @@ async function selectProfitsInDateRange(startdate, enddate) {
         WHERE Reservacion.FechaInicio
         BETWEEN '${startdate}' AND '${enddate}'`
         const result = await db.executeQuery(query)
-        return result.recordset
+        return result.recordset;
     }
     catch (error) {
         throw error;
     }
 }
 
-module.exports = {
-    selectVisitsInDateRange,
-    selectProfitsInDateRange
-};
+module.exports = { router };
