@@ -1,5 +1,29 @@
 const db = require('../DbConfig');
-const visitorManager = require('./visitorInsert')
+const visitorManager = require('./visitorInsert');
+const express = require('express');
+const router = express.Router();
+
+router.use(express.json())
+
+let prevData = null;
+router.post("/", async (req,res)=>{
+  try {
+    if (prevData !== null) {
+      if (prevData.nameUser !== req.body.UserData.nameUser) {
+        prevData = req.body.UserData;
+        await insertDataReservation(req.body.UserData);
+        res.json("Inserted");
+      }
+    } else if (prevData === null) {
+      prevData = req.body.UserData;
+      await insertDataReservation(req.body.UserData);
+      res.json("Inserted");
+    }
+  } catch (error) {
+    console.log("Error while creating a reservation", error); 
+  }
+  //console.log(req.body.UserData)
+})
 
 /**
  * This function creates a reservation.
@@ -14,23 +38,29 @@ async function insertDataReservation(reservation) {
     await insertUser(reservation.mail,reservation.id,
       reservation.nameUser, reservation.secondName,
       reservation.firstSurname, reservation.secondSurname);
-    
-    for (const phone of reservation.phone) {
-      await insertPhone(phone, reservation.mail);
+    if (Array.isArray(reservation.phone)) {
+      for (const phone of reservation.phone) {
+        await insertPhone(phone, reservation.mail);
+      }
+    } else {
+      await insertPhone(reservation.phone, reservation.mail);
     }
 
     await insertClient(reservation.mail);
-
+    if (reservation.originCountry === '') reservation.originCountry = 'Costa Rica';
+    if (reservation.end_date === '') reservation.end_date = reservation.start_date;
+    const reservationCode = await insertReservation(
+      reservation.mail,reservation.start_date,
+      reservation.end_date, reservation.originCountry,
+      reservation.originProvince, reservation.area);
     for (const plate of reservation.plates) {
-      if (plate!=='') await insertVehicle(reservation.mail, plate);
+      if (plate!=='') await insertVehicle(reservationCode, plate);
     }
-    const reservationCode = await insertReservation(reservation.mail,
-      reservation.area);
     await insertVisitors(reservationCode, reservation.visitors,
       reservation.area)
     await insertReceipt(reservationCode)
   } catch (error) {
-    console.log(error);
+    throw error;
   }
 };
 
@@ -42,10 +72,13 @@ async function insertUser(email, id, name, secondName,
     if (secondName !== '') mySecondName = secondName;
     if (lastname2 !== '') myLastName2 = lastname2;
     const result = await db.executeQuery(
-      `EXEC InsertUser @Email = '${email}', @Cedula = '${id}',
-      @PrimerNombre = '${name}', @SegundoNombre = ${mySecondName},
-      @PrimerApellido = '${lastname1}', @SegundoApellido = ${myLastName2},
-      @EstadoActividad = 1`
+      `EXEC InsertUser 
+        @Email = '${email}',
+        @Cedula = '${id}',
+        @PrimerNombre = '${name}',
+        @SegundoNombre = ${mySecondName},
+        @PrimerApellido = '${lastname1}',
+        @SegundoApellido = ${myLastName2}`
     );
     return result;
   } catch (error) {
@@ -75,30 +108,33 @@ async function insertClient(email) {
   }
 };
 
-async function insertVehicle(email, plate) {
+async function insertReservation(email, start_date, end_date,
+  origin, province, area) {
   try {
-    const query = `EXEC InsertVehicle
-    @EmailCliente='${email}',
-    @Placa='${plate}'`
+    const query = `DECLARE @Output INT;
+    EXEC InsertReservation 
+      @Email = '${email}',
+      @TipoArea = '${area[0]}',
+      @FechaInicio = '${start_date}',
+      @FechaFin = '${end_date}',
+      @NombrePais = '${origin}',
+      @NombreProvincia = '${province}',
+      @OutputParameter = @Output OUTPUT;
+    SELECT @Output AS OutpuCode;`
     const result = await db.executeQuery(query);
-    return result;
+    return result.recordset[0].OutputCode;
   } catch (error) {
     throw error;
   }
 };
 
-async function insertReservation(email, area) {
+async function insertVehicle(reservationCode, plate) {
   try {
-    let date = new Date();
-    const query = `DECLARE @OutputParameter INT;
-    EXEC InsertReservation
-    @Email = '${email}',
-    @TipoArea = '${area}',
-    @FechaSolicitud = '${date.toISOString().replace('T', ' ').substring(0, 19)}',
-    @OutputParameter = @OutputParameter OUTPUT;
-    SELECT @OutputParameter AS OutputParameter;`
+    const query = `EXEC InsertVehiculo
+    @CodigoReservacion=${reservationCode},
+    @Placa='${plate}'`
     const result = await db.executeQuery(query);
-    return result.recordset[0].OutputParameter;
+    return result;
   } catch (error) {
     throw error;
   }
@@ -108,25 +144,45 @@ async function insertReservation(email, area) {
 
 async function insertVisitors(reservationCode, visitors,
   area) {
-  // Visitor NA
-  if (visitors[0].countAdultNac) {
-    await visitorManager.insertVisitorNA(reservationCode, area,
-      visitors[0].countAdultNac);
+  // Visitor Adult national
+  if (visitors[0]) {
+    await visitorManager.insertVisitorAdultNational(reservationCode, area,
+      visitors[0]);
   }
-  // Visitor NB
-  if (visitors[1].countAdultKidsNac) {
-    await visitorManager.insertVisitorNB(reservationCode, area,
-      visitors[1].countAdultKidsNac);
+  // Visitor kid 0-6 y/o national
+  if (visitors[1]) {
+    await visitorManager.insertVisitorKid06National(reservationCode, area,
+      visitors[1]);
   }
-  // Visitor EA
-  if (visitors[2].countAdultFor) {
-    await visitorManager.insertVisitorEA(reservationCode, area,
-      visitors[2].countAdultFor);
+  // Visitor kid 6-12 y/o national
+  if (visitors[2]) {
+    await visitorManager.insertVisitorKids612National(reservationCode, area,
+      visitors[2]);
   }
-  // Visitor EB
-  if (visitors[3].countAdultKidsFor) {
-    await visitorManager.insertVisitorEB(reservationCode, area,
-      visitors[3].countAdultKidsFor);
+  // Visitor elder 65+ y/o national
+  if (visitors[3]) {
+    await visitorManager.insertVisitorElderNational(reservationCode, area,
+      visitors[3]);
+  }
+  // Visitor Adult foreigner
+  if (visitors[4]) {
+    await visitorManager.insertVisitorAdultForeign(reservationCode, area,
+      visitors[4]);
+  }
+  // Visitor kid 0-6 y/o foreigner
+  if (visitors[5]) {
+    await visitorManager.insertVisitorKid06Foreign(reservationCode, area,
+      visitors[5]);
+  }
+  // Visitor kid 6-12 y/o foreigner
+  if (visitors[6]) {
+    await visitorManager.insertVisitorKids612Foreign(reservationCode, area,
+      visitors[6]);
+  }
+  // Visitor elder 65+ y/o foreigner
+  if (visitors[7]) {
+    await visitorManager.insertVisitorElderForeign(reservationCode, area,
+      visitors[7]);
   }
 }
 
@@ -138,11 +194,12 @@ async function insertReceipt(reservationCode) {
     @CodigoReservacion = ${reservationCode},
     @EstadoPago = 0;`
     const result = await db.executeQuery(query);
+    return result;
   } catch (error) {
     throw error;
   }
 };
 
 module.exports = {
-  insertDataReservation,
+  router
 };

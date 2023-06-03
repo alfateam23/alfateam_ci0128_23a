@@ -1,47 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 /**
  * Component to show the title for the availability page
- */
+*/
 export const Availability_title = () => {
   return (
-    <div className="w-1/2 float-left mt-[3%]">
-      <p className="font-lexend text-2xl
-      ml-20 mt-0.5">Cupo Total</p>
-      <hr className="ml-10 mr-24 bg-black h-0.5"/>
-    </div>
-  );
-};
-
-/**
- * Title for the user to select how many people is coming with
- * him
- */
-export const Party_title = ({UserData}) => {
-  const [count, setCount] = useState(0);
-
-  return (
-    <div className="w-1/2 clear-left mt-[15%] mb-[10%]">
-      <p className="font-lexend text-2xl
-      ml-20 mt-0.5">¿Cuántos lo acompañan?</p>
-      <hr className="ml-10 mr-24 bg-black h-0.5"/>
-      <br/>
-      <div className="ml-20 bg-gray-200 w-1/2
-      py-2 pl-3">
-        <p className="text-lg inline-block">Persona(s)</p>
-        <div className='inline-block ml-28'>
-          <button className='inline-block bg-gray-400 rounded-2xl
-          w-6' onClick={() => count > 0 ? setCount((prevCount) => 
-            prevCount-1) : setCount(0)}>-</button>
-          <p className='inline-block ml-5 text-lg bg-white w-7 text-center
-          shadow-[0px_1px_2px_0px_rgba(0,0,0,0.50)_inset]'>{count}</p>
-          <button className='inline-block ml-5 bg-gray-400 rounded-2xl
-          w-6'onClick={() => count > 39 ? 
-            alert("No puede traer a tantas personas") : setCount((prevCount) => 
-            prevCount+1)}>+</button>
-          <p className='hidden'>{UserData.num_guests=count}</p>
-        </div>
-      </div>
+    <div className="flex flex-col mt-10 w-1/2">
+      <p className="font-lexend text-center text-2xl">
+        Cupo Total
+      </p>
+      <hr className="bg-black h-0.5 w-full"/>
     </div>
   );
 };
@@ -50,11 +19,106 @@ export const Party_title = ({UserData}) => {
  * Component that will eventually receive the total amount of space left
  * as a parameter and display it.
  */
-export const Spaces_left = ({quantity}) => {
+export const Spaces_left = ({count, userData}) => {
+  const [datesCapacity,setDatesCapacity] = useState(null);
+  const [prevCount, setPrevCount] = useState(0);
+  useEffect(() => {
+    let apiParameters = [];
+    apiParameters.push(userData.start_date.toISOString())
+    userData.end_date !== '' ? apiParameters.push(
+      userData.end_date.toISOString()) : apiParameters.push('no');
+    apiParameters.push(userData.area)
+    
+    fetch(`/backend/capacity/${apiParameters[0]}/${apiParameters[1]}/${apiParameters[2]}`)
+    .then((res) => {
+      if (!res.ok) {
+        console.log('Network response was not ok');
+      }
+      return res.json();
+    })
+    .then((data) => setDatesCapacity(data))
+    .catch((error) => {
+      console.error('Error fetching data:', error);
+    });
+  }, []);
+  useEffect(()=>{
+    function updateCapacityValue () {
+      let operation = prevCount < count ? '+' : '-';
+      if (datesCapacity !== null) {
+        const newValues = datesCapacity.map(position => {
+          if (operation === '-') {
+            return {
+              ...position,
+              CupoOnlineDia: position.CupoOnlineDia + 1,
+            };
+          } else {
+            return {
+              ...position,
+              CupoOnlineDia: position.CupoOnlineDia - 1,
+            };
+          }
+        });
+        newValues.find((pos) => pos.CupoOnlineDia === 0) !== undefined ?
+        alert('No hay suficiente espacio') :
+        setDatesCapacity(newValues);
+      }
+    }
+    updateCapacityValue();
+    setPrevCount(count);
+  },[count])
   return (
-    <div className="w-1/2 float-left mt-[1%]">
-      <p className="font-lexend text-2xl
-      ml-20 mt-0.5">{quantity} espacios restantes</p>
+    <div className={`grid grid-cols-2 lg:grid-cols-4 gap-4`}>
+      {!datesCapacity ?
+      "Loading..." :
+      datesCapacity.map((item) => (
+      <div key={item.Fecha}>
+        <p className='bg-white px-5 py-3 rounded-2xl rounded-b-none'>{(new Date(item.Fecha)).toDateString()}</p>
+        <p className='text-center bg-gray-300 py-2 rounded-2xl rounded-t-none'>{item.CupoOnlineDia}</p>
+      </div>
+      ))}
+    </div>
+  );
+};
+
+/**
+ * Title for the user to select how many people is coming with
+ * him
+ */
+export const Party_title = ({count, setCount, UserData}) => {
+
+  useEffect(()=>{
+    UserData.totalPeople = count + 1;
+  },[count])
+
+  return (
+    <div className="flex flex-col lg:w-1/2 sm:w-1/2 w-80">
+      <p className="font-lexend text-2xl text-center">
+        ¿Cuántos lo acompañan?
+      </p>
+      <hr className="bg-black h-0.5"/>
+      <div className="flex flex-row justify-center items-center
+      my-10">
+        <p className="text-xl inline-block">
+          Persona(s)
+        </p>
+        <div className='inline-block ml-10'>
+          <button className='inline-block bg-gray-400 rounded-2xl
+          w-6' onClick={() => count > 0 ? setCount((prevCount) => 
+            prevCount-1) : setCount(0)}>
+              -
+          </button>
+          <p className='inline-block ml-5 text-lg bg-white w-7 text-center
+          shadow-[0px_1px_2px_0px_rgba(0,0,0,0.50)_inset]'>
+            {count}
+          </p>
+          <button className='inline-block ml-5 bg-gray-400 rounded-2xl
+          w-6'onClick={() => count > 39 ? 
+            alert("No puede traer a tantas personas") : setCount((prevCount) => 
+            prevCount+1)}>
+              +
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
