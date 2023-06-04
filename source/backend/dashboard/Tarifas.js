@@ -5,7 +5,7 @@ const router = express.Router();
 /* API for getting */
 router.get('/tarifas', async (req, res) => {
     let visitor = await dialogBody.executeQuery('SELECT * FROM TipoVisitante')
-    res.send(visitor.recordsets[0]);
+    res.json(visitor.recordsets[0]);
 });
 
 module.exports = { router }
