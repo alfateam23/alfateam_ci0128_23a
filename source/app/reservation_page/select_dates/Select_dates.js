@@ -8,7 +8,7 @@ import { From_until } from "./From_until";
 export const Select_dates_title = ({title}) => {
   return (
     <div className="flex justify-center flex-col
-    mt-[3%]">
+    mt-[5%]">
       <p className="flex justify-center font-lexend text-2xl
       max-w-xs mx-auto">
         {title}
@@ -53,7 +53,7 @@ export const Reservation_type = ({userData, handleTitleChange}) => {
       <div className={insideDivStyle}>
         <button onClick={() => activate_selection(1)}
         className={styleLot}>
-          Parcela
+          Camping
         </button>
         <hr className="bg-white w-48 ml-[21%]"/>
         <button onClick={() => activate_selection(2)}
@@ -124,7 +124,7 @@ export const Start_reservation = ({userData}) => {
   const [selectedDate, setSelectedDate] = useState(0);
 
   const handleTitleChange = (id) => {
-    userData.reservation_type = id;
+    userData.area = id;
     if (id === "Camping") setSelectedDate(()=>1);
     else setSelectedDate(()=>2)
   };
@@ -139,7 +139,7 @@ export const Start_reservation = ({userData}) => {
 
 
   return (
-    <div className="flex flex-col space-y-7">
+    <div className="flex flex-col space-y-7 w-full lg:w-1/2">
       <Select_dates_title title={title}/>
       <Reservation_type userData={userData}
       handleTitleChange={handleTitleChange}/>
