@@ -19,10 +19,14 @@ const useStyles = createUseStyles({
       textAlign: 'center', // Centrar el contenido de las celdas
     },
     '& th': {
-      backgroundColor: '#C9F1EB',
+      backgroundColor: '#3f83f8',
       fontWeight: 'bold',
+      color: 'white',
     },
     '& tr:nth-child(even)': {
+      backgroundColor: '#f2f2f2',
+    },
+    '& tr:nth-child(odd)': {
       backgroundColor: '#f2f2f2',
     },
     '& tr:hover': {
@@ -64,7 +68,7 @@ useEffect(() => {
 
 // Verificar si los datos se han cargado
 
-const handleFilter = (field, value) => {
+const filterElement = (field, value) => {
   let filteredData = [...initialData]; // Utiliza una copia del conjunto de datos original
 
   if (field === 'filterValue') {
@@ -79,7 +83,7 @@ const handleFilter = (field, value) => {
   setData(filteredData);
 };
 
-  const handleSort = (field) => {
+  const sortElements = (field) => {
     let sortedData = [...data];
 
     if (sortField === field && sortOrder === 'asc') {
@@ -109,11 +113,11 @@ const handleFilter = (field, value) => {
   };
 
 
-  const handleCancelEstado = (ReservacionCodigo) => {
+  const cancelEstado = (ReservacionCodigo) => {
     const updatedData = data.map((item) => {
-      if (item.ReservacionCodigo === ReservacionCodigo && item.EstadoActividad === 'Pendiente') {
+      if (item.ReservacionCodigo === ReservacionCodigo && item.EstadoActividad === true) {
           setCancelado(ReservacionCodigo);
-          return { ...item, EstadoActividad: 'Cancelado' };
+          return { ...item, EstadoActividad: false };
       }
       return item;
     });
@@ -139,11 +143,11 @@ const handleFilter = (field, value) => {
   }, [cancelado]);
 
   
-  const handleAprobeEstado = (ReservacionCodigo) => {
+  const aprobeEstado = (ReservacionCodigo) => {
     const updatedData = data.map((item) => {
-      if (item.ReservacionCodigo === ReservacionCodigo && item.EstadoPago === 'Pendiente') {
+      if (item.ReservacionCodigo === ReservacionCodigo && item.EstadoPago === false) {
         setAprobado(ReservacionCodigo);
-        return { ...item, EstadoPago: 'Aprobado' };
+        return { ...item, EstadoPago: true };
       }
       return item;
     });
@@ -177,12 +181,13 @@ const handleFilter = (field, value) => {
     setCalendarVisible(!isCalendarVisible);
   };
 
-  const handleSelectDate = (day) => {
-    let filteredData = [...initialData]; 
-      setFilterValue(day);
-      filteredData = filteredData.filter((item) => item.FechaInicio === day);
-  setData(filteredData);  
-};
+  const selectDate = (day) => {
+    const filteredData = initialData.filter((item) => {
+      return (new Date(item.FechaInicio)).toDateString() === (new Date(day)).toDateString();
+    });
+  
+    setData(filteredData);
+  };
 
   const ocultarCalendario = () => {
     setCalendarVisible(false);
@@ -191,19 +196,21 @@ const handleFilter = (field, value) => {
   
   return (
     <div className='{{ backgroundColor: gray }}'>
-      <h1 className='col' >Lista de Reservas</h1>
+      <h1 className='col title' style={{ fontSize: '2rem', fontWeight: 'bold', color: 'black' }}>
+    Lista de Reservas
+      </h1>
       <div>
         <input
           type="text"
           value={filterValue}
-          onChange={(event) => handleFilter('filterValue', event.target.value)}
+          onChange={(event) => filterElement('filterValue', event.target.value)}
           placeholder="Filtrar por Código"
         />
       </div>
       <div>
         <select
           value={selectedTypeFilter}
-          onChange={(event) => handleFilter('selectedTypeFilter', event.target.value)}
+          onChange={(event) => filterElement('selectedTypeFilter', event.target.value)}
         >
           <option value="">Ambos</option>
           <option value="P">Picnic</option>
@@ -212,14 +219,14 @@ const handleFilter = (field, value) => {
       </div>
 
       <div>
-      <button onClick={mostrarCalendario}>Mostrar Calendario</button>
+      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4" onClick={mostrarCalendario}>Mostrar Calendario</button>
       {isCalendarVisible && (
         <My_Calendar
           active={true}
-          handleClick={handleSelectDate}
+          handleClick={selectDate}
         />
       )}
-      <button onClick={ocultarCalendario}>Ocultar Calendario</button>
+      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4" onClick={ocultarCalendario}>Ocultar Calendario</button>
     </div>
 
       <div className={classes.tableContainer}>
@@ -227,33 +234,28 @@ const handleFilter = (field, value) => {
         <thead>
           <tr>
             <th>Codigo
-              <button onClick={() => handleSort('ReservacionCodigo')}>
+              <button onClick={() => sortElements('ReservacionCodigo')}>
                 {sortField === 'ReservacionCodigo' && sortOrder === 'asc' ? '▲' : '▼'}
               </button>
             </th>
             <th>Tipo
-              <button onClick={() => handleSort('TipoArea')}>
+              <button onClick={() => sortElements('TipoArea')}>
                 {sortField === 'TipoArea' && sortOrder === 'asc' ? '▲' : '▼'}
               </button>
             </th>
             <th>
             Cantidad de Visitantes{' '}
-              <button onClick={() => handleSort('TotalCantidadVisitantes')}>
+              <button onClick={() => sortElements('TotalCantidadVisitantes')}>
                 {sortField === 'TotalCantidadVisitantes' && sortOrder === 'asc' ? '▲' : '▼'}
               </button>
             </th>
             <th>Fecha entrada
-              <button onClick={() => handleSort('fechaInicio')}>
+              <button onClick={() => sortElements('fechaInicio')}>
                 {sortField === 'fechaInicio' && sortOrder === 'asc' ? '▲' : '▼'}
               </button>
             </th>
-            <th>Fecha salida
-              <button onClick={() => handleSort('fechaFinal')}>
-                {sortField === 'fechaFinal' && sortOrder === 'asc' ? '▲' : '▼'}
-              </button>
-            </th>
             <th>EstadoPago
-              <button onClick={() => handleSort('EstadoPago')}>
+              <button onClick={() => sortElements('EstadoPago')}>
                 {sortField === 'EstadoPago' && sortOrder === 'asc' ? '▲' : '▼'}
               </button>
             </th>
@@ -267,13 +269,12 @@ const handleFilter = (field, value) => {
               <td>{item.TipoArea === 'C' ? 'Camping' : 'Picnic'}</td>
               <td>{item.TotalCantidadVisitantes}</td>
               <td>{(new Date (item.FechaInicio)).toDateString()}</td>
-              <td>{(new Date (item.FechaInicio)).toDateString()}</td>
               <td>{item.EstadoPago == true ? 'Aprobado' : item.EstadoActividad == false ? 'Cancelado' : 'Pendiente'}</td>
               <td>
-               <button onClick={() => handleCancelEstado(item.ReservacionCodigo)}>Cancelar</button>
+               <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4" onClick={() => cancelEstado(item.ReservacionCodigo)}>Cancelar</button>
               </td>              
               <td>
-                <button onClick={() => handleAprobeEstado(item.ReservacionCodigo)}>Confirmar</button>
+                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4" onClick={() => aprobeEstado(item.ReservacionCodigo)}>Confirmar</button>
               </td>
             </tr>
           ))}
