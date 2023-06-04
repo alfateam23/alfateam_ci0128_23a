@@ -1,27 +1,247 @@
-import React from "react";
+import { React, useEffect, useState } from 'react'
+import { Table } from 'flowbite-react';
+
+const reportTypes = ['visitors', 'profits']
 
 const Reports = () => {
-    const [data, setData] = React.useState(null);
+    const [reportData, setReportData] = React.useState(null);
+    const [reportType, setReportType] = React.useState(null);
+    const [startDate, setStartDate] = React.useState(null);
+    const [endDate, setEndDate] = React.useState(null);
 
-    React.useEffect(() => {
-        fetch("/api")
-            .then((res) => res.json())
-            .then((data) => setData(data.message));
-    }, []);
 
-    async function getGet() {
-        fetch("/tarifas")
+
+    async function getReport(startdate, end) {
+        switch (type) {
+            case 'visits':
+                endpoint = `/backend/reports/visits/:${startdate}/:${enddate}`
+                break;
+            case 'profits':
+                endpoint = `/backend/reports/profits/:${startdate}/:${enddate}`
+                break;
+            default:
+                break;
+        }
+
+
+        fetch("/reports/")
             .then((res) => res.json())
             .then((data) => setData(data.info));
     }
 
     return (
         <div>
-            <h1 className="font-bold text-xl">Tarifas</h1>
-            <button id="get" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4" onClick={getGet}>Change Text</button>
-            <p> {!data ? "Loading..." : data} </p>
+            <h1 className="font-bold text-xl">Reportes</h1>
+
+            <button id="get" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4"
+            onClick={getReport}>Change Text</button>
+            <p> {!reportData ? "Loading..." : reportData} </p>
         </div>
     );
 };
 
 export default Reports;
+
+
+
+
+
+
+
+
+function Report({ startdate, enddate, type }) {
+    const [reportData, setreportData] = useState(null);
+    const endpoint = "";
+
+
+
+    useEffect(() => {
+        fetch(endpoint, {
+            method: 'POST',
+            body: JSON.stringify({
+                UserData
+            }),
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+        }).then((res) => {
+            if (!res.ok) {
+                console.log('Network response was not ok');
+            }
+            console.log(res.json());
+        })
+            .catch((error) => {
+                console.error('Error fetching data:', error);
+            });
+    }, [reportData]);
+
+    const reportItems = reportData.map(item =>
+        <tr>
+            <td>{visitor.id}</td>
+            <td>{visitor.region}</td>
+            <td>{visitor.status}</td>
+        </tr>
+    );
+
+    return (
+        <Table>
+            <Table.Head>
+
+            </Table.Head>
+
+        </Table>
+    );
+
+}
+
+export const VisitsReport = ({ startdate, enddate }) => {
+    return (
+        <Report startdate={startdate} enddate={enddate} type='visits' />
+    );
+}
+
+export const ProfitsReport = ({ startdate, enddate }) => {
+    return (
+        <Report startdate={startdate} enddate={enddate} type='profits' />
+    );
+}
+
+
+
+
+
+import React, { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+
+import { useState } from 'react';
+
+function FilterableProductTable({ products }) {
+  const [filterText, setFilterText] = useState('');
+  const [inStockOnly, setInStockOnly] = useState(false);
+
+  return (
+    <div>
+      <SearchBar
+        filterText={filterText}
+        inStockOnly={inStockOnly}
+        onFilterTextChange={setFilterText}
+        onInStockOnlyChange={setInStockOnly} />
+      <ProductTable
+        products={products}
+        filterText={filterText}
+        inStockOnly={inStockOnly} />
+    </div>
+  );
+}
+
+function ProductCategoryRow({ category }) {
+  return (
+    <tr>
+      <th colSpan="2">
+        {category}
+      </th>
+    </tr>
+  );
+}
+
+function ProductRow({ product }) {
+  const name = product.stocked ? product.name :
+    <span style={{ color: 'red' }}>
+      {product.name}
+    </span>;
+
+  return (
+    <tr>
+      <td>{name}</td>
+      <td>{product.price}</td>
+    </tr>
+  );
+}
+
+function ProductTable({ products, filterText, inStockOnly }) {
+  const rows = [];
+  let lastCategory = null;
+
+  products.forEach((product) => {
+    if (
+      product.name.toLowerCase().indexOf(
+        filterText.toLowerCase()
+      ) === -1
+    ) {
+      return;
+    }
+    if (inStockOnly && !product.stocked) {
+      return;
+    }
+    if (product.category !== lastCategory) {
+      rows.push(
+        <ProductCategoryRow
+          category={product.category}
+          key={product.category} />
+      );
+    }
+    rows.push(
+      <ProductRow
+        product={product}
+        key={product.name} />
+    );
+    lastCategory = product.category;
+  });
+
+  return (
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Price</th>
+        </tr>
+      </thead>
+      <tbody>{rows}</tbody>
+    </table>
+  );
+}
+
+function SearchBar({
+  filterText,
+  inStockOnly,
+  onFilterTextChange,
+  onInStockOnlyChange
+}) {
+  return (
+    <form>
+      <input
+        type="text"
+        value={filterText} placeholder="Search..."
+        onChange={(e) => onFilterTextChange(e.target.value)} />
+      <label>
+        <input
+          type="checkbox"
+          checked={inStockOnly}
+          onChange={(e) => onInStockOnlyChange(e.target.checked)} />
+        {' '}
+        Only show products in stock
+      </label>
+    </form>
+  );
+}
+
+const PRODUCTS = [
+  {category: "Fruits", price: "$1", stocked: true, name: "Apple"},
+  {category: "Fruits", price: "$1", stocked: true, name: "Dragonfruit"},
+  {category: "Fruits", price: "$2", stocked: false, name: "Passionfruit"},
+  {category: "Vegetables", price: "$2", stocked: true, name: "Spinach"},
+  {category: "Vegetables", price: "$4", stocked: false, name: "Pumpkin"},
+  {category: "Vegetables", price: "$1", stocked: true, name: "Peas"}
+];
+
+let App = function App() {
+  return <FilterableProductTable products={PRODUCTS} />;
+}
+
+
+const root = createRoot(document.getElementById('root'));
+root.render(
+  <StrictMode>
+    <App />
+  </StrictMode>
+);
