@@ -22,8 +22,6 @@ router.get('/profits/:startdate/:enddate', async (req, res) => {
 
 // Endpoints for report datasets
 
-const db = require('../DbConfig')
-
 async function selectVisitsInDateRange(startdate, enddate) {
     try {
         const query = `SELECT
