@@ -2,7 +2,7 @@
 const GeneratorEmailMessage = (UserData) => {
     const mensaje = `Confirmación de Reservación
     
-    Estimado/a ${UserData.firstSurname}
+    Estimado(a) Visitante
   
     Gracias por reservar con nosotros! A continuación, te mostramos los detalles de tu reservación:
   
@@ -40,6 +40,8 @@ const GeneratorEmailMessage = (UserData) => {
       ${UserData.visitors[7] !== 0 ? `Adultos mayores extranjeros de 65: ${UserData.visitors[7]}` : ''}
 
       Monto total a pagar: ${UserData.totalPrice}
+
+      Los métodos para realizar el pago son sinpe móvil o transferencia bancaria.
 
   
     Si necesitas realizar alguna modificación en tu reservación, por favor contáctanos lo antes posible.
