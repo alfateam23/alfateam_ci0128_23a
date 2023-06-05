@@ -1,8 +1,9 @@
+
 import React, { useEffect, useState } from 'react';
 import { createUseStyles } from 'react-jss';
-import {My_Calendar} from './reservation_page/Calendar';
-
-
+import {My_Calendar} from '../../reservation_page/Calendar';
+import "flowbite";
+/** 
 const useStyles = createUseStyles({
   tableContainer: {
     maxWidth: '1500px',
@@ -16,7 +17,9 @@ const useStyles = createUseStyles({
     '& th, td': {
       padding: '8px',
       border: '1px solid #ddd',
-      textAlign: 'center', // Centrar el contenido de las celdas
+      textAlign: 'center',
+      whiteSpace: 'nowrap',
+      fontSize: 25
     },
     '& th': {
       backgroundColor: '#3f83f8',
@@ -34,9 +37,9 @@ const useStyles = createUseStyles({
     },
   },
 });
-
+*/
 function Lista() {
-  const classes = useStyles();
+  //const classes = useStyles();
   const [initialData, setInitialData] = useState([]);
   const [data, setData] = useState(null);
   const [filterValue, setFilterValue] = useState('');
@@ -44,7 +47,7 @@ function Lista() {
   const [sortField, setSortField] = useState('');
   const [sortOrder, setSortOrder] = useState('asc');
   const [aprobado,setAprobado] = useState(false);
-  const [cancelado,setCancelado] = useState(0);
+  const [cancelado,setCancelado] = useState(false);
   const [isCalendarVisible, setCalendarVisible] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
 
@@ -66,11 +69,8 @@ useEffect(() => {
     });
 }, []);
 
-// Verificar si los datos se han cargado
-
 const filterElement = (field, value) => {
-  let filteredData = [...initialData]; // Utiliza una copia del conjunto de datos original
-
+  let filteredData = [...initialData]; 
   if (field === 'filterValue') {
     setFilterValue(value);
     filteredData = filteredData.filter((item) => item.ReservacionCodigo === parseInt(value));
@@ -127,7 +127,7 @@ const filterElement = (field, value) => {
   useEffect(() => {
     if(cancelado !== 0){
       const ReservacionCodigo=cancelado;
-    fetch(`/backend/reservationDetails/confirmReservation/${ReservacionCodigo}`)
+    fetch(`/backend/reservationDetails/cancelReservation/${ReservacionCodigo}`)
     .then((res) => {
       if (!res.ok) {
         console.log('Network response was not ok');
@@ -138,7 +138,7 @@ const filterElement = (field, value) => {
     .catch((error) => {
       console.error('Error fetching data:', error);
     });
-    setCancelado(0);
+    setCancelado(1);
     }
   }, [cancelado]);
 
@@ -196,7 +196,7 @@ const filterElement = (field, value) => {
   
   return (
     <div className='{{ backgroundColor: gray }}'>
-      <h1 className='col title' style={{ fontSize: '2rem', fontWeight: 'bold', color: 'black' }}>
+      <h1 class="font-sans text-4xl rounded-none py-4 m-3">
     Lista de Reservas
       </h1>
       <div>
@@ -228,61 +228,58 @@ const filterElement = (field, value) => {
       )}
       <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4" onClick={ocultarCalendario}>Ocultar Calendario</button>
     </div>
-
-      <div className={classes.tableContainer}>
-      <table className={classes.table}>
-        <thead>
+      <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
           <tr>
-            <th>Codigo
+            <th scope="col" class="px-6 py-3">Codigo
               <button onClick={() => sortElements('ReservacionCodigo')}>
                 {sortField === 'ReservacionCodigo' && sortOrder === 'asc' ? '▲' : '▼'}
               </button>
             </th>
-            <th>Tipo
+            <th scope="col" class="px-6 py-3">Tipo
               <button onClick={() => sortElements('TipoArea')}>
                 {sortField === 'TipoArea' && sortOrder === 'asc' ? '▲' : '▼'}
               </button>
             </th>
-            <th>
+            <th scope="col" class="px-6 py-3">
             Cantidad de Visitantes{' '}
               <button onClick={() => sortElements('TotalCantidadVisitantes')}>
                 {sortField === 'TotalCantidadVisitantes' && sortOrder === 'asc' ? '▲' : '▼'}
               </button>
             </th>
-            <th>Fecha entrada
+            <th scope="col" class="px-6 py-5">Fecha entrada
               <button onClick={() => sortElements('fechaInicio')}>
                 {sortField === 'fechaInicio' && sortOrder === 'asc' ? '▲' : '▼'}
               </button>
             </th>
-            <th>EstadoPago
+            <th scope="col" class="px-6 py-3">EstadoPago
               <button onClick={() => sortElements('EstadoPago')}>
                 {sortField === 'EstadoPago' && sortOrder === 'asc' ? '▲' : '▼'}
               </button>
             </th>
-            
+            <th scope="col" class="px-6 py-3"></th>
+            <th scope="col" class="px-6 py-3"></th>
           </tr>
         </thead>
         <tbody>
           {data.map((item) => (
-            <tr key={item.ReservacionCodigo}>
-              <td>{item.ReservacionCodigo}</td>
-              <td>{item.TipoArea === 'C' ? 'Camping' : 'Picnic'}</td>
-              <td>{item.TotalCantidadVisitantes}</td>
-              <td>{(new Date (item.FechaInicio)).toDateString()}</td>
-              <td>{item.EstadoPago == true ? 'Aprobado' : item.EstadoActividad == false ? 'Cancelado' : 'Pendiente'}</td>
-              <td>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600" key={item.ReservacionCodigo}>
+              <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{item.ReservacionCodigo}</th>
+              <td class="px-6 py-4">{item.TipoArea === 'C' ? 'Camping' : 'Picnic'}</td>
+              <td class="px-6 py-4">{item.TotalCantidadVisitantes}</td>
+              <td class="px-6 py-4">{(new Date (item.FechaInicio)).toDateString()}</td>
+              <td class="px-6 py-4">{item.EstadoPago == true ? 'Aprobado' : item.EstadoActividad == false ? 'Cancelado' : 'Pendiente'}</td>
+              <td class="px-6 py-4">
                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4" onClick={() => cancelEstado(item.ReservacionCodigo)}>Cancelar</button>
               </td>              
-              <td>
+              <td class="px-6 py-4">
                 <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4" onClick={() => aprobeEstado(item.ReservacionCodigo)}>Confirmar</button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-     
       </div>
-    </div>
   );
 }
 

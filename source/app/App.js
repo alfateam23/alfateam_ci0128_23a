@@ -8,7 +8,7 @@ import {
 } from './reservation_page/Reservation_page';
 import { UserData } from './UserData';
 import { Visitors } from './visitors/Visitors';
-import Lista from './Lista';
+import Lista from './admin_dashboard/pages/Lista';
 import { useLocation } from 'react-router-dom';
 
 /* import for Centro de Control */
