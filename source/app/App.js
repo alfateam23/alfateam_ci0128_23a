@@ -8,6 +8,7 @@ import {
 } from './reservation_page/Reservation_page';
 import { UserData } from './UserData';
 import { Visitors } from './visitors/Visitors';
+import Lista from './admin_dashboard/pages/Lista';
 import { useLocation } from 'react-router-dom';
 
 /* import for Centro de Control */
@@ -43,6 +44,7 @@ const AdminApp = () => {
          <RootLayout>
             <Routes>
                <Route path="/" element={<Home />} />
+               <Route path="/lista" element={<Lista />} />
                <Route path="/settings" element={<Settings />} />
                <Route path="/reservation" element={<Select_dates_page UserData={userData} />} />
                <Route path="/reservation/availability" element={<Availability_page UserData={userData} />} />  
@@ -76,7 +78,7 @@ const CustomerApp = () => {
  * web application.
  */
 const App = () => {
-   const runAdminApp = false; // Change for either admin or normal mode
+   const runAdminApp = true; // Change for either admin or normal mode
    if (runAdminApp) {
       return (AdminApp());
    } else {

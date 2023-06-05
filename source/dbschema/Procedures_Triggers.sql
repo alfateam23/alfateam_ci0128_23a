@@ -294,6 +294,54 @@ BEGIN
 END;
 
 go
+CREATE PROCEDURE CancelReservation
+    @Codigo INT
+AS
+BEGIN
+    UPDATE Reservacion
+    SET EstadoActividad = 0
+    WHERE Codigo = @Codigo;
+    EXEC GetReservationWithCode @Codigo = @Codigo
+END;
+
+CREATE PROCEDURE GetReservationWithCode
+  @Codigo INT
+AS
+BEGIN
+  SELECT
+    Reservacion.Codigo AS ReservacionCodigo,
+    Reservacion.TipoArea,
+    SUM(Visitante.CantidadVisitantes) AS TotalCantidadVisitantes,
+    Reservacion.FechaInicio,
+    Reservacion.FechaFin,
+    Factura.EstadoPago,
+    Reservacion.EstadoActividad
+  FROM
+    Reservacion
+    INNER JOIN Visitante ON Visitante.CodigoReservacion = Reservacion.Codigo
+    INNER JOIN Factura ON Factura.CodigoReservacion = Reservacion.Codigo
+  WHERE
+    Reservacion.Codigo = @Codigo
+  GROUP BY
+    Reservacion.Codigo,
+    Reservacion.TipoArea,
+    Reservacion.FechaInicio,
+    Reservacion.FechaFin,
+    Factura.EstadoPago,
+    Reservacion.EstadoActividad;
+END;
+
+go
+CREATE PROCEDURE ConfirmReservation
+    @Codigo INT
+AS
+BEGIN
+  UPDATE Factura
+  SET EstadoPago = 1
+  WHERE CodigoReservacion = @Codigo;
+  EXEC GetReservationWithCode @Codigo = @Codigo
+END;
+
 CREATE PROCEDURE CalculateSubtotal
   @NacionalCampingNiño0a6 INT,
   @NacionalCampingNiño6a12 INT,
@@ -370,3 +418,4 @@ delete from Reservacion where Email = 'este-bandido@gmail.com'
 delete from Cliente where Email = 'este-bandido@gmail.com'
 delete from Telefono where Email = 'este-bandido@gmail.com'
 delete from Usuario where Email = 'este-bandido@gmail.com'*/
+
