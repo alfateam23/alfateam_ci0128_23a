@@ -2,14 +2,18 @@
 
 const express = require('express');
 const app = express();
+const db = require('./DbConfig')
 const reservationManager = require('./reservation/reservationInsert');
 const availabilityInfo = require('./reservation/AvailabilityReq');
+const reservationCost = require('./reservation/CostConsult')
 const origin = require('./reservation/OriginReq');
 const reservationDetails = require('./dashboard/ReservationDetailsReq')
 
 app.use("/backend/capacity", availabilityInfo.router);
 app.use("/backend/geographicInfo", origin.router);
 app.use("/backend/reservationDetails", reservationDetails.router);
+app.use("/backend/reservationCost", reservationCost.router);
+app.use("/backend/insertReservation", reservationManager.router);
 
 const visitorsRawData = {
     "visitors": [
@@ -20,43 +24,41 @@ const visitorsRawData = {
     ]
 };
 
-app.get('/backend/visitordata/:id', (req, res) => {
-    let visitor = visitorsRawData.visitors.find((v) => v.id === req.params.id);
-    if (!visitor) res.status(404).send("Visitor not found");
-    res.send(visitor);
+app.get('/backend/visitordata/',async (req, res) => {
+    let visitor = await db.executeQuery('SELECT * FROM TipoVisitante')
+    res.send(visitor.recordsets[0]);
 });
 
 let reservation = {
-    start_date: new Date(2023, 6, 15),
-    end_date: new Date(2023, 6, 18),
-    num_guests: 3,
-    nameUser: 'Esteban',
+    start_date: new Date(2023, 6, 3),
+    end_date: new Date(2023, 6, 5),
+    totalPeople: 4,
+    nameUser: 'Pablo',
     secondName: '',
-    firstSurname: 'Dido',
-    secondSurname: 'Chavez',
-    id: '117718065',
-    mail: 'este-bandido@gmail.com',
-    phone: ['50682116523',
-    '50687765432'], // Phone is an array
-    totalPlates: 1,
-    plates: ['098767',
-    '123456',
-    '789012',
+    firstSurname: 'Alvarez',
+    secondSurname: 'Mata',
+    id: '1771012485',
+    mail: 'pablo-alvarez@gmail.com',
+    phone: '83654987', // Phone is an array
+    plates: ['BPT987',
+    'PTY098',
+    '',
     '',
     '',
     ''
     ], // Multiple plates
-    origin : 'Costa Rica',
-    province : 'San José',
+    originCountry : 'Costa Rica',
+    originProvince : 'San José',
     visitors: [
-        { countAdultNac: 4 },
-        { countAdultKids06Nac: 2 },
-        { countAdultKids612Nac: 0 },
+        { countAdultKids06Nac: 1 },
+        { countAdultKids612Nac: 1 },
+        { countAdultNac: 2 },
         { countElderNac: 0 },
-        { countAdultExt: 0 },
+        
         { countAdultKids06Ext: 0 },
         { countAdultKids612Ext: 0 },
-        { countElderExt: 0 }
+        { countAdultExt: 0 },
+        { countElderExt: 0 },
     ],
     area: 'Camping'
 };

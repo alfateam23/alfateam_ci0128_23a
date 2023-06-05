@@ -23,6 +23,9 @@ export const Next_link = ({route_next, route_back,
     if (userData.start_date !== '' &&
     userData.end_date !== '') {
       navigate(route_next);
+    } else if (userData.area === 'Picnic' &&
+    userData.start_date !== '') {
+      navigate(route_next);
     } else {
       alert('Por favor digite las fechas que desea antes de continuar')
     }
@@ -30,47 +33,46 @@ export const Next_link = ({route_next, route_back,
 
   if (check != null) {
     return (
-      <footer className="bottom-0 absolute w-full">
-      <Link to={route_back}
-      className="font-sans bg-YellowButtonP float-left
-      ml-[10%] mb-[5%] px-8 py-2 shadow-lg hover:bg-YellowButton
-      inline-block">
-        Atrás
-      </Link>
-      <Link to={route_next} onClick={checkDates} className="font-sans bg-YellowButtonP float-right
-      mr-[10%] mb-[5%] px-8 py-2 shadow-lg hover:bg-YellowButton
-      inline-block">
-        Siguiente
-      </Link>
-    </footer>
+      <div className="bottom-5 absolute flex flex-row
+      space-x-32 lg:space-x-96 justify-center items-center">
+        <Link to={route_back}
+        className="flex font-sans bg-YellowButtonP
+        px-8 py-2 shadow-lg hover:bg-YellowButton">
+          Atrás
+        </Link>
+        <Link to={route_next} onClick={checkDates} className="font-sans
+        bg-YellowButtonP
+        px-8 py-2 shadow-lg hover:bg-YellowButton">
+          Siguiente
+        </Link>
+      </div>
     );
   } else if (info != null) {
     return (
       <div className='flex flex-col'>
-        <footer className="">
+        <div className="">
           <Link to={route_back} className="font-sans bg-YellowButtonP float-left
           ml-[10%] mb-[5%] px-8 py-2 shadow-lg hover:bg-YellowButton
           inline-block">
             Atrás
           </Link>
-        </footer>
+        </div>
       </div>
     );
   }
   return (
-    <div className='flex flex-col'>
-      <footer className="">
-        <Link to={route_back} className="font-sans bg-YellowButtonP float-left
-        ml-[10%] mb-[5%] px-8 py-2 shadow-lg hover:bg-YellowButton
-        inline-block">
-          Atrás
-        </Link>
-        <Link to={route_next} className="font-sans bg-YellowButtonP float-right
-        mr-[10%] mb-[5%] px-8 py-2 shadow-lg hover:bg-YellowButton
-        inline-block">
-          Siguiente
-        </Link>
-      </footer>
+    <div className="mt-5 flex flex-row
+    space-x-32 lg:space-x-96 justify-center items-center">
+      <Link to={route_back}
+      className="flex font-sans bg-YellowButtonP
+      px-8 py-2 shadow-lg hover:bg-YellowButton">
+        Atrás
+      </Link>
+      <Link to={route_next} className="font-sans
+      bg-YellowButtonP
+      px-8 py-2 shadow-lg hover:bg-YellowButton">
+        Siguiente
+      </Link>
     </div>
   );
 };
@@ -104,7 +106,7 @@ export const NavBar_PIR = ({selected}) => {
 
   return (
     <div className="flex justify-center items-center
-    bg-OrangeNavBar w-full mt-48 pt-4">
+    bg-OrangeNavBar w-full pt-4">
       <Link to="/reservation/info" className={traveller_style}>
         Información del Visitante
       </Link>
@@ -116,20 +118,36 @@ export const NavBar_PIR = ({selected}) => {
 };
 
 export const Dates_type_info = ({userData}) => {
+  if (userData.area === "Camping") {
+    return (
+      <div className="flex flex-col justify-center items-center mt-10
+      sm:flex-row sm:space-x-40 md:space-x-60">
+        <div className="bg-white divide-x px-8 py-4 rounded-2xl
+        lg:-translate-x-40">
+          <div className="inline-block">
+            <p className="mr-5">{userData.start_date.toDateString()}</p>
+          </div>
+          <div className="inline-block">
+            <p className="ml-5">{userData.end_date.toDateString()}</p>
+          </div>
+        </div>
+        <div className="bg-white px-8 py-4 rounded-2xl mt-4 sm:mt-0">
+          <p>{userData.area}</p>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="flex flex-col justify-center items-center mt-10
     sm:flex-row sm:space-x-40 md:space-x-60">
-      <div className="bg-white divide-x px-8 py-4 rounded-2xl
+      <div className="bg-white px-8 py-4 rounded-2xl
       lg:-translate-x-40">
         <div className="inline-block">
           <p className="mr-5">{userData.start_date.toDateString()}</p>
         </div>
-        <div className="inline-block">
-          <p className="ml-5">{userData.end_date.toDateString()}</p>
-        </div>
       </div>
       <div className="bg-white px-8 py-4 rounded-2xl mt-4 sm:mt-0">
-        <p>{userData.reservation_type}</p>
+        <p>{userData.area}</p>
       </div>
     </div>
   );

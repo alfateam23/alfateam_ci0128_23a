@@ -23,7 +23,13 @@ export const Spaces_left = ({count, userData}) => {
   const [datesCapacity,setDatesCapacity] = useState(null);
   const [prevCount, setPrevCount] = useState(0);
   useEffect(() => {
-    fetch(`/backend/capacity/${userData.start_date.toISOString()}/${userData.end_date.toISOString()}/${userData.reservation_type}`)
+    let apiParameters = [];
+    apiParameters.push(userData.start_date.toISOString())
+    userData.end_date !== '' ? apiParameters.push(
+      userData.end_date.toISOString()) : apiParameters.push('no');
+    apiParameters.push(userData.area)
+    
+    fetch(`/backend/capacity/${apiParameters[0]}/${apiParameters[1]}/${apiParameters[2]}`)
     .then((res) => {
       if (!res.ok) {
         console.log('Network response was not ok');
@@ -61,7 +67,7 @@ export const Spaces_left = ({count, userData}) => {
     setPrevCount(count);
   },[count])
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className={`grid grid-cols-2 lg:grid-cols-4 gap-4`}>
       {!datesCapacity ?
       "Loading..." :
       datesCapacity.map((item) => (
@@ -79,6 +85,10 @@ export const Spaces_left = ({count, userData}) => {
  * him
  */
 export const Party_title = ({count, setCount, UserData}) => {
+
+  useEffect(()=>{
+    UserData.totalPeople = count + 1;
+  },[count])
 
   return (
     <div className="flex flex-col lg:w-1/2 sm:w-1/2 w-80">
@@ -107,7 +117,6 @@ export const Party_title = ({count, setCount, UserData}) => {
             prevCount+1)}>
               +
           </button>
-          <p className='hidden'>{UserData.num_guests=count}</p>
         </div>
       </div>
     </div>

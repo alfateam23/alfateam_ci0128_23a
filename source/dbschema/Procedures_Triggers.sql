@@ -140,7 +140,6 @@ END;
   @Placa = 'ABC123';*/
 
 -- Insertar Visitantes
-
 go
 CREATE PROCEDURE InsertVisitante
   @CodigoReservacion INT,
@@ -151,8 +150,20 @@ CREATE PROCEDURE InsertVisitante
   @CantidadVisitantes INT
 AS
 BEGIN
-  INSERT INTO Visitante (CodigoReservacion, TipoProcedencia, TipoVisita, Estatus, CategoriaPago, CantidadVisitantes)
-  VALUES (@CodigoReservacion, @TipoProcedencia, @TipoVisita, @Estatus, @CategoriaPago, @CantidadVisitantes);
+  DECLARE @Subtotal MONEY;
+
+  -- Calculate the Subtotal based on TipoVisitante
+  SELECT @Subtotal = Monto * @CantidadVisitantes
+  FROM TipoVisitante
+  WHERE TipoProcedencia = @TipoProcedencia
+    AND TipoVisita = @TipoVisita
+    AND Estatus = @Estatus
+    AND CategoriaPago = @CategoriaPago;
+  print @Estatus
+
+  -- Insert into Visitante table with Subtotal
+  INSERT INTO Visitante (CodigoReservacion, TipoProcedencia, TipoVisita, Estatus, CategoriaPago, CantidadVisitantes, Subtotal)
+  VALUES (@CodigoReservacion, @TipoProcedencia, @TipoVisita, @Estatus, @CategoriaPago, @CantidadVisitantes, @Subtotal);
 END;
 
 /*EXEC InsertVisitante 
@@ -166,9 +177,9 @@ END;
   @CodigoReservacion = 1,
   @TipoProcedencia = 'Nacional',
   @TipoVisita = 'Camping',
-  @Estatus = 'Niño 6 a 12 años',
-  @CategoriaPago = 'No exonerado',
-  @CantidadVisitantes = 2;*/
+  @Estatus = 'Adulto 65 años o más',
+  @CategoriaPago = 'Exonerado',
+  @CantidadVisitantes = 1;*/
 
 -- Insertar la factura
 
@@ -188,28 +199,9 @@ BEGIN
   -- Inicializar Monto
   SET @Monto = 0;
 
-  DECLARE @MontoSum MONEY;
-  DECLARE @CantidadVisitantes INT;
-
-  DECLARE MontoCursor CURSOR FOR
-  SELECT tv.Monto, v.CantidadVisitantes
-  FROM TipoVisitante tv
-  INNER JOIN Visitante v ON tv.TipoProcedencia = v.TipoProcedencia
-    AND tv.TipoVisita = v.TipoVisita
-    AND tv.Estatus = v.Estatus
+  SELECT @Monto = SUM(v.Subtotal)
+  FROM Visitante v
   WHERE v.CodigoReservacion = @CodigoReservacion;
-
-  OPEN MontoCursor;
-  FETCH NEXT FROM MontoCursor INTO @MontoSum, @CantidadVisitantes;
-
-  WHILE @@FETCH_STATUS = 0
-  BEGIN
-    SET @Monto = @Monto + (@MontoSum * @CantidadVisitantes);
-    FETCH NEXT FROM MontoCursor INTO @MontoSum, @CantidadVisitantes;
-  END;
-
-  CLOSE MontoCursor;
-  DEALLOCATE MontoCursor;
 
   -- Se toma el valor de la moneda
   SET @Moneda = (SELECT TOP 1 Moneda
@@ -350,6 +342,55 @@ BEGIN
   EXEC GetReservationWithCode @Codigo = @Codigo
 END;
 
+CREATE PROCEDURE CalculateSubtotal
+  @NacionalCampingNiño0a6 INT,
+  @NacionalCampingNiño6a12 INT,
+  @NacionalCampingAdulto INT,
+  @NacionalCampingAdulto65 INT,
+  @ExtranjeroCampingNiño0a6 INT,
+  @ExtranjeroCampingNiño6a12 INT,
+  @ExtranjeroCampingAdulto INT,
+  @ExtranjeroCampingAdulto65 INT
+AS
+BEGIN
+  DECLARE @Subtotals TABLE
+  (
+    TipoProcedencia VARCHAR(60),
+    TipoVisita VARCHAR(60),
+    Estatus VARCHAR(60),
+    CategoriaPago VARCHAR(60),
+    Cantidad INT,
+    Subtotal MONEY
+  );
+
+  -- Insertar todos los tipos de visitante y sus cantidades
+  INSERT INTO @Subtotals (TipoProcedencia, TipoVisita, Estatus, CategoriaPago, Cantidad)
+  VALUES
+    ('Nacional', 'Camping', 'Niño 0 a 6 años', 'Exonerado', @NacionalCampingNiño0a6),
+    ('Nacional', 'Camping', 'Niño 6 a 12 años', 'No exonerado', @NacionalCampingNiño6a12),
+    ('Nacional', 'Camping', 'Adulto', 'No exonerado', @NacionalCampingAdulto),
+    ('Nacional', 'Camping', 'Adulto 65 años o más', 'No exonerado', @NacionalCampingAdulto65),
+    ('Extranjero', 'Camping', 'Niño 0 a 6 años', 'Exonerado', @ExtranjeroCampingNiño0a6),
+    ('Extranjero', 'Camping', 'Niño 6 a 12 años', 'No exonerado', @ExtranjeroCampingNiño6a12),
+    ('Extranjero', 'Camping', 'Adulto', 'No exonerado', @ExtranjeroCampingAdulto),
+    ('Extranjero', 'Camping', 'Adulto 65 años o más', 'No exonerado', @ExtranjeroCampingAdulto65);
+
+  -- Calcular subtotales
+  UPDATE t
+  SET Subtotal = tv.Monto * t.Cantidad
+  FROM @Subtotals t
+  JOIN TipoVisitante tv ON t.TipoProcedencia = tv.TipoProcedencia
+                        AND t.TipoVisita = tv.TipoVisita
+                        AND t.Estatus = tv.Estatus
+                        AND t.CategoriaPago = tv.CategoriaPago;
+
+  -- Total
+  DECLARE @Total MONEY;
+  SELECT @Total = SUM(Subtotal)
+  FROM @Subtotals;
+
+  SELECT @Total AS Total;
+END;
 
 /*select * from Usuario
 select * from Telefono
