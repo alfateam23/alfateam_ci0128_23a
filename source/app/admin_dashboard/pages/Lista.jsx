@@ -44,6 +44,7 @@ function Lista() {
   const [data, setData] = useState(null);
   const [filterValue, setFilterValue] = useState('');
   const [selectedTypeFilter, setselectedTypeFilter] = useState('');
+  const [selectedStateFilter, setselectedStateFilter] = useState('');
   const [sortField, setSortField] = useState('');
   const [sortOrder, setSortOrder] = useState('asc');
   const [aprobado,setAprobado] = useState(false);
@@ -76,14 +77,17 @@ const filterElement = (field, value) => {
   if (field === 'filterValue') {
     setFilterValue(value);
     filteredData = filteredData.filter((item) => item.ReservacionCodigo === parseInt(value));
-  } else if (field === 'selectedTypeFilter') {
-    setselectedTypeFilter(value);
-    if (value !== '') {
-      filteredData = filteredData.filter((item) => item.TipoArea === value);
+  } else if (field === 'selectedStateFilter') {
+    setselectedStateFilter(value);
+    if (value === 'Aprobado') {
+      filteredData = filteredData.filter((item) => item.EstadoPago === true);
     }
-  }
+    else if (value === 'Cancelado') {
+      filteredData = filteredData.filter((item) => item.EstadoActividad === false);
+    }
   setData(filteredData);
 };
+}
 
   const sortElements = (field) => {
     let sortedData = [...data];
@@ -202,24 +206,15 @@ const filterElement = (field, value) => {
     Lista de Reservas
       </h1>
       <div>
-        <input
-          type="text"
-          value={filterValue}
-          onChange={(event) => filterElement('filterValue', event.target.value)}
-          placeholder="Filtrar por Código"
-        />
-      </div>
-      <div>
         <select
-          value={selectedTypeFilter}
-          onChange={(event) => filterElement('selectedTypeFilter', event.target.value)}
+          value={selectedStateFilter}
+          onChange={(event) => filterElement('selectedStateFilter', event.target.value)}
         >
           <option value="">Ambos</option>
-          <option value="P">Picnic</option>
-          <option value="C">Camping</option>
+          <option value="Aprobado">Aceptados</option>
+          <option value="Cancelado">Cancelados</option>
         </select>
       </div>
-
       <div>
       <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4" onClick={mostrarCalendario}>Mostrar Calendario</button>
       {isCalendarVisible && (
