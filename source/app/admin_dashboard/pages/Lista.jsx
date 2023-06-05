@@ -52,22 +52,24 @@ function Lista() {
   const [selectedDate, setSelectedDate] = useState(null);
 
 
-useEffect(() => {
-  fetch("/backend/reservationDetails/getReservations")
-    .then((res) => {
-      if (!res.ok) {
-        console.log('Network response was not ok');
-      }
-      return res.json();
-    })
-    .then((data) => {
-      console.log(data);
-      setData(data);
-    })
-    .catch((error) => {
-      console.error('Error fetching data:', error);
-    });
-}, []);
+  useEffect(() => {
+    fetch("/backend/reservationDetails/getReservations")
+      .then((res) => {
+        if (!res.ok) {
+          console.log('Network response was not ok');
+        }
+        return res.json();
+      })
+      .then((data) => {
+        console.log(data);
+        setData(data);
+        setInitialData(data); // Establecer initialData con los datos recibidos
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+  }, []);
+
 
 const filterElement = (field, value) => {
   let filteredData = [...initialData]; 
@@ -182,10 +184,10 @@ const filterElement = (field, value) => {
   };
 
   const selectDate = (day) => {
-    const filteredData = initialData.filter((item) => {
-      return (new Date(item.FechaInicio)).toDateString() === (new Date(day)).toDateString();
-    });
-  
+    const filteredData = initialData.filter((item) => 
+    (new Date(item.FechaInicio)).toDateString() === day.toDateString()
+    );
+    console.log(initialData);
     setData(filteredData);
   };
 
