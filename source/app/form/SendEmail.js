@@ -2,13 +2,13 @@
 
 import GeneratorEmailMessage from "./EmailAnswer_template";
 
-const sendEmail = async (UserData) => {
+const sendEmail = async (UserData, code) => {
   const baseUrl = "http://localhost:8000";
 
   let dataSend = {
     email: UserData.mail,
     subject: "Reservación Junquillal",
-    message: GeneratorEmailMessage(UserData),
+    message: GeneratorEmailMessage(UserData, code),
   };
 
   try {

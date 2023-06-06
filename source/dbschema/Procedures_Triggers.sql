@@ -304,6 +304,7 @@ BEGIN
     EXEC GetReservationWithCode @Codigo = @Codigo
 END;
 
+go
 CREATE PROCEDURE GetReservationWithCode
   @Codigo INT
 AS
@@ -342,6 +343,7 @@ BEGIN
   EXEC GetReservationWithCode @Codigo = @Codigo
 END;
 
+go
 CREATE PROCEDURE CalculateSubtotal
   @NacionalCampingNiño0a6 INT,
   @NacionalCampingNiño6a12 INT,
@@ -392,30 +394,12 @@ BEGIN
   SELECT @Total AS Total;
 END;
 
-/*select * from Usuario
-select * from Telefono
-select * from Cliente
-select * from Reservacion
-select * from Vehiculo
-select * from Visitante
-select * from Factura
-select * from LimiteVisitantes
-
-Select * Area
-
-delete from Factura
-delete from LimiteVisitantes
-delete from Visitante
-delete from Vehiculo
-delete from Reservacion
-delete from Cliente
-delete from Telefono
-delete from Usuario
-
-delete from Visitante where CodigoReservacion = 2
-delete from Vehiculo where CodigoReservacion = 2
-delete from Reservacion where Email = 'este-bandido@gmail.com'
-delete from Cliente where Email = 'este-bandido@gmail.com'
-delete from Telefono where Email = 'este-bandido@gmail.com'
-delete from Usuario where Email = 'este-bandido@gmail.com'*/
-
+go
+CREATE PROCEDURE GetReservationCode
+  @Email VARCHAR(60)
+AS
+BEGIN
+  SELECT Codigo
+  FROM Reservacion
+  WHERE Email = @Email
+END

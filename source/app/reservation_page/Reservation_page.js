@@ -8,6 +8,7 @@ import { Party_title,
 import { Start_reservation, Reservation_type } from './select_dates/Select_dates';
 import {FormularioView} from "../form/Form";
 import {Review_info} from "../form/Review_page";
+import { SaveReservation } from "../form/SaveReservation"
 
 /*
 Function to add the form for the traveller to fill
@@ -37,7 +38,8 @@ export const Review = ({UserData}) => {
       <NavBar_PIR selected={"review"}/>
       <br />
       <Review_info UserData={UserData}/>
-      <Next_link route_next='/'
+      <Next_link route_next='/' clickFunction={SaveReservation}
+      review={1} userData={UserData}
       route_back='/reservation/info' />
     </div>
   );
