@@ -7,27 +7,11 @@ import './Calendar.css'
  */
 export const My_Calendar = ({active, handleClick}) => {
 
-  let style = "w-[24.7%] clear-left ml-[10%]";
+  let style = "flex justify-center -translate-y-5";
 
   if (!active) {
     style += ' hidden';
   }
-
-  // Select range only when start date is selected
-
-  /*const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
-
-  function handleDateChange(date) {
-    if (startDate && endDate) {
-      setStartDate(date);
-      setEndDate(null);
-    } else if (startDate && date > startDate) {
-      setEndDate(date);
-    } else {
-      setStartDate(date);
-    }
-  }*/
 
   return (
     <div className={style}>
