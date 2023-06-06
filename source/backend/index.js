@@ -10,9 +10,9 @@ const reservationCost = require('./reservation/CostConsult')
 const origin = require('./reservation/OriginReq');
 const reservationDetails = require('./dashboard/ReservationDetailsReq');
 const tarifas = require('./dashboard/Tarifas');
-const reservationDetails = require('./dashboard/ReservationDetailsReq')
 const emailManager = require("./reservation/Email/emailRoutes");
 const bodyParser = require('body-parser');
+const reports = require('./dashboard/ReportsReq')
 
 dotenv.config();
 
@@ -35,6 +35,7 @@ app.use("/backend/insertReservation", reservationManager.router);
 app.use('/tarifas', tarifas.router);
 //Signup and login
 app.use("/backend/email", emailManager);
+app.use("/backend/reports", reports.router);
 
 const visitorsRawData = {
     "visitors": [
@@ -75,7 +76,7 @@ let reservation = {
         { countAdultKids612Nac: 1 },
         { countAdultNac: 2 },
         { countElderNac: 0 },
-        
+
         { countAdultKids06Ext: 0 },
         { countAdultKids612Ext: 0 },
         { countAdultExt: 0 },
@@ -87,7 +88,7 @@ let reservation = {
 //reservationManager.insertDataReservation(reservation);
 
 /* let date1 = new Date("2023-07-15T06:00:00.000Z");
-let date2 = new Date("2023-07-19T06:00:00.000Z"); 
+let date2 = new Date("2023-07-19T06:00:00.000Z");
 date1.setDate(date1.getDate()+1)
 if (date1 > new Date('2023-07-15T06:00:00.000Z')) console.log(true) */
 
