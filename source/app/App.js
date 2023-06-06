@@ -15,6 +15,7 @@ import RootLayout from './admin_dashboard/layout/RootLayout';
 import Settings from './admin_dashboard/pages/Settings';
 import Home from './admin_dashboard/pages/Home';
 import Tarifas from './admin_dashboard/pages/Tarifas';
+import TarifasEditar from './admin_dashboard/pages/TarifasEditar';
 
 
 /**
@@ -49,6 +50,7 @@ const AdminApp = () => {
                <Route path="/reservation/info" element={<T_information UserData={userData} />} />
                <Route path="/reservation/review" element={<Review UserData={userData} />} />
                <Route path='/tarifas' element={<Tarifas />} />
+               <Route path='/tarifas/editar/:TipoProcedencia/:TipoVisita/:Estatus/:CategoriaPago' element={<TarifasEditar />} />
             </Routes>
          </RootLayout>
       </div>
