@@ -19,9 +19,6 @@ const Tarifas = () => {
         handleTarifas()
     }, []);
 
-
-    console.log('Ojito pa ' + tableRows.length);
-
     // This renders every row for the table, with specific info
     const renderTarifa = () => {
         // Pueden sacar aquí la parte de mapping para tener código más legible
@@ -83,7 +80,9 @@ const Tarifas = () => {
                                             {tarifa.Moneda}
                                         </td>
                                         <td className="px-6 py-4 text-right">
-                                            <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                                            <a 
+                                            href={`tarifas/editar/${tarifa.TipoProcedencia}/${tarifa.TipoVisita}/${tarifa.Estatus}/${tarifa.CategoriaPago}`}
+                                            className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
                                         </td>
                                     </tr >
                                 ))}
