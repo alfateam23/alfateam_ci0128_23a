@@ -17,6 +17,7 @@ import Settings from './admin_dashboard/pages/Settings';
 import Home from './admin_dashboard/pages/Home';
 import Tarifas from './admin_dashboard/pages/Tarifas';
 import TarifasEditar from './admin_dashboard/pages/TarifasEditar';
+import Reports from './admin_dashboard/pages/Reports';
 
 
 /**
@@ -48,11 +49,12 @@ const AdminApp = () => {
                <Route path="/lista" element={<Lista />} />
                <Route path="/settings" element={<Settings />} />
                <Route path="/reservation" element={<Select_dates_page UserData={userData} />} />
-               <Route path="/reservation/availability" element={<Availability_page UserData={userData} />} />  
+               <Route path="/reservation/availability" element={<Availability_page UserData={userData} />} />
                <Route path="/reservation/info" element={<T_information UserData={userData} />} />
                <Route path="/reservation/review" element={<Review UserData={userData} />} />
                <Route path='/tarifas' element={<Tarifas />} />
                <Route path='/tarifas/editar/:TipoProcedencia/:TipoVisita/:Estatus/:CategoriaPago' element={<TarifasEditar />} />
+               <Route path='/reports' element={<Reports />} />
             </Routes>
          </RootLayout>
       </div>
@@ -66,7 +68,7 @@ const CustomerApp = () => {
          <Routes>
             <Route path="/" element={<Navbar />} />
             <Route path="/reservation" element={<Select_dates_page UserData={userData} />} />
-            <Route path="/reservation/availability" element={<Availability_page UserData={userData} />} />  
+            <Route path="/reservation/availability" element={<Availability_page UserData={userData} />} />
             <Route path="/reservation/info" element={<T_information UserData={userData} />} />
             <Route path="/reservation/review" element={<Review UserData={userData} />} />
             <Route path="/visitors" element={<Visitors />} />
