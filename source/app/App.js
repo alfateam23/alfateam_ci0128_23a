@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
 import {
    Availability_page,
@@ -8,6 +8,7 @@ import {
 } from './reservation_page/Reservation_page';
 import { UserData } from './UserData';
 import { Visitors } from './visitors/Visitors';
+import Lista from './admin_dashboard/pages/Lista';
 import { useLocation } from 'react-router-dom';
 
 /* import for Centro de Control */
@@ -15,7 +16,8 @@ import RootLayout from './admin_dashboard/layout/RootLayout';
 import Settings from './admin_dashboard/pages/Settings';
 import Home from './admin_dashboard/pages/Home';
 import Tarifas from './admin_dashboard/pages/Tarifas';
-import Reports from './admin_dashboard/pages/Reports';
+import TarifasEditar from './admin_dashboard/pages/TarifasEditar';
+
 
 /**
  * Temp navbar of project
@@ -43,13 +45,14 @@ const AdminApp = () => {
          <RootLayout>
             <Routes>
                <Route path="/" element={<Home />} />
+               <Route path="/lista" element={<Lista />} />
                <Route path="/settings" element={<Settings />} />
                <Route path="/reservation" element={<Select_dates_page UserData={userData} />} />
-               <Route path="/reservation/availability" element={<Availability_page UserData={userData} />} />
+               <Route path="/reservation/availability" element={<Availability_page UserData={userData} />} />  
                <Route path="/reservation/info" element={<T_information UserData={userData} />} />
                <Route path="/reservation/review" element={<Review UserData={userData} />} />
                <Route path='/tarifas' element={<Tarifas />} />
-               <Route path='/reports' element={<Reports />} />
+               <Route path='/tarifas/editar/:TipoProcedencia/:TipoVisita/:Estatus/:CategoriaPago' element={<TarifasEditar />} />
             </Routes>
          </RootLayout>
       </div>
@@ -63,7 +66,7 @@ const CustomerApp = () => {
          <Routes>
             <Route path="/" element={<Navbar />} />
             <Route path="/reservation" element={<Select_dates_page UserData={userData} />} />
-            <Route path="/reservation/availability" element={<Availability_page UserData={userData} />} />
+            <Route path="/reservation/availability" element={<Availability_page UserData={userData} />} />  
             <Route path="/reservation/info" element={<T_information UserData={userData} />} />
             <Route path="/reservation/review" element={<Review UserData={userData} />} />
             <Route path="/visitors" element={<Visitors />} />
@@ -77,7 +80,7 @@ const CustomerApp = () => {
  * web application.
  */
 const App = () => {
-   const runAdminApp = false; // Change for either admin or normal mode
+   const runAdminApp = true; // Change for either admin or normal mode
    if (runAdminApp) {
       return (AdminApp());
    } else {

@@ -2,20 +2,39 @@
 
 const express = require('express');
 const app = express();
+const dotenv = require("dotenv");
 const db = require('./DbConfig')
 const reservationManager = require('./reservation/reservationInsert');
 const availabilityInfo = require('./reservation/AvailabilityReq');
 const reservationCost = require('./reservation/CostConsult')
 const origin = require('./reservation/OriginReq');
+const reservationDetails = require('./dashboard/ReservationDetailsReq');
+const tarifas = require('./dashboard/Tarifas');
 const reservationDetails = require('./dashboard/ReservationDetailsReq')
-const reports = require('./reports/ReportsReq')
+const emailManager = require("./reservation/Email/emailRoutes");
+const bodyParser = require('body-parser');
 
+dotenv.config();
+
+const cors = require("cors");
+const corsOptions = {
+  origin: "*",
+  credentials: true, //access-control-allow-credentials:true
+  optionSuccessStatus: 200,
+};
+
+app.use(cors()); // Use this after the variable declaration
+app.use(express.json()); // tell the server to accept the json data from frontend
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.use("/backend/capacity", availabilityInfo.router);
 app.use("/backend/geographicInfo", origin.router);
 app.use("/backend/reservationDetails", reservationDetails.router);
 app.use("/backend/reservationCost", reservationCost.router);
 app.use("/backend/insertReservation", reservationManager.router);
-app.use("/backend/reports", reports.router);
+app.use('/tarifas', tarifas.router);
+//Signup and login
+app.use("/backend/email", emailManager);
 
 const visitorsRawData = {
     "visitors": [
@@ -56,7 +75,7 @@ let reservation = {
         { countAdultKids612Nac: 1 },
         { countAdultNac: 2 },
         { countElderNac: 0 },
-
+        
         { countAdultKids06Ext: 0 },
         { countAdultKids612Ext: 0 },
         { countAdultExt: 0 },
@@ -68,7 +87,7 @@ let reservation = {
 //reservationManager.insertDataReservation(reservation);
 
 /* let date1 = new Date("2023-07-15T06:00:00.000Z");
-let date2 = new Date("2023-07-19T06:00:00.000Z");
+let date2 = new Date("2023-07-19T06:00:00.000Z"); 
 date1.setDate(date1.getDate()+1)
 if (date1 > new Date('2023-07-15T06:00:00.000Z')) console.log(true) */
 
