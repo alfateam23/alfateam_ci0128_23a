@@ -12,6 +12,7 @@ const origin = require('./reservation/OriginReq');
 const tarifas = require('./dashboard/Tarifas');
 const emailManager = require("./reservation/Email/emailRoutes");
 const bodyParser = require('body-parser');
+const reports = require('./dashboard/ReportsReq')
 
 dotenv.config();
 
@@ -35,5 +36,15 @@ app.use("/backend/reservationCode", reservationCode.router);
 app.use("/backend", tarifas.router);
 //Signup and login
 app.use("/backend/email", emailManager);
+app.use("/backend/reports", reports.router);
+const reservationManager = require('./reservation/reservationInsert');
+const reservationDetails = require('./dashboard/ReservationDetailsReq');
+const reservationCost = require('./reservation/CostConsult')
+const reservationCode = require("./reservation/CodeConsult");
+const availabilityInfo = require('./reservation/AvailabilityReq');
+const origin = require('./reservation/OriginReq');
+const tarifas = require('./dashboard/Tarifas');
+const emailManager = require("./reservation/Email/emailRoutes");
+const bodyParser = require('body-parser');
 
 app.listen(3030, ()=> console.log('Listening on port 3030...'));
