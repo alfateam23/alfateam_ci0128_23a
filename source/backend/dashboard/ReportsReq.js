@@ -4,7 +4,8 @@ const router = express.Router();
 
 router.get('/visits/:startdate/:enddate', async (req, res) => {
     try {
-        let visits = await selectVisitsInDateRange(req.params['startdate'], req.params['enddate']);
+        let visits = await selectVisitsInDateRange(req.params['startdate'],
+        req.params['enddate']);
         res.json(visits);
     } catch (error) {
         console.log('Error al obtener reporte de visitas', error);
@@ -13,7 +14,8 @@ router.get('/visits/:startdate/:enddate', async (req, res) => {
 
 router.get('/profits/:startdate/:enddate', async (req, res) => {
     try {
-        let visits = await selectProfitsInDateRange(req.params['startdate'], req.params['enddate']);
+        let visits = await selectProfitsInDateRange(req.params['startdate'],
+        req.params['enddate']);
         res.json(visits);
     } catch (error) {
         console.log('Error al obtener reporte de ingresos', error);
@@ -25,17 +27,22 @@ router.get('/profits/:startdate/:enddate', async (req, res) => {
 async function selectVisitsInDateRange(startdate, enddate) {
     try {
         const query = `SELECT
-        Reservacion.FechaInicio,
-        Visitante.TipoProcedencia,
-        Visitante.TipoVisita,
-        Visitante.Estatus,
-        Visitante.CategoriaPago,
-        Visitante.CantidadVisitantes
-        FROM Visitante
-        JOIN Reservacion
-        ON Codigo=Visitante.CodigoReservacion
-        WHERE Reservacion.FechaInicio
-        BETWEEN '${startdate}' AND '${enddate}'`
+        TV.TipoProcedencia,
+        TV.TipoVisita,
+        TV.Estatus,
+        ISNULL(SUM(V.CantidadVisitantes),0) AS TotalVisitors
+      FROM
+        TipoVisitante TV
+        LEFT JOIN Visitante V ON V.TipoProcedencia = TV.TipoProcedencia
+          AND V.TipoVisita = TV.TipoVisita
+          AND V.Estatus = TV.Estatus
+          AND V.CategoriaPago = TV.CategoriaPago
+        LEFT JOIN Reservacion R ON R.Codigo = V.CodigoReservacion
+          AND R.FechaInicio BETWEEN '${startdate}' AND '${enddate}'
+      GROUP BY
+        TV.TipoProcedencia,
+        TV.TipoVisita,
+        TV.Estatus;`
         const result = await db.executeQuery(query)
         return result.recordset;
     }
@@ -46,24 +53,24 @@ async function selectVisitsInDateRange(startdate, enddate) {
 
 async function selectProfitsInDateRange(startdate, enddate) {
     try {
-        const query = `SELECT
-        Reservacion.FechaInicio,
-        TipoVisitante.TipoProcedencia,
-        TipoVisitante.TipoVisita,
-        TipoVisitante.Estatus,
-        TipoVisitante.CategoriaPago,
-        Visitante.Subtotal,
-        TipoVisitante.Moneda
-        FROM Visitante
-        JOIN Reservacion
-        ON Codigo=Visitante.CodigoReservacion
-        JOIN TipoVisitante
-        ON TipoVisitante.TipoProcedencia=Visitante.TipoProcedencia
-        AND TipoVisitante.TipoVisita=Visitante.TipoVisita
-        AND TipoVisitante.Estatus=Visitante.Estatus
-        AND TipoVisitante.CategoriaPago=Visitante.CategoriaPago
-        WHERE Reservacion.FechaInicio
-        BETWEEN '${startdate}' AND '${enddate}'`
+        const query = `
+        SELECT
+          TV.TipoProcedencia,
+          TV.TipoVisita,
+          TV.Estatus,
+          ISNULL(SUM(V.Subtotal),0) AS TotalSubtotal
+        FROM
+          TipoVisitante TV
+          LEFT JOIN Visitante V ON V.TipoProcedencia = TV.TipoProcedencia
+            AND V.TipoVisita = TV.TipoVisita
+            AND V.Estatus = TV.Estatus
+            AND V.CategoriaPago = TV.CategoriaPago
+          LEFT JOIN Reservacion R ON R.Codigo = V.CodigoReservacion
+            AND R.FechaInicio BETWEEN '${startdate}' AND '${enddate}'
+        GROUP BY
+          TV.TipoProcedencia,
+          TV.TipoVisita,
+          TV.Estatus;`
         const result = await db.executeQuery(query)
         return result.recordset;
     }
