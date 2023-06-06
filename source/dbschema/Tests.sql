@@ -1,5 +1,6 @@
 select * from Usuario
 select * from Telefono
+select * from Telefono
 select * from Cliente
 select * from Reservacion
 select * from Vehiculo

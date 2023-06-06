@@ -9,14 +9,14 @@ let prevData = null;
 router.post("/", async (req,res)=>{
   try {
     if (prevData !== null) {
-      if (prevData.nameUser !== req.body.UserData.nameUser) {
-        prevData = req.body.UserData;
-        await insertDataReservation(req.body.UserData);
+      if (prevData.nameUser !== req.body.userData.nameUser) {
+        prevData = req.body.userData;
+        await insertDataReservation(req.body.userData);
         res.json("Inserted");
       }
     } else if (prevData === null) {
-      prevData = req.body.UserData;
-      await insertDataReservation(req.body.UserData);
+      prevData = req.body.userData;
+      await insertDataReservation(req.body.userData);
       res.json("Inserted");
     }
   } catch (error) {

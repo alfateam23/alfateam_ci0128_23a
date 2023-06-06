@@ -49,7 +49,7 @@ const AdminApp = () => {
                <Route path="/lista" element={<Lista />} />
                <Route path="/settings" element={<Settings />} />
                <Route path="/reservation" element={<Select_dates_page UserData={userData} />} />
-               <Route path="/reservation/availability" element={<Availability_page UserData={userData} />} />
+               <Route path="/reservation/availability" element={<Availability_page UserData={userData} />} />  
                <Route path="/reservation/info" element={<T_information UserData={userData} />} />
                <Route path="/reservation/review" element={<Review UserData={userData} />} />
                <Route path='/tarifas' element={<Tarifas />} />
@@ -68,7 +68,7 @@ const CustomerApp = () => {
          <Routes>
             <Route path="/" element={<Navbar />} />
             <Route path="/reservation" element={<Select_dates_page UserData={userData} />} />
-            <Route path="/reservation/availability" element={<Availability_page UserData={userData} />} />
+            <Route path="/reservation/availability" element={<Availability_page UserData={userData} />} />  
             <Route path="/reservation/info" element={<T_information UserData={userData} />} />
             <Route path="/reservation/review" element={<Review UserData={userData} />} />
             <Route path="/visitors" element={<Visitors />} />
