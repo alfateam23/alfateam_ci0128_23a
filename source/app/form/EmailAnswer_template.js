@@ -1,5 +1,8 @@
 
-const GeneratorEmailMessage = (UserData) => {
+const GeneratorEmailMessage = (UserData, code) => {
+    const date = UserData.area === 'Camping' ?
+    UserData.start_date.toDateString() + " to " + UserData.end_date.toDateString() :
+    UserData.start_date.toDateString()
     const mensaje = `Confirmación de Reservación
     
     Estimado(a) Visitante
@@ -14,12 +17,12 @@ const GeneratorEmailMessage = (UserData) => {
       Telefono: ${UserData.phone}
       ${UserData.originCountry !== '' ? `Procedencia: ${UserData.originCountry}` : ''}
       ${UserData.originProvince !== '' ? `Procedencia: ${UserData.originProvince}` : ''}
-      Código de reserva: 00000001
+      Código de reserva: ${code}
 
   
     Detalles de la Reservación
       Tipo de reservación: ${UserData.area}
-      Fecha reservación: ${UserData.start_date.toDateString() + " to " + UserData.end_date.toDateString()}
+      Fecha reservación: ${date}
 
       Placas de carros:
       ${UserData.plates[0] !== '' ? `Placa 1: ${UserData.plates[0]}` : ''}

@@ -7,7 +7,6 @@ import {
 } from "./Elementos/ElementosFormulario";
 import "./style.css";
 import CalculateCost from "./CalculateVisitors";
-import SendMail from "./SendEmail";
 
 export const Review_info = ({ UserData }) => {
   const filteredPlates = UserData.plates.filter((plate) => plate.trim() !== "");
@@ -18,7 +17,10 @@ export const Review_info = ({ UserData }) => {
     "dark:text-gray-400"
   );
   const fontSemiBold = "text-sm font-semibold";
-  const [costData, setCostData] = useState(null);
+  let date = UserData.start_date.toDateString();
+  date += UserData.end_date instanceof Date ? 
+  " to " + UserData.end_date.toDateString() :
+  '';
   CalculateCost(UserData);
   return (
     <div>
@@ -109,9 +111,7 @@ export const Review_info = ({ UserData }) => {
                 Fecha reservación:
               </dt>
               <dd className={fontSemiBold}>
-                {UserData.start_date.toDateString() +
-                  " to " +
-                  UserData.end_date.toDateString()}
+                {date}
               </dd>
             </div>
 
@@ -190,10 +190,6 @@ export const Review_info = ({ UserData }) => {
               </dt>
               <dd className={fontSemiBold}>{UserData.totalPrice}</dd>
             </div>
-
-            <ContenedorBotonCentrado>
-              <Boton onClick={() => SendMail(UserData)}>Siguiente</Boton>
-            </ContenedorBotonCentrado>
           </dl>
         </a>
       </div>
