@@ -11,6 +11,7 @@ const availabilityInfo = require('./reservation/AvailabilityReq');
 const origin = require('./reservation/OriginReq');
 const tarifas = require('./dashboard/Tarifas');
 const emailManager = require("./reservation/Email/emailRoutes");
+const bodyParser = require('body-parser');
 
 dotenv.config();
 
@@ -23,6 +24,8 @@ const corsOptions = {
 
 app.use(cors()); // Use this after the variable declaration
 app.use(express.json()); // tell the server to accept the json data from frontend
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.use("/backend/capacity", availabilityInfo.router);
 app.use("/backend/geographicInfo", origin.router);
 app.use("/backend/reservationDetails", reservationDetails.router);
