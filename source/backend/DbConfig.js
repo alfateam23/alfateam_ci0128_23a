@@ -36,12 +36,10 @@ async function executeQuery(query) {
     try {
         await database.connect(DbConfig);
         const result = await database.query(query);
-        database.close();
         return result;
     } catch (err) {
         throw err;
-    } 
-    //quitar finally para correr en windows
+    }
 }
 
 module.exports = { executeQuery };
