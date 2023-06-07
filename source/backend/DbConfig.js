@@ -39,10 +39,7 @@ async function executeQuery(query) {
         return result;
     } catch (err) {
         throw err;
-    } /*finally {
-        database.close();
-    }*/
-    //quitar finally para correr en windows
+    }
 }
 
 module.exports = { executeQuery };

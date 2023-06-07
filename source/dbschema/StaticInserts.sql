@@ -233,7 +233,7 @@ INSERT INTO ProvinciaCRC(Nombre) VALUES ('Limón');
 INSERT INTO ProvinciaCRC(Nombre) VALUES ('Alajuela');
 INSERT INTO ProvinciaCRC(Nombre) VALUES ('Heredia');
 INSERT INTO ProvinciaCRC(Nombre) VALUES ('San José');
-INSERT INTO ProvinciaCRC(Nombre) VALUES ('Puntareans');
+INSERT INTO ProvinciaCRC(Nombre) VALUES ('Puntarenas');
 INSERT INTO ProvinciaCRC(Nombre) VALUES ('');
 
 /*
