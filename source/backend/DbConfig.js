@@ -36,7 +36,7 @@ async function executeQuery(query) {
     try {
         await database.connect(DbConfig);
         const result = await database.query(query);
-        database.close();
+        //database.close();
         return result;
     } catch (err) {
         throw err;
