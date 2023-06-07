@@ -3,12 +3,12 @@
 const express = require('express');
 const app = express();
 const dotenv = require("dotenv");
-const db = require('./DbConfig')
 const reservationManager = require('./reservation/reservationInsert');
-const availabilityInfo = require('./reservation/AvailabilityReq');
-const reservationCost = require('./reservation/CostConsult')
-const origin = require('./reservation/OriginReq');
 const reservationDetails = require('./dashboard/ReservationDetailsReq');
+const reservationCost = require('./reservation/CostConsult')
+const reservationCode = require("./reservation/CodeConsult");
+const availabilityInfo = require('./reservation/AvailabilityReq');
+const origin = require('./reservation/OriginReq');
 const tarifas = require('./dashboard/Tarifas');
 const emailManager = require("./reservation/Email/emailRoutes");
 const bodyParser = require('body-parser');
@@ -32,18 +32,10 @@ app.use("/backend/geographicInfo", origin.router);
 app.use("/backend/reservationDetails", reservationDetails.router);
 app.use("/backend/reservationCost", reservationCost.router);
 app.use("/backend/insertReservation", reservationManager.router);
+app.use("/backend/reservationCode", reservationCode.router);
 app.use('/tarifas', tarifas.router);
 //Signup and login
 app.use("/backend/email", emailManager);
 app.use("/backend/reports", reports.router);
-const reservationManager = require('./reservation/reservationInsert');
-const reservationDetails = require('./dashboard/ReservationDetailsReq');
-const reservationCost = require('./reservation/CostConsult')
-const reservationCode = require("./reservation/CodeConsult");
-const availabilityInfo = require('./reservation/AvailabilityReq');
-const origin = require('./reservation/OriginReq');
-const tarifas = require('./dashboard/Tarifas');
-const emailManager = require("./reservation/Email/emailRoutes");
-const bodyParser = require('body-parser');
 
 app.listen(3030, ()=> console.log('Listening on port 3030...'));

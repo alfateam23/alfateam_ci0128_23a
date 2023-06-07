@@ -9,17 +9,18 @@ select * from Factura
 
 select * from TipoVisitante
 
-delete from usuario where Email = 'asolmon88@gmail.com'
-delete from Telefono where Email = 'asolmon88@gmail.com'
+delete from Factura where CodigoReservacion = 10
+delete from Visitante where CodigoReservacion = 10
+delete from Vehiculo where CodigoReservacion = 10
 delete from Cliente where Email = 'asolmon88@gmail.com'
+delete from Telefono where Email = 'asolmon88@gmail.com'
+delete from usuario where Email = 'asolmon88@gmail.com'
+delete from Reservacion where Codigo = 10
 
-delete from Factura where CodigoReservacion = 3
-delete from Visitante where CodigoReservacion = 3
-delete from Vehiculo where CodigoReservacion = 3
-delete from Cliente where Email = 'mario-neta@hotmail.com'
-delete from Telefono where Email = 'mario-neta@hotmail.com'
-delete from Usuario where Email = 'mario-neta@hotmail.com'
-delete from Reservacion where Codigo = 3
+delete from Cliente where Email = 'pablito-clava@gmail.com'
+delete from Telefono where Email = 'pablito-clava@gmail.com'
+delete from Usuario where Email = 'pablito-clava@gmail.com'
+delete from Reservacion where Codigo = 7
 
 DECLARE @date1 DATE;
 SET @date1 = CONVERT(DATE, '2023-06-27', 23);
