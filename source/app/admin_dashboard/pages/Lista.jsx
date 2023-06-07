@@ -3,41 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import {My_Calendar} from '../../reservation_page/Calendar';
 import "flowbite";
-/** 
-const useStyles = createUseStyles({
-  tableContainer: {
-    maxWidth: '1500px',
-    width: '100%',
-    margin: '0 auto',
-    fontFamily: 'Times New Roman, sans-serif',
-  },
-  table: {
-    width: '100%',
-    borderCollapse: 'collapse',
-    '& th, td': {
-      padding: '8px',
-      border: '1px solid #ddd',
-      textAlign: 'center',
-      whiteSpace: 'nowrap',
-      fontSize: 25
-    },
-    '& th': {
-      backgroundColor: '#3f83f8',
-      fontWeight: 'bold',
-      color: 'white',
-    },
-    '& tr:nth-child(even)': {
-      backgroundColor: '#f2f2f2',
-    },
-    '& tr:nth-child(odd)': {
-      backgroundColor: '#f2f2f2',
-    },
-    '& tr:hover': {
-      backgroundColor: '#ddd',
-    },
-  },
-});
-*/
+
 function Lista() {
   //const classes = useStyles();
   const [initialData, setInitialData] = useState([]);
