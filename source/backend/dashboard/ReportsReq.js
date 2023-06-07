@@ -79,4 +79,4 @@ async function selectProfitsInDateRange(startdate, enddate) {
     }
 }
 
-module.exports = { router };
+module.exports = { router , selectVisitsInDateRange, selectProfitsInDateRange };
