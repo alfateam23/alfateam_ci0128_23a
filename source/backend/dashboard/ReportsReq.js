@@ -26,23 +26,29 @@ router.get('/profits/:startdate/:enddate', async (req, res) => {
 
 async function selectVisitsInDateRange(startdate, enddate) {
     try {
-        const query = `SELECT
-        TV.TipoProcedencia,
-        TV.TipoVisita,
-        TV.Estatus,
-        ISNULL(SUM(V.CantidadVisitantes),0) AS TotalVisitors
-      FROM
-        TipoVisitante TV
-        LEFT JOIN Visitante V ON V.TipoProcedencia = TV.TipoProcedencia
-          AND V.TipoVisita = TV.TipoVisita
-          AND V.Estatus = TV.Estatus
-          AND V.CategoriaPago = TV.CategoriaPago
-        LEFT JOIN Reservacion R ON R.Codigo = V.CodigoReservacion
-          AND R.FechaInicio BETWEEN '${startdate}' AND '${enddate}'
-      GROUP BY
-        TV.TipoProcedencia,
-        TV.TipoVisita,
-        TV.Estatus;`
+        const query = `
+          SELECT
+          TV.TipoProcedencia,
+          TV.TipoVisita,
+          TV.Estatus,
+          TV.CategoriaPago,
+          ISNULL(SUM(V.CantidadVisitantes), 0) AS TotalVisitantes
+        FROM
+          TipoVisitante TV
+          LEFT JOIN (
+            SELECT V.TipoProcedencia, V.TipoVisita, V.Estatus, V.CategoriaPago, V.CantidadVisitantes
+            FROM Visitante V
+            INNER JOIN Reservacion R ON R.Codigo = V.CodigoReservacion
+            WHERE R.FechaInicio BETWEEN ${startdate} AND ${enddate}
+          ) AS V ON V.TipoProcedencia = TV.TipoProcedencia
+            AND V.TipoVisita = TV.TipoVisita
+            AND V.Estatus = TV.Estatus
+            AND V.CategoriaPago = TV.CategoriaPago
+        GROUP BY
+          TV.TipoProcedencia,
+          TV.TipoVisita,
+          TV.Estatus,
+          TV.CategoriaPago;`
         const result = await db.executeQuery(query)
         return result.recordset;
     }
@@ -58,19 +64,24 @@ async function selectProfitsInDateRange(startdate, enddate) {
           TV.TipoProcedencia,
           TV.TipoVisita,
           TV.Estatus,
-          ISNULL(SUM(V.Subtotal),0) AS TotalSubtotal
+          TV.CategoriaPago,
+          ISNULL(SUM(V.Subtotal), 0) AS TotalVisitantes
         FROM
           TipoVisitante TV
-          LEFT JOIN Visitante V ON V.TipoProcedencia = TV.TipoProcedencia
+          LEFT JOIN (
+            SELECT V.TipoProcedencia, V.TipoVisita, V.Estatus, V.CategoriaPago, V.Subtotal
+            FROM Visitante V
+            INNER JOIN Reservacion R ON R.Codigo = V.CodigoReservacion
+            WHERE R.FechaInicio BETWEEN @date1 AND @date2
+          ) AS V ON V.TipoProcedencia = TV.TipoProcedencia
             AND V.TipoVisita = TV.TipoVisita
             AND V.Estatus = TV.Estatus
             AND V.CategoriaPago = TV.CategoriaPago
-          LEFT JOIN Reservacion R ON R.Codigo = V.CodigoReservacion
-            AND R.FechaInicio BETWEEN '${startdate}' AND '${enddate}'
         GROUP BY
           TV.TipoProcedencia,
           TV.TipoVisita,
-          TV.Estatus;`
+          TV.Estatus,
+          TV.CategoriaPago;`
         const result = await db.executeQuery(query)
         return result.recordset;
     }
