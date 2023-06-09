@@ -1,6 +1,7 @@
 const db = require('../DbConfig');
 const express = require('express');
 const router = express.Router();
+const ExcelJS = require('exceljs')
 
 router.get('/visits/:startdate/:enddate', async (req, res) => {
     try {
@@ -19,6 +20,21 @@ router.get('/profits/:startdate/:enddate', async (req, res) => {
         res.json(visits);
     } catch (error) {
         console.log('Error al obtener reporte de ingresos', error);
+    }
+})
+
+router.get('/excel', async (req, res) => {
+    try {
+      const workbook = new ExcelJS.Workbook();
+      workbook.creator = 'Asojunquillal'
+      workbook.created = new Date();
+      const worksheet = workbook.addWorksheet('Reporte')
+      worksheet.columns = JSON.parse(req.body)[0]
+      worksheet.addRows(JSON.parse(req.body))
+      const reportFile = await workbook.xlsx.writeBuffer();
+      res.send(reportFile)
+    } catch(error) {
+        console.log('Error al convertir a archivo de Excel');
     }
 })
 
