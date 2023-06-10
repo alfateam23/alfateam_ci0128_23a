@@ -3,46 +3,66 @@ const express = require('express');
 const router = express.Router();
 const ExcelJS = require('exceljs')
 
-router.get('/visits/:startdate/:enddate', async (req, res) => {
-    try {
-        let visits = await selectVisitsInDateRange(req.params['startdate'],
-        req.params['enddate']);
-        res.json(visits);
-    } catch (error) {
-        console.log('Error al obtener reporte de visitas', error);
+// Get report of a given type (visits or profits), in a specified format (JSON, CSV, or XLSX),
+// between a start date and an end date
+router.get('/:type/:format/:startdate/:enddate', async (req, res) => {
+  let reportData
+  try {
+    switch (req.params['type']) {
+      case 'visits':
+        reportData = await selectVisitsInDateRange(req.params['startdate'], req.params['enddate']);
+        break;
+      case 'profits':
+        reportData = await selectProfitsInDateRange(req.params['startdate'], req.params['enddate']);
+      default:
+        console.log('Error en tipo de reporte')
+        break;
     }
+
+    switch (req.params['format']) {
+      case 'json':
+        res.json(reportData);
+        break;
+      case 'csv':
+      case 'xlsx':
+        reportFile = await exportReport(reportData, format);
+        res.send(reportFile);
+        break;
+      default:
+        console.log('Error en formato de reporte')
+        break;
+    }
+
+    res.json(visits);
+  } catch (error) {
+    console.log('Error al obtener reportes', error);
+  }
 })
 
-router.get('/profits/:startdate/:enddate', async (req, res) => {
-    try {
-        let visits = await selectProfitsInDateRange(req.params['startdate'],
-        req.params['enddate']);
-        res.json(visits);
-    } catch (error) {
-        console.log('Error al obtener reporte de ingresos', error);
-    }
-})
-
-router.get('/excel', async (req, res) => {
-    try {
-      const workbook = new ExcelJS.Workbook();
-      workbook.creator = 'Asojunquillal'
-      workbook.created = new Date();
-      const worksheet = workbook.addWorksheet('Reporte')
-      worksheet.columns = JSON.parse(req.body)[0]
-      worksheet.addRows(JSON.parse(req.body))
-      const reportFile = await workbook.xlsx.writeBuffer();
-      res.send(reportFile)
-    } catch(error) {
-        console.log('Error al convertir a archivo de Excel');
-    }
-})
-
-// Endpoints for report datasets
+async function exportReport(reportData, format) {
+  let reportFile;
+  const workbook = new ExcelJS.Workbook();
+  workbook.creator = 'Asojunquillal'
+  workbook.created = new Date();
+  const worksheet = workbook.addWorksheet('Reporte')
+  worksheet.columns = reportData[0]
+  worksheet.addRows(reportData)
+  switch (format) {
+    case 'csv':
+      reportFile = await workbook.csv.writeBuffer();
+      break;
+    case 'xlsx':
+      reportFile = await workbook.xlsx.writeBuffer();
+      break;
+    default:
+      break;
+  }
+  res.send(reportFile)
+}
 
 async function selectVisitsInDateRange(startdate, enddate) {
-    try {
-        const query = `
+  try {
+    const query = `
           SELECT
           TV.TipoProcedencia,
           TV.TipoVisita,
@@ -65,17 +85,17 @@ async function selectVisitsInDateRange(startdate, enddate) {
           TV.TipoVisita,
           TV.Estatus,
           TV.CategoriaPago;`
-        const result = await db.executeQuery(query)
-        return result.recordset;
-    }
-    catch (error) {
-        throw error;
-    }
+    const result = await db.executeQuery(query)
+    return result.recordset;
+  }
+  catch (error) {
+    throw error;
+  }
 }
 
 async function selectProfitsInDateRange(startdate, enddate) {
-    try {
-        const query = `
+  try {
+    const query = `
         SELECT
           TV.TipoProcedencia,
           TV.TipoVisita,
@@ -98,12 +118,12 @@ async function selectProfitsInDateRange(startdate, enddate) {
           TV.TipoVisita,
           TV.Estatus,
           TV.CategoriaPago;`
-        const result = await db.executeQuery(query)
-        return result.recordset;
-    }
-    catch (error) {
-        throw error;
-    }
+    const result = await db.executeQuery(query)
+    return result.recordset;
+  }
+  catch (error) {
+    throw error;
+  }
 }
 
-module.exports = { router , selectVisitsInDateRange, selectProfitsInDateRange };
+module.exports = { router, selectVisitsInDateRange, selectProfitsInDateRange };
