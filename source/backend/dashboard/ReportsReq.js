@@ -3,6 +3,8 @@ const express = require('express');
 const router = express.Router();
 const ExcelJS = require('exceljs')
 
+const contentType = { 'csv': 'text/csv', 'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }
+
 // Get report of a given type (visits or profits), in a specified format (JSON, CSV, or XLSX),
 // between a start date and an end date
 router.get('/:type/:format/:startdate/:enddate', async (req, res) => {
@@ -25,39 +27,28 @@ router.get('/:type/:format/:startdate/:enddate', async (req, res) => {
         break;
       case 'csv':
       case 'xlsx':
-        reportFile = await exportReport(reportData, format);
-        res.send(reportFile);
+        const workbook = await exportReport(reportData)
+        await workbook.xlsx.write(res).then(() => {
+          res.setHeader("Content-Type", contentType[req.params['format']])
+          res.setHeader("Content-Disposition", `attachment; filename=reporte-${req.params['format']}`)
+          res.status(200).end()
+        })
         break;
       default:
         console.log('Error en formato de reporte')
         break;
     }
-
-    res.json(visits);
   } catch (error) {
     console.log('Error al obtener reportes', error);
   }
 })
 
-async function exportReport(reportData, format) {
-  let reportFile;
+async function exportReport(reportData) {
   const workbook = new ExcelJS.Workbook();
   workbook.creator = 'Asojunquillal'
   workbook.created = new Date();
-  const worksheet = workbook.addWorksheet('Reporte')
-  worksheet.columns = reportData[0]
-  worksheet.addRows(reportData)
-  switch (format) {
-    case 'csv':
-      reportFile = await workbook.csv.writeBuffer();
-      break;
-    case 'xlsx':
-      reportFile = await workbook.xlsx.writeBuffer();
-      break;
-    default:
-      break;
-  }
-  res.send(reportFile)
+  workbook.addWorksheet('Reporte').addRows(reportData)
+  return workbook;
 }
 
 async function selectVisitsInDateRange(startdate, enddate) {
