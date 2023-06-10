@@ -1,19 +1,19 @@
 
 import React, { useEffect, useState } from 'react';
-import { createUseStyles } from 'react-jss';
-import {My_Calendar} from '../../reservation_page/Calendar';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import "flowbite";
 
 function Lista() {
   //const classes = useStyles();
   const [initialData, setInitialData] = useState([]);
+  const [inputValue, setInputValue] = useState('');
   const [data, setData] = useState(null);
   const [filterValue, setFilterValue] = useState('');
-  const [selectedTypeFilter, setselectedTypeFilter] = useState('');
-  const [selectedStateFilter, setselectedStateFilter] = useState('');
+  const [selectedStateFilter, setSelectedStateFilter] = useState('');
   const [sortField, setSortField] = useState('');
   const [sortOrder, setSortOrder] = useState('asc');
-  const [aprobado,setAprobado] = useState(false);
+  const [Aceptado,setAceptado] = useState(false);
   const [cancelado,setCancelado] = useState(false);
   const [isCalendarVisible, setCalendarVisible] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
@@ -38,22 +38,20 @@ function Lista() {
   }, []);
 
 
-const filterElement = (field, value) => {
-  let filteredData = [...initialData]; 
-  if (field === 'filterValue') {
-    setFilterValue(value);
-    filteredData = filteredData.filter((item) => item.ReservacionCodigo === parseInt(value));
-  } else if (field === 'selectedStateFilter') {
-    setselectedStateFilter(value);
-    if (value === 'Aprobado') {
-      filteredData = filteredData.filter((item) => item.EstadoPago === true);
+  const filterElement = (field, value) => {
+    let filteredData = [...initialData]; 
+    if (field === 'selectedStateFilter') {
+      setSelectedStateFilter(value);
+      if (value === 'Aceptado') {
+        filteredData = filteredData.filter((item) => item.EstadoPago === true);
+      } else if (value === 'Cancelado') {
+        filteredData = filteredData.filter((item) => item.EstadoActividad === false);
+      } else if (value === 'Pendientes') {
+        filteredData = filteredData.filter((item) => item.EstadoPago === false && item.EstadoActividad === true);
+      }
+      setData(filteredData);
     }
-    else if (value === 'Cancelado') {
-      filteredData = filteredData.filter((item) => item.EstadoActividad === false);
-    }
-  setData(filteredData);
-};
-}
+  };
 
   const sortElements = (field) => {
     let sortedData = [...data];
@@ -84,6 +82,12 @@ const filterElement = (field, value) => {
     setData(sortedData);
   };
 
+  const resetTable = () => {
+    setSelectedStateFilter('');
+    setCalendarVisible(false);
+    setData(initialData);
+  };
+  
 
   const cancelEstado = (ReservacionCodigo) => {
     const updatedData = data.map((item) => {
@@ -118,7 +122,7 @@ const filterElement = (field, value) => {
   const aprobeEstado = (ReservacionCodigo) => {
     const updatedData = data.map((item) => {
       if (item.ReservacionCodigo === ReservacionCodigo && item.EstadoPago === false) {
-        setAprobado(ReservacionCodigo);
+        setAceptado(ReservacionCodigo);
         return { ...item, EstadoPago: true };
       }
       return item;
@@ -127,8 +131,8 @@ const filterElement = (field, value) => {
   };
 
   useEffect(() => {
-    if(aprobado !== 0){
-      const ReservacionCodigo=aprobado;
+    if(Aceptado !== 0){
+      const ReservacionCodigo=Aceptado;
     fetch(`/backend/reservationDetails/confirmReservation/${ReservacionCodigo}`)
     .then((res) => {
       if (!res.ok) {
@@ -140,57 +144,53 @@ const filterElement = (field, value) => {
     .catch((error) => {
       console.error('Error fetching data:', error);
     });
-    setAprobado(0);
+    setAceptado(0);
     }
-  }, [aprobado]);
+  }, [Aceptado]);
 
 
   if (data === null) {
     return <div>Cargando datos...</div>;
   }
 
-  const mostrarCalendario = () => {
-    setCalendarVisible(!isCalendarVisible);
-  };
-
   const selectDate = (day) => {
     const filteredData = initialData.filter((item) => 
     (new Date(item.FechaInicio)).toDateString() === day.toDateString()
     );
     console.log(initialData);
+    setSelectedStateFilter(day);
     setData(filteredData);
   };
 
-  const ocultarCalendario = () => {
-    setCalendarVisible(false);
-  };
-
-  
   return (
     <div className='{{ backgroundColor: gray }}'>
-      <h1 class="font-sans text-4xl rounded-none py-4 m-3">
-    Lista de Reservas
+      <h1 className="font-sans text-4xl rounded-none py-4 m-3">
+        Lista de Reservas
       </h1>
       <div>
-        <select
-          value={selectedStateFilter}
-          onChange={(event) => filterElement('selectedStateFilter', event.target.value)}
-        >
-          <option value="">Ambos</option>
-          <option value="Aprobado">Aceptados</option>
-          <option value="Cancelado">Cancelados</option>
-        </select>
-      </div>
-      <div>
-      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4" onClick={mostrarCalendario}>Mostrar Calendario</button>
-      {isCalendarVisible && (
-        <My_Calendar
-          active={true}
-          handleClick={selectDate}
+      <select
+  value={selectedStateFilter}
+  onChange={(event) => filterElement('selectedStateFilter', event.target.value)}
+>
+  <option value="">Filtrar por estado</option>
+  <option value="Aceptado">Aceptados</option>
+  <option value="Cancelado">Cancelados</option>
+  <option value="Pendientes">Pendientes</option>
+</select>
+</div>
+      <div className="flex flex-row space-x-10">
+        <DatePicker
+          selected={selectedDate}
+          placeholderText='Filtro por fecha'
+          onChange={(date) => {
+            setSelectedDate(date);
+            selectDate(date);
+          }}
         />
-      )}
-      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4" onClick={ocultarCalendario}>Ocultar Calendario</button>
-    </div>
+      </div>
+        {selectedStateFilter && (
+          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4" onClick={resetTable}> Reiniciar Tabla</button>
+        )}
       <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
           <tr>
@@ -231,19 +231,23 @@ const filterElement = (field, value) => {
               <td class="px-6 py-4">{item.TipoArea === 'C' ? 'Camping' : 'Picnic'}</td>
               <td class="px-6 py-4">{item.TotalCantidadVisitantes}</td>
               <td class="px-6 py-4">{(new Date (item.FechaInicio)).toDateString()}</td>
-              <td class="px-6 py-4">{item.EstadoPago == true ? 'Aprobado' : item.EstadoActividad == false ? 'Cancelado' : 'Pendiente'}</td>
-              <td class="px-6 py-4">
-               <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4" onClick={() => cancelEstado(item.ReservacionCodigo)}>Cancelar</button>
-              </td>              
-              <td class="px-6 py-4">
-                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4" onClick={() => aprobeEstado(item.ReservacionCodigo)}>Confirmar</button>
-              </td>
+              <td class="px-6 py-4">{item.EstadoPago == true ? 'Aceptado' : item.EstadoActividad == false ? 'Cancelado' : 'Pendiente'}</td>
+    
+                {item.EstadoActividad && (
+                  <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4" onClick={() => cancelEstado(item.ReservacionCodigo)}>Cancelar</button>
+                )}
+                           
+                {!item.EstadoPago && item.EstadoActividad && (
+                  <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4" onClick={() => aprobeEstado(item.ReservacionCodigo)}>Aceptar</button>
+                )}
+            
             </tr>
           ))}
         </tbody>
       </table>
-      </div>
+    </div>
   );
 }
+
 
 export default Lista;
