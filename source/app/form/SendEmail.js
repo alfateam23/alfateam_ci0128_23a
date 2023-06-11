@@ -1,14 +1,19 @@
 //adapted from https://github.com/callbackcoding/Send-email-using-Nodemailer.git
 
-import GeneratorEmailMessage from "./EmailAnswer_template";
+import { Template } from "./Email_Template.tsx";
+import { render } from "@react-email/render";
 
 const sendEmail = async (UserData, code) => {
   const baseUrl = "http://localhost:8000";
 
+  const html = render(<Template UserData= {UserData}/>, {
+    pretty: true,
+  });
+
   let dataSend = {
     email: UserData.mail,
     subject: "Reservación Junquillal",
-    message: GeneratorEmailMessage(UserData, code),
+    message: html,
   };
 
   try {
