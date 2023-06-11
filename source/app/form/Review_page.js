@@ -188,7 +188,7 @@ export const Review_info = ({ UserData }) => {
               <dt className={classNames(textGray, fontSemiBold)}>
                 Monto total a pagar:
               </dt>
-              <dd className={fontSemiBold}>{UserData.totalPrice}</dd>
+              <dd className={fontSemiBold}>₡{UserData.totalPrice}</dd>
             </div>
           </dl>
         </a>

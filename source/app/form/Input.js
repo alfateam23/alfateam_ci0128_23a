@@ -146,8 +146,7 @@ const ComponentDropDown = ({
 }) => {
   const handleMenuClick = (e) => {
     const selected = items.find((item) => item.Nombre === e.key);
-    const { Nombre } = selected || {};
-    setSelectedItem(Nombre);
+    setSelectedItem(selected);
   };
 
   const handleDropDownVisibleChange = (visible) => {
