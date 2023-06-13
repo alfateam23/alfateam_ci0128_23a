@@ -1,15 +1,16 @@
 import { React, useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import moment from "moment"
 import { ExcelJS } from "exceljs"
 import { saveAs } from "file-saver"
-import {Table} from "flowbite-react"
+import { Table } from "flowbite-react"
 import { TableHead } from "flowbite-react/lib/esm/components/Table/TableHead";
 import { TableRow } from "flowbite-react/lib/esm/components/Table/TableRow";
 import { TableHeadCell } from "flowbite-react/lib/esm/components/Table/TableHeadCell";
 import { TableBody } from "flowbite-react/lib/esm/components/Table/TableBody";
 
-const  ReportTable = ({reportType, reportData}) => {
+const ReportTable = ({ reportType, reportData }) => {
   let reportHeaders = new Array();
 
   switch (reportType) {
@@ -26,25 +27,27 @@ const  ReportTable = ({reportType, reportData}) => {
   return (
     <div>
       <Table>
-      <TableHead>
-        {reportHeaders.forEach(item => {
-        <TableHeadCell>
-        {item}
-         </TableHeadCell>
-        })}
-      </TableHead>
-      <TableBody>
-        {reportData.forEach(item =>
-        <TableRow>
-          {item}
-        </TableRow>)}
-      </TableBody>
+        <TableHead>
+          {reportHeaders.forEach(item => {
+            <TableHeadCell>
+              {item}
+            </TableHeadCell>
+          })}
+        </TableHead>
+        <TableBody>
+          {reportData.forEach(item =>
+            <TableRow>
+              {item}
+            </TableRow>)}
+        </TableBody>
       </Table>
     </div>
   )
 }
 
 const Reports = () => {
+  const today = moment().format('YYYY-MM-DD')
+
   const [reportData, setData] = useState(null);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
@@ -52,28 +55,28 @@ const Reports = () => {
   const [saveFile, setSaveFile] = useState(null);
 
   useEffect(() => {
-    if (reportType && startDate && endDate) {
-      fetch(`/backend/reports/${reportType}/${startDate}/${endDate}`)
-        .then((reportData) => {
-          setData(reportData);
-        })
-        .catch((error) => {
-          console.error('Error al obtener datos', error);
-        });
-    }
-
-    if (saveFile && reportData) {
+    fetch(`/backend/reports/${reportType ? reportType : 'visits'}/${startDate ? startDate : today}/${endDate ? endDate : today}`)
+      .then((reportData) => {
+        setData(reportData);
+      })
+      .catch((error) => {
+        console.error('Error al obtener datos', error);
+      });
+    if (saveFile) {
       const workbook = new ExcelJS.Workbook();
       workbook.creator = 'Asojunquillal'
       workbook.created = new Date();
-      workbook.addWorksheet('Reporte').addRows(reportData);
+      workbook.addWorksheet('Reporte').addRows(reportData ? reportData : []);
       workbook.xlsx.writeBuffer().then((reportData) => {
         const blob = new Blob([reportData],
           { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8' });
-        saveAs(blob, `reporte-${reportType}-${startDate}-${endDate}.xlsx`);
+        saveAs(blob, `${reportType ? reportType : 'visits'}-${startDate ? startDate : today}-${endDate ? endDate : today}.xlsx`);
       });
+      setSaveFile(false);
     }
-  }, [reportType, saveFile, startDate, endDate]);
+  }, [reportData, startDate, endDate, reportType, saveFile]);
+
+  //         {reportData ? <ReportTable reportType={reportType} reportData={reportData} /> : ''}
 
   return (
     <div className="flex flex-col space-y-20 bg-slate-400
@@ -91,9 +94,9 @@ const Reports = () => {
         </div>
         <div className="flex flex-row space-x-10">
           <DatePicker className="rounded-xl"
-            onChange={(date) => setStartDate(date)} />
+            onChange={(date) => setStartDate(moment(date).format('YYYY-MM-DD'))} />
           <DatePicker className="rounded-xl"
-            onChange={(date) => setEndDate(date)} />
+            onChange={(date) => setEndDate(moment(date).format('YYYY-MM-DD'))} />
         </div>
         <div>
           <button className="rounded-lg border border-black
@@ -104,7 +107,7 @@ const Reports = () => {
         </div>
       </div>
       <div>
-        {reportData ? <ReportTable reportType={reportType} reportData={reportData} /> : ''}
+
       </div>
     </div>
   );
