@@ -162,11 +162,13 @@ if (elementoCodigo1) {
       <div className="row">
       <div>
       <select
-      className="rounded-xl my-4"
+  className="rounded-xl my-4"
   value={selectedStateFilter}
   onChange={(event) => filterElement('selectedStateFilter', event.target.value)}
 >
-  <option value="">Filtrar por estado</option>
+  <option value="" disabled selected>
+    Filtro por estado
+  </option>
   <option value="Aceptado">Aceptados</option>
   <option value="Cancelado">Cancelados</option>
   <option value="Pendientes">Pendientes</option>

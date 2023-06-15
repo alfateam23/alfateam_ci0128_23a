@@ -11,30 +11,30 @@ const TablaReservaciones = ({
 }) => {
   return (
     <table className="w-full text-sm text-center ">
-<thead className=" text-base text-white uppercase">
+<thead className="  text-white uppercase">
         <tr>
-          <th scope="col" className="bg-blue-500 px-6 py-3 w-[200px]">
+          <th scope="col" className="bg-blue-500 text-lg px-6 py-3 w-[250px]">
             Código
             <button onClick={() => sortElements('ReservacionCodigo')}>
                 {sortField === 'ReservacionCodigo' && sortOrder === 'asc' ? '▲' : '▼'}
             </button>
           </th>
-          <th scope="col" className="bg-blue-500 px-6 py-3">
+          <th scope="col" className="bg-blue-500 text-xl px-6 py-3 w-[200px] ">
             Tipo 
             <button onClick={() => sortElements('TipoArea')}>
               {sortField === 'TipoArea' && sortOrder === 'asc' ? '▲' : '▼'}
             </button>
           </th>
-          <th scope="col" className="bg-blue-500 px-6 py-3 w-[390px]">
+          <th scope="col" className="bg-blue-500  text-lg px-6 py-3 w-[300px]">
             Visitantes{' '}
             <button onClick={() => sortElements('TotalCantidadVisitantes')}>
                 {sortField === 'TotalCantidadVisitantes' && sortOrder === 'asc' ? '▲' : '▼'}
               </button>
           </th>
-          <th scope="col" className="bg-blue-500 px-6 py-4 w-[900px]">
+          <th scope="col" className="bg-blue-500 text-lg px-6 py-4 w-[900px]">
             Fecha entrada
           </th>
-          <th scope="col" className="bg-blue-500 px-6 py-3 w-[200px]">
+          <th scope="col" className="bg-blue-500 text-lg px-6 py-3 w-[250px]">
             Estado
             <button onClick={() => sortElements('EstadoPago')}>
                 {sortField === 'EstadoPago' && sortOrder === 'asc' ? '▲' : '▼'}
