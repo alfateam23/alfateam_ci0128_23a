@@ -1,37 +1,52 @@
 import React from 'react';
+import Lista from './Lista';
 
 const TablaReservaciones = ({
   data,
   cancelEstado,
-  aprobeEstado
+  aprobeEstado,
+  sortField,
+  sortOrder,
+  sortElements
 }) => {
   return (
-    <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-      <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+    <table className="w-full text-sm text-center ">
+<thead className=" text-base text-white uppercase">
         <tr>
-          <th scope="col" className="px-6 py-3">
+          <th scope="col" className="bg-blue-500 px-6 py-3 w-[200px]">
             Código
+            <button onClick={() => sortElements('ReservacionCodigo')}>
+                {sortField === 'ReservacionCodigo' && sortOrder === 'asc' ? '▲' : '▼'}
+            </button>
           </th>
-          <th scope="col" className="px-6 py-3">
-            Tipo
+          <th scope="col" className="bg-blue-500 px-6 py-3">
+            Tipo 
+            <button onClick={() => sortElements('TipoArea')}>
+              {sortField === 'TipoArea' && sortOrder === 'asc' ? '▲' : '▼'}
+            </button>
           </th>
-          <th scope="col" className="px-6 py-3">
-            Cantidad de Visitantes{' '}
+          <th scope="col" className="bg-blue-500 px-6 py-3 w-[390px]">
+            Visitantes{' '}
+            <button onClick={() => sortElements('TotalCantidadVisitantes')}>
+                {sortField === 'TotalCantidadVisitantes' && sortOrder === 'asc' ? '▲' : '▼'}
+              </button>
           </th>
-          <th scope="col" className="px-6 py-5">
+          <th scope="col" className="bg-blue-500 px-6 py-4 w-[900px]">
             Fecha entrada
           </th>
-          <th scope="col" className="px-6 py-3">
+          <th scope="col" className="bg-blue-500 px-6 py-3 w-[200px]">
             Estado
+            <button onClick={() => sortElements('EstadoPago')}>
+                {sortField === 'EstadoPago' && sortOrder === 'asc' ? '▲' : '▼'}
+                </button>
           </th>
-          <th scope="col" className="px-6 py-3"></th>
-          <th scope="col" className="px-6 py-3"></th>
+          <th scope="col" className="bg-blue-500 px-6 py-3"></th>
         </tr>
       </thead>
-      <tbody>
+      <tbody className="text-gray-500 dark:text-gray-400">
         {data.map((item) => (
           <tr
-            className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+            className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-base"
             key={item.ReservacionCodigo}
           >
             <th
@@ -40,37 +55,38 @@ const TablaReservaciones = ({
             >
               {item.ReservacionCodigo}
             </th>
-            <td className="px-6 py-4">
+            <td className="px-6 py-4 text-base">
               {item.TipoArea === 'C' ? 'Camping' : 'Picnic'}
             </td>
-            <td className="px-6 py-4">{item.TotalCantidadVisitantes}</td>
-            <td className="px-6 py-4">
+            <td className="px-6 py-4 text-base">{item.TotalCantidadVisitantes}</td>
+            <td className="px-6 py-4 text-base">
               {new Date(item.FechaInicio).toDateString()}
             </td>
-            <td className="px-6 py-4">
-              {item.EstadoPago == true
-                ? 'Aceptado'
-                : item.EstadoActividad == false
-                ? 'Cancelado'
-                : 'Pendiente'}
-            </td>
-
-            {item.EstadoActividad && (
-              <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4"
-                onClick={() => cancelEstado(item.ReservacionCodigo)}
-              >
-                Cancelar
-              </button>
-            )}
-            {!item.EstadoActividad && (
-              <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4"
-                onClick={() => aprobeEstado(item.ReservacionCodigo)}
-              >
-                Aceptar
-              </button>
-            )}
+            <td className="px-6 py-4 text-base">
+  {item.EstadoActividad === false
+    ? 'Cancelado'
+    : item.EstadoPago === true
+    ? 'Aceptado'
+    : 'Pendiente'}
+</td>
+            <div className="flex flex-row">
+  {item.EstadoActividad && (
+    <button
+      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4"
+      onClick={() => cancelEstado(item.ReservacionCodigo)}
+    >
+      Cancelar
+    </button>
+  )}
+  {!item.EstadoPago && item.EstadoActividad && (
+    <button
+      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4"
+      onClick={() => aprobeEstado(item.ReservacionCodigo)}
+    >
+      Aceptar
+    </button>
+  )}
+</div>
           </tr>
         ))}
       </tbody>

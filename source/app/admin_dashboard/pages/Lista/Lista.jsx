@@ -7,6 +7,8 @@ function Lista() {
   const [initialData, setInitialData] = useState([]);
   const [data, setData] = useState(null);
   const [selectedStateFilter, setSelectedStateFilter] = useState('');
+  const [sortField, setSortField] = useState('');
+  const [sortOrder, setSortOrder] = useState('asc');
   const [Aceptado,setAceptado] = useState(false);
   const [cancelado,setCancelado] = useState(false);
   const [isCalendarVisible, setCalendarVisible] = useState(false);
@@ -34,10 +36,10 @@ function Lista() {
     let filteredData = [...initialData];
     if (field === 'selectedStateFilter') {
       setSelectedStateFilter(value);
-      if (value === 'Aceptado') {
-        filteredData = filteredData.filter((item) => item.EstadoPago === true);
-      } else if (value === 'Cancelado') {
+      if (value === 'Cancelado') {
         filteredData = filteredData.filter((item) => item.EstadoActividad === false);
+      } else if (value === 'Aceptado') {
+        filteredData = filteredData.filter((item) => item.EstadoPago === true && item.EstadoActividad === true);
       } else if (value === 'Pendientes') {
         filteredData = filteredData.filter((item) => item.EstadoPago === false && item.EstadoActividad === true);
       }
@@ -49,6 +51,35 @@ function Lista() {
     setSelectedStateFilter('');
     setCalendarVisible(false);
     setData(initialData);
+    const elementoCodigo1 = data.find(item => item.ReservacionCodigo === 29);
+if (elementoCodigo1) {
+  console.log(elementoCodigo1.EstadoPago);
+}
+  };
+
+  const sortElements = (field) => {
+    let sortedData = [...data];
+    if (sortField === field && sortOrder === 'asc') {
+      sortedData.sort((a, b) => {
+        if (typeof a[field] === 'string') {
+          return b[field].localeCompare(a[field]);
+        } else {
+          return b[field] - a[field];
+        }
+      });
+      setSortOrder('desc');
+    } else {
+      sortedData.sort((a, b) => {
+        if (typeof a[field] === 'string') {
+          return a[field].localeCompare(b[field]);
+        } else {
+          return a[field] - b[field];
+        }
+      });
+      setSortOrder('asc');
+    }
+    setSortField(field);
+    setData(sortedData);
   };
 
   const cancelEstado = (ReservacionCodigo) => {
@@ -61,31 +92,29 @@ function Lista() {
     });
     setData(updatedData);
   };
-
   useEffect(() => {
     if(cancelado !== 0){
       const ReservacionCodigo=cancelado;
-    fetch(`/backend/reservationDetails/updateReservationEstadoActividad/${ReservacionCodigo}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            EstadoActividad: false,
-        }),
+    fetch(`/backend/reservationDetails/cancelReservation/${ReservacionCodigo}`)
+    .then((res) => {
+      if (!res.ok) {
+        console.log('Network response was not ok');
+      }
+      return res.json();
     })
-        .then(response => response.json())
-        .then(data => console.log(data))
-        .catch((error) => {
-            console.error('Error:', error);
-        });
-        setCancelado(0);
+    .then((updatedData) => setData(updatedData))
+    .catch((error) => {
+      console.error('Error fetching data:', error);
+    });
+    setCancelado(1);
     }
   }, [cancelado]);
 
   const aprobeEstado = (ReservacionCodigo) => {
     const updatedData = data.map((item) => {
       if (item.ReservacionCodigo === ReservacionCodigo && item.EstadoPago === false) {
-          setAceptado(ReservacionCodigo);
-          return { ...item, EstadoPago: true };
+        setAceptado(ReservacionCodigo);
+        return { ...item, EstadoPago: true };
       }
       return item;
     });
@@ -95,19 +124,18 @@ function Lista() {
   useEffect(() => {
     if(Aceptado !== 0){
       const ReservacionCodigo=Aceptado;
-    fetch(`/backend/reservationDetails/updateReservationEstadoPago/${ReservacionCodigo}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            EstadoPago: true,
-        }),
+    fetch(`/backend/reservationDetails/confirmReservation/${ReservacionCodigo}`)
+    .then((res) => {
+      if (!res.ok) {
+        console.log('Network response was not ok');
+      }
+      return res.json();
     })
-        .then(response => response.json())
-        .then(data => console.log(data))
-        .catch((error) => {
-            console.error('Error:', error);
-        });
-        setAceptado(0);
+    .then((updatedData) => setData(updatedData))
+    .catch((error) => {
+      console.error('Error fetching data:', error);
+    });
+    setAceptado(0);
     }
   }, [Aceptado]);
 
@@ -128,12 +156,13 @@ function Lista() {
     <div className="container">
       <div className="row">
         <div className="col-12">
-          <h1>Reservaciones</h1>
+          <h1 className="font-lexend text-center text-2xl">Reservaciones</h1>
         </div>
       </div>
       <div className="row">
       <div>
       <select
+      className="rounded-xl my-4"
   value={selectedStateFilter}
   onChange={(event) => filterElement('selectedStateFilter', event.target.value)}
 >
@@ -142,8 +171,7 @@ function Lista() {
   <option value="Cancelado">Cancelados</option>
   <option value="Pendientes">Pendientes</option>
 </select>
-</div>
-        <div className="flex flex-row space-x-10">
+</div>   
         <DatePicker
           selected={selectedDate}
           placeholderText='Filtro por fecha'
@@ -152,17 +180,19 @@ function Lista() {
             selectDate(date);
           }}
         />
-      </div>
         {selectedStateFilter && (
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4" onClick={resetTable}> Reiniciar Tabla</button>
+          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-xl my-4" onClick={resetTable}> Reiniciar Tabla</button>
         )}
       </div>
       <ReservationTable
-        data={data}
-        resetTable={resetTable}
-        cancelEstado={cancelEstado}
-        aprobeEstado={aprobeEstado}
-      />
+  data={data}
+  resetTable={resetTable}
+  cancelEstado={cancelEstado}
+  aprobeEstado={aprobeEstado}
+  sortField={sortField}
+  sortOrder={sortOrder}
+  sortElements={sortElements}
+/>
     </div>
   );
 }
