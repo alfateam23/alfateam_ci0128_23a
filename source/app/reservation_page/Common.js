@@ -37,8 +37,7 @@ export const Next_link = ({route_next, route_back,
   useEffect(() => {
     function reservationSave(userData) {
       if (clickFunction && sendReservation === 1) {
-        clickFunction(userData, userData.mail);
-        //navigate(route_next);
+        clickFunction();
       }
     }
     reservationSave(userData);

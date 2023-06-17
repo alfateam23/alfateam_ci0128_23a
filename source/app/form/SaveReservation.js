@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
-import SendMail from "./SendEmail";
+import sendEmail from "./SendEmail";
 
 export const activateModal = (openModal, setOpenModal) => {
   setOpenModal(!openModal);
 };
 
-export const checkEmail = async (modifyModalBody, id) => {
+export const checkEmail = async (modifyModalBody, UserData) => {
   let result = null;
   await fetch('/backend/insertReservation/checkEmail', {
     method: 'POST',
     body: JSON.stringify({
-      id: id
+      userData: UserData
     }),
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
@@ -26,7 +26,32 @@ export const checkEmail = async (modifyModalBody, id) => {
     modifyModalBody(data)
   })
   .catch((error) => {
-    console.error('Error sending email:', error);
+    console.error('Error getting user information:', error);
+  });
+  return result;
+};
+
+export const updateUser = async (storedUserData, UserData) => {
+  let result = null;
+  await fetch('/backend/insertReservation/updateUser', {
+    method: 'PUT',
+    body: JSON.stringify({
+      userData: UserData,
+      storedUserData: storedUserData
+    }),
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+    },
+  }).then((res) => {
+    if (!res.ok) {
+      console.log('Network response was not ok');
+    }
+    return res.json();
+  }).then((data) => {
+    result = data;
+  })
+  .catch((error) => {
+    console.error('Error getting user information:', error);
   });
   return result;
 };
@@ -35,8 +60,9 @@ export const checkEmail = async (modifyModalBody, id) => {
  * Saves a full reservations (meaning that it comes from
  * a new user)
  */
-export const SaveReservationFull = (userData) => {
-  fetch('/backend/insertReservation/', {
+export const SaveReservationFull = async (userData) => {
+  let result = null;
+  await fetch('/backend/insertReservation/', {
     method: 'POST',
     body: JSON.stringify({
       userData
@@ -44,18 +70,18 @@ export const SaveReservationFull = (userData) => {
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
     },
-  }).then((res) => {
+  }).then(async (res) => {
     if (!res.ok) {
       console.log('Network response was not ok');
     }
-    fetch(`/backend/reservationCode/${userData.mail}`)
+    await fetch(`/backend/reservationCode/${userData.id}`)
     .then((res) => {
       if (!res.ok) {
         console.log('Network response was not ok');
       }
       return res.json();
     })
-    .then((data) => SendMail(userData, data[0].Codigo))
+    .then((data) => result = sendEmail(userData, data[0].Codigo))
     .catch((error) => {
       console.error('Error fetching data:', error);
     });
@@ -63,13 +89,15 @@ export const SaveReservationFull = (userData) => {
   .catch((error) => {
     console.error('Error fetching data:', error);
   });
+  return result;
 };
 
 /**
  * Saves a reservation from an user that is already on the database
  */
-export const SaveReservationUser = (userData) => {
-  fetch('/backend/insertReservation/oldUser', {
+export const SaveReservationUser = async (userData) => {
+  let result = null;
+  await fetch('/backend/insertReservation/oldUser', {
     method: 'POST',
     body: JSON.stringify({
       userData
@@ -77,18 +105,18 @@ export const SaveReservationUser = (userData) => {
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
     },
-  }).then((res) => {
+  }).then(async (res) => {
     if (!res.ok) {
       console.log('Network response was not ok');
     }
-    fetch(`/backend/reservationCode/${userData.id}`)
+    await fetch(`/backend/reservationCode/${userData.id}`)
     .then((res) => {
       if (!res.ok) {
         console.log('Network response was not ok');
       }
       return res.json();
     })
-    .then((data) => SendMail(userData, data[0].Codigo))
+    .then((data) => result = sendEmail(userData, data[0].Codigo))
     .catch((error) => {
       console.error('Error fetching data:', error);
     });
@@ -96,4 +124,5 @@ export const SaveReservationUser = (userData) => {
   .catch((error) => {
     console.error('Error fetching data:', error);
   });
+  return result;
 };

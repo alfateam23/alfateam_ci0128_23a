@@ -18,21 +18,15 @@ drop table Usuario
 drop table Autorizacion;
 drop table Administrador;
 
-delete from Factura where CodigoReservacion = 10
-delete from Visitante where CodigoReservacion = 10
-delete from Vehiculo where CodigoReservacion = 10
-delete from Cliente where Email = 'asolmon88@gmail.com'
-delete from Telefono where Email = 'asolmon88@gmail.com'
-delete from usuario where Email = 'asolmon88@gmail.com'
-delete from Reservacion where Codigo = 10
+delete from Factura where CodigoReservacion = 12
+delete from Visitante where CodigoReservacion = 12
+delete from Vehiculo where CodigoReservacion = 12
+delete from Reservacion where Codigo = 12
+delete from Cliente where Cedula = '123456879'
+delete from Telefono where Cedula = '123456879'
+delete from usuario where Cedula = '123456879'
 
 delete from Cliente where Email = 'pablito-clava@gmail.com'
 delete from Telefono where Email = 'pablito-clava@gmail.com'
 delete from Usuario where Email = 'pablito-clava@gmail.com'
 delete from Reservacion where Codigo = 7
-
-SELECT constraint_name, constraint_type
-FROM information_schema.table_constraints
-WHERE table_name = 'Usuario';
-
-select dbo.CheckEmailExists('asolmon88@gmail.com');

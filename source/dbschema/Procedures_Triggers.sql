@@ -33,6 +33,26 @@ BEGIN
   END
 END;
 
+go
+CREATE PROCEDURE UpdateUser
+  @Cedula VARCHAR(60),
+  @Email VARCHAR(60) = NULL,
+  @PrimerNombre VARCHAR(60) = NULL,
+  @SegundoNombre VARCHAR(60) = NULL,
+  @PrimerApellido VARCHAR(60) = NULL,
+  @SegundoApellido VARCHAR(60) = NULL
+AS
+BEGIN
+  UPDATE Usuario
+  SET
+    Email = ISNULL(@Email, Email),
+    PrimerNombre = ISNULL(@PrimerNombre, PrimerNombre),
+    SegundoNombre = ISNULL(@SegundoNombre, SegundoNombre),
+    PrimerApellido = ISNULL(@PrimerApellido, PrimerApellido),
+    SegundoApellido = ISNULL(@SegundoApellido, SegundoApellido)
+  WHERE Cedula = @Cedula;
+END;
+
 /*EXEC InsertUser 
   @Email = 'example@email.com',
   @Cedula = '123456789',

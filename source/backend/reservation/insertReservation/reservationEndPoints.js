@@ -24,47 +24,28 @@ router.post("/", async (req,res)=>{
   //console.log(req.body.UserData)
 })
 
-let prevOldUser = null;
 router.post("/oldUser", async (req,res)=>{
   try {
-    if (prevOldUser !== null) {
-      if (prevOldUser.nameUser !== req.body.userData.nameUser) {
-        prevOldUser = req.body.userData;
-        await insertManager.insertReservationOldUser(req.body.userData);
-        res.json("Inserted");
-      }
-    } else if (prevOldUser === null) {
-      prevOldUser = req.body.userData;
-      await insertManager.insertReservationOldUser(req.body.userData);
-      res.json("Inserted");
-    }
+    await insertManager.insertReservationOldUser(req.body.userData);
+    res.json("Inserted");
   } catch (error) {
     console.log("Error while creating a reservation", error); 
   }
 })
 
-let prevUpdate = null;
-router.post("/updateUser", async (req,res)=>{
+router.put("/updateUser", async (req,res)=>{
   try {
-    if (prevUpdate !== null) {
-      if (prevUpdate.nameUser !== req.body.userData.nameUser) {
-        prevUpdate = req.body.userData;
-        await insertManager.insertReservationOldUser(req.body.userData);
-        res.json("Inserted");
-      }
-    } else if (prevUpdate === null) {
-      prevUpdate = req.body.userData;
-      await insertManager.insertReservationOldUser(req.body.userData);
-      res.json("Inserted");
-    }
+    const result = await insertManager.updateUser(
+      req.body.storedUserData.result, req.body.userData);
+    res.json({result});
   } catch (error) {
-    console.log("Error while creating a reservation", error); 
+    console.log("Error while checking email: ", error); 
   }
 })
 
 router.post("/checkEmail", async (req,res)=>{
   try {
-    const result = await insertManager.checkEmail(req.body.id);
+    const result = await insertManager.checkEmail(req.body.userData);
     res.json({result});
   } catch (error) {
     console.log("Error while checking email: ", error); 
