@@ -8,7 +8,8 @@ import { Party_title,
 import { Start_reservation, Reservation_type } from './select_dates/Select_dates';
 import {FormularioView} from "../form/Form";
 import {Review_info} from "../form/Review_page";
-import { SaveReservation } from "../form/SaveReservation"
+import { checkEmail, activateModal, SaveReservationFull } from '../form/SaveReservation';
+import { MyModal } from './Modal';
 
 /*
 Function to add the form for the traveller to fill
@@ -32,15 +33,32 @@ Function to show the review page
 */
 
 export const Review = ({UserData}) => {
+  const [openModal, setOpenModal] = useState(false);
+  const [modalBody, setModalBody] = useState(null);
+  function modifyModalBody(value) {
+    setModalBody(value);
+  }
+
+  async function modifyModal() {
+    activateModal(openModal, setOpenModal);
+    const result = await checkEmail(modifyModalBody, UserData.id);
+    console.log(result);
+    if (result && result.result.userInfo.EmailExists !== undefined) {
+      SaveReservationFull(UserData);
+    }
+  }
+
   return (
     <div className='flex flex-col space-y-8'>
       <Dates_type_info userData={UserData} />
       <NavBar_PIR selected={"review"}/>
       <br />
       <Review_info UserData={UserData}/>
-      <Next_link route_next='/' clickFunction={SaveReservation}
+      <Next_link route_next='/' clickFunction={modifyModal}
       review={1} userData={UserData}
       route_back='/reservation/info' />
+      <MyModal title={'Terminando Reservacion'} body={modalBody}
+      openModal={openModal} setOpenModal={setOpenModal}/>
     </div>
   );
 };
