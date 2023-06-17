@@ -11,7 +11,7 @@ import { Body } from "@react-email/body";
 import { Heading } from "@react-email/heading";
 import { Row } from "@react-email/row";
 
-export const Template = ({ UserData }) => {
+export const Template = ({ UserData , code}) => {
   const date =
     UserData.area === "Camping"
       ? `${UserData.start_date.toDateString()} to ${UserData.end_date.toDateString()}`
@@ -150,6 +150,7 @@ export const Template = ({ UserData }) => {
 
                 <Text style={{ ...paragraph, marginTop: -5 }}>
                   <b>Código de reservación: </b>
+                  {code}
                 </Text>
 
                 <Heading

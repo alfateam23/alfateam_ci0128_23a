@@ -6,7 +6,7 @@ import { render } from "@react-email/render";
 const sendEmail = async (UserData, code) => {
   const baseUrl = "http://localhost:8000";
 
-  const html = render(<Template UserData= {UserData}/>, {
+  const html = render(<Template UserData= {UserData} code = {code}/>, {
     pretty: true,
   });
 
