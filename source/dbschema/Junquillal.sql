@@ -10,25 +10,25 @@ use AlphaTeam_Testing;
 
 CREATE TABLE Usuario
 (
-  Email VARCHAR(60),
-  Cedula VARCHAR(60) NOT NULL UNIQUE,
+  Cedula VARCHAR(60),
+  Email VARCHAR(60) NOT NULL,
   PrimerNombre VARCHAR(60) NOT NULL,
   SegundoNombre VARCHAR(60),
   PrimerApellido VARCHAR(60) NOT NULL,
   SegundoApellido VARCHAR(60),
   EstadoActividad BIT DEFAULT (1) NOT NULL,
-  CONSTRAINT PK_Usuario PRIMARY KEY(Email)
+  CONSTRAINT PK_Usuario PRIMARY KEY(Cedula)
 );
 
 -- Teléfono de usuario.
 
 CREATE TABLE Telefono
 (
-  Email VARCHAR(60),
+  Cedula VARCHAR(60),
   Numero VARCHAR(60),
-  CONSTRAINT PK_Telefono PRIMARY KEY(Email, Numero),
-  CONSTRAINT FK_Telefono_Usuario FOREIGN KEY(Email)
-  REFERENCES Usuario(Email) ON UPDATE CASCADE
+  CONSTRAINT PK_Telefono PRIMARY KEY(Cedula, Numero),
+  CONSTRAINT FK_Telefono_Usuario FOREIGN KEY(Cedula)
+  REFERENCES Usuario(Cedula) ON UPDATE CASCADE
 );
 
 -- Administrador de la aplicación
@@ -39,11 +39,11 @@ CREATE TABLE Telefono
 
 CREATE TABLE Administrador
 (
-  Email VARCHAR(60),
+  Cedula VARCHAR(60),
   Clave VARCHAR(100) NOT NULL,
-  CONSTRAINT PK_Administrador PRIMARY KEY(Email),
-  CONSTRAINT FK_Administrador_Usuario FOREIGN KEY(Email)
-  REFERENCES Usuario(Email) ON UPDATE CASCADE
+  CONSTRAINT PK_Administrador PRIMARY KEY(Cedula),
+  CONSTRAINT FK_Administrador_Usuario FOREIGN KEY(Cedula)
+  REFERENCES Usuario(Cedula) ON UPDATE CASCADE
 );
 
 -- Rol de administrador
@@ -60,11 +60,11 @@ CREATE TABLE Rol
 
 CREATE TABLE Autorizacion
 (
-  EmailAdmin VARCHAR(60),
+  CedulaAdmin VARCHAR(60),
   NombreRol VARCHAR(60),
-  CONSTRAINT PK_Autorizacion PRIMARY KEY(EmailAdmin, NombreRol),
-  CONSTRAINT FK_Autorizacion_Administrador FOREIGN KEY(EmailAdmin)
-  REFERENCES Administrador(Email) ON UPDATE CASCADE,
+  CONSTRAINT PK_Autorizacion PRIMARY KEY(CedulaAdmin, NombreRol),
+  CONSTRAINT FK_Autorizacion_Administrador FOREIGN KEY(CedulaAdmin)
+  REFERENCES Administrador(Cedula) ON UPDATE CASCADE,
   CONSTRAINT FK_Autorizacion_Rol FOREIGN KEY(NombreRol)
   REFERENCES Rol(Nombre)
 );
@@ -73,10 +73,10 @@ CREATE TABLE Autorizacion
 
 CREATE TABLE Cliente
 (
-  Email VARCHAR(60),
-  CONSTRAINT PK_Cliente PRIMARY KEY(Email),
-  CONSTRAINT FK_Cliente_Usuario FOREIGN KEY(Email)
-  REFERENCES Usuario(Email) ON UPDATE CASCADE
+  Cedula VARCHAR(60),
+  CONSTRAINT PK_Cliente PRIMARY KEY(Cedula),
+  CONSTRAINT FK_Cliente_Usuario FOREIGN KEY(Cedula)
+  REFERENCES Usuario(Cedula) ON UPDATE CASCADE
 );
 
 -- Tipo de área, puede ser picnic o camping
@@ -143,7 +143,7 @@ CREATE TABLE LimiteVisitantes
 CREATE TABLE Reservacion
 (
   Codigo INT,
-  Email VARCHAR(60) NOT NULL,
+  Cedula VARCHAR(60) NOT NULL,
   TipoArea CHAR NOT NULL,
   FechaSolicitud DATETIME NOT NULL,
   FechaInicio DATETIME NOT NULL,
@@ -152,8 +152,8 @@ CREATE TABLE Reservacion
   NombrePais VARCHAR(60),
   NombreProvincia VARCHAR(60),
   CONSTRAINT PK_Reservacion PRIMARY KEY(Codigo),
-  CONSTRAINT FK_Reservacion_Cliente FOREIGN KEY(Email)
-  REFERENCES Cliente(Email) ON UPDATE CASCADE,
+  CONSTRAINT FK_Reservacion_Cliente FOREIGN KEY(Cedula)
+  REFERENCES Cliente(Cedula) ON UPDATE CASCADE,
   CONSTRAINT FK_Reservacion_Area FOREIGN KEY(TipoArea)
   REFERENCES Area(Tipo),
   CONSTRAINT FK_Reservacion_Pais FOREIGN KEY(NombrePais)
