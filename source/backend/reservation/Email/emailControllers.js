@@ -31,6 +31,7 @@ const sendEmail = expressAsyncHandler(async (req, res) => {
       console.log(error);
     } else {
       console.log("Email sent successfully!");
+      res.json("Email sent successfully!");
     }
   });
 });

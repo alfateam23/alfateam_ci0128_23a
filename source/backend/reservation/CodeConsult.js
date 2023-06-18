@@ -2,9 +2,9 @@ const db = require('../DbConfig');
 const express = require('express');
 const router = express.Router();
 
-router.get("/:email", async (req,res)=>{
+router.get("/:id", async (req,res)=>{
   try {
-    const result = await getCode(req.params.email);
+    const result = await getCode(req.params.id);
     res.json(result);
   } catch (error) {
     console.log(`Error while getting reservation code
@@ -12,10 +12,10 @@ router.get("/:email", async (req,res)=>{
   }
 })
 
-async function getCode (email) {
+async function getCode (id) {
   try {
     const result = await db.executeQuery(
-      `EXEC GetReservationCode @Email = '${email}'`
+      `EXEC GetReservationCode @Cedula = '${id}'`
     );
     return result.recordsets[0];
   } catch (error) {

@@ -17,7 +17,7 @@ const sendEmail = async (UserData, code) => {
   };
 
   try {
-    const res = await fetch(`/backend/email/sendEmail`, {
+    let res = await fetch(`/backend/email/sendEmail`, {
       method: "POST",
       body: JSON.stringify(dataSend),
       headers: {
@@ -27,10 +27,12 @@ const sendEmail = async (UserData, code) => {
     });
 
     if (res.status > 199 && res.status < 300) {
-      alert("Send Successfully !");
+      res = "Correo Enviado!";
     }
+    return res;
   } catch (error) {
     console.error("Error sending email:", error);
+    return "Error enviando correo, verifique que lo haya digitado correctamente";
   }
 };
 

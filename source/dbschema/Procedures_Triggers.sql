@@ -33,6 +33,26 @@ BEGIN
   END
 END;
 
+go
+CREATE PROCEDURE UpdateUser
+  @Cedula VARCHAR(60),
+  @Email VARCHAR(60) = NULL,
+  @PrimerNombre VARCHAR(60) = NULL,
+  @SegundoNombre VARCHAR(60) = NULL,
+  @PrimerApellido VARCHAR(60) = NULL,
+  @SegundoApellido VARCHAR(60) = NULL
+AS
+BEGIN
+  UPDATE Usuario
+  SET
+    Email = ISNULL(@Email, Email),
+    PrimerNombre = ISNULL(@PrimerNombre, PrimerNombre),
+    SegundoNombre = ISNULL(@SegundoNombre, SegundoNombre),
+    PrimerApellido = ISNULL(@PrimerApellido, PrimerApellido),
+    SegundoApellido = ISNULL(@SegundoApellido, SegundoApellido)
+  WHERE Cedula = @Cedula;
+END;
+
 /*EXEC InsertUser 
   @Email = 'example@email.com',
   @Cedula = '123456789',
@@ -43,13 +63,13 @@ END;
 -- Siguiente insertar telefono
 go
 CREATE PROCEDURE InsertPhone (
-  @Email VARCHAR(60),
+  @Cedula VARCHAR(60),
   @Numero VARCHAR(60)
 )
 AS
 BEGIN
-  INSERT INTO Telefono (Email, Numero)
-  VALUES (@Email, @Numero)
+  INSERT INTO Telefono (Cedula, Numero)
+  VALUES (@Cedula, @Numero)
 END;
 
 /*EXEC InsertPhone 
@@ -58,12 +78,12 @@ END;
 -- Siguiente insertar el cliente
 go
 CREATE PROCEDURE InsertClient (
-  @Email VARCHAR(60)
+  @Cedula VARCHAR(60)
 )
 AS
 BEGIN
-  INSERT INTO Cliente (Email)
-  VALUES (@Email)
+  INSERT INTO Cliente (Cedula)
+  VALUES (@Cedula)
 END;
  
 /*EXEC InsertClient 
@@ -88,7 +108,7 @@ END;
 -- Insertar reservación
 go
 CREATE PROCEDURE InsertReservation
-  @Email VARCHAR(60),
+  @Cedula VARCHAR(60),
   @TipoArea CHAR,
   @FechaInicio DATETIME,
   @FechaFin DATETIME,
@@ -106,8 +126,8 @@ BEGIN
   IF @Codigo IS NULL
     SET @Codigo = 1;
 
-  INSERT INTO Reservacion (Codigo, Email, TipoArea, FechaSolicitud, FechaInicio, FechaFin, NombrePais, NombreProvincia)
-  VALUES (@Codigo, @Email, @TipoArea, @FechaSolicitud, @FechaInicio, @FechaFin, @NombrePais, @NombreProvincia);
+  INSERT INTO Reservacion (Codigo, Cedula, TipoArea, FechaSolicitud, FechaInicio, FechaFin, NombrePais, NombreProvincia)
+  VALUES (@Codigo, @Cedula, @TipoArea, @FechaSolicitud, @FechaInicio, @FechaFin, @NombrePais, @NombreProvincia);
 
   SET @OutputParameter = @Codigo;
   SELECT @OutputParameter AS OutputCode;
@@ -396,10 +416,41 @@ END;
 
 go
 CREATE PROCEDURE GetReservationCode
-  @Email VARCHAR(60)
+  @Cedula VARCHAR(60)
 AS
 BEGIN
   SELECT Codigo
   FROM Reservacion
-  WHERE Email = @Email
+  WHERE Cedula = @Cedula
 END
+
+go
+CREATE PROCEDURE CheckIDExists
+(
+  @Cedula VARCHAR(60)
+)
+AS
+BEGIN
+  IF EXISTS(SELECT 1 FROM Usuario WHERE @Cedula = Cedula)
+  BEGIN
+    SELECT Email, Cedula, PrimerNombre, SegundoNombre, PrimerApellido, SegundoApellido
+    FROM Usuario
+    WHERE @Cedula = Cedula;
+  END
+  ELSE
+  BEGIN
+    SELECT CAST(0 AS BIT) AS EmailExists;
+  END
+END;
+
+go
+CREATE PROCEDURE GetPhone
+(
+  @Cedula VARCHAR(60)
+)
+AS
+BEGIN
+  SELECT Numero
+  FROM Telefono
+  WHERE @Cedula = Cedula
+END;
