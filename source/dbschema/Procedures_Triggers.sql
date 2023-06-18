@@ -454,3 +454,30 @@ BEGIN
   FROM Telefono
   WHERE @Cedula = Cedula
 END;
+
+/*---- Procedimientos para insertar USUARIOS ----*/
+go
+CREATE PROCEDURE InsertAdmin
+    @Cedula VARCHAR(60),
+    @Email VARCHAR(60),
+    @PrimerNombre VARCHAR(60),
+    @SegundoNombre VARCHAR(60),
+    @PrimerApellido VARCHAR(60),
+    @SegundoApellido VARCHAR(60),
+    @Clave VARCHAR(100),
+    @NombreRol VARCHAR(60)
+AS
+BEGIN
+    -- Insert user into Usuario table
+    INSERT INTO Usuario (Cedula, Email, PrimerNombre, SegundoNombre, PrimerApellido, SegundoApellido)
+    VALUES (@Cedula, @Email, @PrimerNombre, @SegundoNombre, @PrimerApellido, @SegundoApellido);
+
+    -- Insert administrator entry in Administrador table
+    INSERT INTO Administrador (Cedula, Clave)
+    VALUES (@Cedula, @Clave);
+
+    -- Assign role to the user in Autorizacion table
+    INSERT INTO Autorizacion (CedulaAdmin, NombreRol)
+    VALUES (@Cedula, @NombreRol);
+END;
+
