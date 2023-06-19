@@ -17,15 +17,56 @@ router.post('/generateUser', bodyParser.json(), async (req, res) => {
     }
 });
 
+/* Post for changing user */
+router.post('/changeActive/:cedula', bodyParser.json(), async (req, res) => {
+    try {
+        let userCedula = req.params.cedula;
+        let oppositeEstadoActividad;
+        user = await db.executeQuery(
+            `SELECT *
+            FROM Usuario
+            WHERE Cedula = '${userCedula}'; `)
+        if (user.EstadoActividad == '0') {
+            oppositeEstadoActividad = '1';
+        } else {
+            oppositeEstadoActividad = '0';
+        }
+        console.log('OJO')
+        console.log('OJO')
+        console.log('OJO')
+        console.log(user.recordset[0].EstadoActividad)
+        oppositeEstadoActividad = !user.recordset[0].EstadoActividad
+        console.log(oppositeEstadoActividad)
+        console.log(userCedula)
+       await changeEstadoActividad(userCedula, oppositeEstadoActividad);
+       res.status(200).send;
+    } catch (error) {
+        res.status(500).send('Error while trying to change an user EstadoActividad' + error);
+    }
+});
+
+
 /* Get all admin users */
 router.get('/getAdmins', async (req, res) => {
     try {
-        let users = await db.executeQuery('SELECT U.* FROM Usuario U JOIN Administrador A ON U.Cedula = A.Cedula;')
+        let users = await db.executeQuery(`SELECT U.* FROM Usuario U JOIN Administrador A ON U.Cedula = A.Cedula;`)
         res.send(users.recordsets[0]);
     } catch (error) {
         res.status(500).send('Error retrieving visitors');
     }
 });
+
+async function changeEstadoActividad (cedula, EstadoActividad) {
+    try {
+        const result = await db.executeQuery(`
+            UPDATE Usuario
+            SET EstadoActividad = '${EstadoActividad}'
+            WHERE Cedula = '${cedula}'
+        `);
+    } catch (error) {
+        throw error;
+    }
+}
 
 /* Query for creating an admin user */
 async function createUser(Cedula, Email, PrimerNombre, SegundoNombre, PrimerApellido, SegundoApellido, Clave, NombreRol) {
@@ -43,3 +84,5 @@ async function createUser(Cedula, Email, PrimerNombre, SegundoNombre, PrimerApel
         throw error;
     }
 }
+
+module.exports = { router }
