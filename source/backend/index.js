@@ -13,6 +13,7 @@ const tarifas = require('./dashboard/Tarifas');
 const emailManager = require("./reservation/Email/emailRoutes");
 const bodyParser = require('body-parser');
 const reports = require('./dashboard/ReportsReq')
+const users = require('./users/users')
 
 dotenv.config();
 
@@ -34,6 +35,7 @@ app.use("/backend/reservationCost", reservationCost.router);
 app.use("/backend/insertReservation", reservationManager.router);
 app.use("/backend/reservationCode", reservationCode.router);
 app.use('/tarifas', tarifas.router);
+app.use('/backend/users', users.router);
 //Signup and login
 app.use("/backend/email", emailManager);
 app.use("/backend/reports", reports.router);
