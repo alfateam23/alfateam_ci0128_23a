@@ -1,3 +1,15 @@
+const formatHeading = (heading) => {
+  let map = {
+    'TipoProcedencia' : 'Procedencia',
+    'TipoVisita' : 'Visita',
+    'Estatus' : 'Estatus',
+    'TotalVisitors' : 'Cantidad Visitantes',
+    'TotalSubtotal' : 'Ganancia Total'
+  }
+
+  return map[heading];
+}
+
 export function Table({theadData, tbodyData}) {
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -6,7 +18,7 @@ export function Table({theadData, tbodyData}) {
               <tr className="bg-[#FF8C32]">
                 {theadData.map(heading => {
                         return <th key={heading}
-                        scope="col" className="px-6 py-3">{heading}</th>
+                        scope="col" className="px-6 py-3">{formatHeading(heading )}</th>
                         })}
               </tr>
           </thead>
