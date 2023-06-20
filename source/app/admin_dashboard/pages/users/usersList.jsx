@@ -71,6 +71,9 @@ const UsersList = () => {
                                     <th scope="col" className="px-6 py-3">
                                         <span className="sr-only">{TABLE_HEAD[4]}</span>
                                     </th>
+                                    <th scope="col" className="px-6 py-3">
+                                        <span className="sr-only">{TABLE_HEAD[4]}</span>
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -96,11 +99,9 @@ const UsersList = () => {
                                             </button>
                                         </td>
                                         <td className="px-6 py-4 text-right">
-                                            <button
-                                                onClick={() => handleUserState(user.Cedula)}
-                                                className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
-                                                Edit
-                                            </button>
+                                            <a 
+                                            href={`users/editar/${user.PrimerNombre}/${user.PrimerApellido}/${user.Cedula}`} // aca mando los parametros en mi casa cedula
+                                            className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
                                         </td>
                                     </tr >
                                 ))}
