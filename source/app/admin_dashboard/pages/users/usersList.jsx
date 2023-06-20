@@ -95,6 +95,13 @@ const UsersList = () => {
                                                 Cambiar Estado
                                             </button>
                                         </td>
+                                        <td className="px-6 py-4 text-right">
+                                            <button
+                                                onClick={() => handleUserState(user.Cedula)}
+                                                className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                                                Edit
+                                            </button>
+                                        </td>
                                     </tr >
                                 ))}
                             </tbody>
