@@ -274,3 +274,13 @@ INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, CategoriaPago, 
 VALUES ('Extranjero', 'Picnic', 'Adulto 65 años o más', 'Exonerado', 0, 'USD');
 
 
+/*
+Insertar todos los tipos de roles posibles.
+*/
+-- Insert "master" role -> has access to all features
+INSERT INTO Rol (Nombre)
+VALUES ('master');
+
+-- Insert "regular" role -> -> has limited access
+INSERT INTO Rol (Nombre)
+VALUES ('regular');
