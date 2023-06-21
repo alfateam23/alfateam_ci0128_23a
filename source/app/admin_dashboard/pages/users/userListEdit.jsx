@@ -19,8 +19,27 @@ const TarifasEditar = () => {
   const handleUser = () => {
     fetch(`/backend/users/editar/${Cedula}`)
       .then((res) => res.json())
-      .then((data) => setData(data));
+      .then((data) => {
+        setData(data);
+        setDaultValues(
+          data[0].PrimerNombre || "",
+          data[0].PrimerApellido || "",
+          data[0].SegundoApellido || "",
+          data[0].Email || ""
+        ); // Establecer valor por defecto
+      });
     //console.log(data);
+  };
+
+  const setDaultValues = (Nombre, PrimerApellido, SegundoApellido, Email) => {
+    /*console.log("Nombre: " + Nombre);
+    console.log("PrimerApellido: " + PrimerApellido);
+    console.log("SegundoApellido: " + SegundoApellido);
+    console.log("Email: " + Email);*/
+    setPrimerNombreEdit(Nombre);
+    setPrimerApellidoEdit(PrimerApellido);
+    setSegundoApellidoEdit(SegundoApellido);
+    setEmailEdit(Email);
   };
 
   // Fetch del pos en una funcion, on click correr
@@ -102,7 +121,6 @@ const TarifasEditar = () => {
                   name="Nombre" //con el id para que el server lo identifique
                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder={user.PrimerNombre}
-                  required
                   onChange={(e) => setPrimerNombreEdit(e.target.value)}
                   type="text"
                 />
@@ -120,7 +138,6 @@ const TarifasEditar = () => {
                   name="PrimerApellido" //con el id para que el server lo identifique
                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder={user.PrimerApellido}
-                  required
                   onChange={(e) => setPrimerApellidoEdit(e.target.value)}
                   type="text"
                 />
@@ -138,7 +155,6 @@ const TarifasEditar = () => {
                   name="SegundoApellido" //con el id para que el server lo identifique
                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder={user.SegundoApellido}
-                  required
                   onChange={(e) => setSegundoApellidoEdit(e.target.value)}
                   type="text"
                 />
@@ -156,7 +172,6 @@ const TarifasEditar = () => {
                   name="Email" //con el id para que el server lo identifique
                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder={user.Email}
-                  required
                   onChange={(e) => setEmailEdit(e.target.value)}
                   type="text"
                 />
