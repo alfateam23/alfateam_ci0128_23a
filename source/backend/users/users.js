@@ -85,4 +85,30 @@ async function createUser(Cedula, Email, PrimerNombre, SegundoNombre, PrimerApel
     }
 }
 
+/* Post for editing a specific User */
+router.post('/user/editar', bodyParser.json(), async (req, res) => {
+    try {
+        let { PrimerNombre, PrimerApellido, Cedula} = req.body
+       await setUsuario(PrimerNombre, PrimerApellido, Cedula);
+       res.status(200).send;
+    } catch (error) {
+        res.status(500).send('Error saving data from Users' + error);
+    }
+});
+
+
+/* Query for updating a specific User */
+async function setUsuario(PrimerNombre, PrimerApellido, Cedula) {
+    try {
+        const result = await db.executeQuery(`
+            EXEC UpdateUser
+             @PrimerNombre = '${PrimerNombre}', @PrimerApellido = '${PrimerApellido}', @Cedula = '${Cedula}'
+        `);
+        return result.recordsets[0];
+    } catch (error) {
+        throw error;
+    }
+}
+
+
 module.exports = { router }
