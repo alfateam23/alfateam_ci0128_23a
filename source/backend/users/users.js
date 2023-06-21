@@ -85,8 +85,37 @@ async function createUser(Cedula, Email, PrimerNombre, SegundoNombre, PrimerApel
     }
 }
 
+/* Retrieve a specific tarifa */
+router.get('/editar/:PrimerNombre/:PrimerApellido/:Cedula', async (req, res) => {
+    try {
+        // console.log(req.params.TipoProcedencia);
+        // console.log(req.params.TipoVisita);
+         console.log(req.params.Cedula);
+        const result = await getTarifa(req.params.Cedula);
+        res.send(result);
+    } catch (error) {
+        res.status(500).send('Error retrieving from tarifa');
+    }
+});
+
+/* Query for getting a specific tarifa */
+async function getTarifa(Cedula) {
+    try {
+        const result = await db.executeQuery(`
+        SELECT *
+        FROM Usuario
+        WHERE Cedula = '${Cedula}'   
+      `);
+        return result.recordsets[0];
+    } catch (error) {
+        throw error;
+    }
+}
+
+
+
 /* Post for editing a specific User */
-router.post('/user/editar', bodyParser.json(), async (req, res) => {
+router.post('/users/editar', bodyParser.json(), async (req, res) => {
     try {
         let { PrimerNombre, PrimerApellido, Cedula} = req.body
        await setUsuario(PrimerNombre, PrimerApellido, Cedula);
