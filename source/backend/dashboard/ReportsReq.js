@@ -25,6 +25,8 @@ router.get('/:type/:startdate/:enddate', async (req, res) => {
 
 async function selectVisitsInDateRange(startdate, enddate) {
   try {
+    const formattedStartDate = new Date(startdate).toISOString().split('T')[0];
+    const formattedEndDate = new Date(enddate).toISOString().split('T')[0];
     const query = `
           SELECT
           TV.TipoProcedencia,
@@ -38,7 +40,7 @@ async function selectVisitsInDateRange(startdate, enddate) {
             SELECT V.TipoProcedencia, V.TipoVisita, V.Estatus, V.CategoriaPago, V.CantidadVisitantes
             FROM Visitante V
             INNER JOIN Reservacion R ON R.Codigo = V.CodigoReservacion
-            WHERE R.FechaInicio BETWEEN ${startdate} AND ${enddate}
+            WHERE R.FechaInicio BETWEEN '${formattedStartDate}' AND '${formattedEndDate}'
           ) AS V ON V.TipoProcedencia = TV.TipoProcedencia
             AND V.TipoVisita = TV.TipoVisita
             AND V.Estatus = TV.Estatus
@@ -58,6 +60,8 @@ async function selectVisitsInDateRange(startdate, enddate) {
 
 async function selectProfitsInDateRange(startdate, enddate) {
   try {
+    const formattedStartDate = new Date(startdate).toISOString().split('T')[0];
+    const formattedEndDate = new Date(enddate).toISOString().split('T')[0];
     const query = `
         SELECT
           TV.TipoProcedencia,
@@ -71,7 +75,7 @@ async function selectProfitsInDateRange(startdate, enddate) {
             SELECT V.TipoProcedencia, V.TipoVisita, V.Estatus, V.CategoriaPago, V.Subtotal
             FROM Visitante V
             INNER JOIN Reservacion R ON R.Codigo = V.CodigoReservacion
-            WHERE R.FechaInicio BETWEEN @date1 AND @date2
+            WHERE R.FechaInicio BETWEEN '${formattedStartDate}' AND '${formattedEndDate}'
           ) AS V ON V.TipoProcedencia = TV.TipoProcedencia
             AND V.TipoVisita = TV.TipoVisita
             AND V.Estatus = TV.Estatus

@@ -37,8 +37,7 @@ export const Next_link = ({route_next, route_back,
   useEffect(() => {
     function reservationSave(userData) {
       if (clickFunction && sendReservation === 1) {
-        clickFunction(userData);
-        navigate(route_next);
+        clickFunction();
       }
     }
     reservationSave(userData);
@@ -86,7 +85,7 @@ export const Next_link = ({route_next, route_back,
           setSendReservation(()=>1)}} className="font-sans
         bg-YellowButtonP
         px-8 py-2 shadow-lg hover:bg-YellowButton">
-          Siguiente
+          Confirmar
         </Link>
       </div>
     );
