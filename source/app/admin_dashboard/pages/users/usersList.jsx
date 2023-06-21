@@ -100,7 +100,7 @@ const UsersList = () => {
                                         </td>
                                         <td className="px-6 py-4 text-right">
                                             <a 
-                                            href={`users/editar/${user.PrimerNombre}/${user.PrimerApellido}/${user.Cedula}`} // aca mando los parametros en mi casa cedula
+                                            href={`users/editar/${user.Cedula}`} // aca mando los parametros en mi casa cedula
                                             className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
                                         </td>
                                     </tr >
