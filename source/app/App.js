@@ -23,7 +23,7 @@ import Users from './admin_dashboard/pages/users/usersList';
 /* Authentication */
 import Login from './authentication/login';
 import withAuth from './authentication/withAuth';
-const AuthenticatedHome = withAuth(Home);
+const AuthenticatedRootLayout = withAuth(RootLayout);
 
 
 
@@ -50,9 +50,10 @@ const AdminApp = () => {
    const userData = new UserData();
    return (
       <div>
-         <RootLayout>
-            <Routes>
-               <Route path="/" element={<Home />} />
+         <Routes>
+            <Route path="/" element={<Login />} />
+            <Route element={<AuthenticatedRootLayout />}>
+               <Route path="/home" element={<Home />} />
                <Route path="/lista" element={<Lista />} />
                <Route path="/settings" element={<Settings />} />
                <Route path="/reservation" element={<Select_dates_page UserData={userData} />} />
@@ -64,9 +65,8 @@ const AdminApp = () => {
                <Route path='/tarifas/editar/:TipoProcedencia/:TipoVisita/:Estatus/:CategoriaPago' element={<TarifasEditar />} />
                <Route path='/reports' element={<Reports />} />
                <Route path="/login" element={<Login />} />
-            </Routes>
-         </RootLayout>
-
+            </Route>
+         </Routes>
       </div>
    );
 }
@@ -87,26 +87,14 @@ const CustomerApp = () => {
    );
 }
 
-const auth = () => {
-   return (
-      <div>
-         <Routes>
-            <Route path="/" element={<Login />} />
-            <Route path="/home" element={<AuthenticatedHome />} />
-         </Routes>
-      </div>
-   );
-}
-
 /**
  * This is the component in charge of handling the routing for the whole
  * web application.
  */
 const App = () => {
-   const runAdminApp = true; // Change for either admin or normal mode
+   const runAdminApp = true; // Change for either admin or guest mode
    if (runAdminApp) {
-      return (auth());
-      //return (AdminApp());
+      return (AdminApp());
    } else {
       return (CustomerApp());
    }

@@ -1,6 +1,8 @@
+import { Navigate, useNavigate } from 'react-router-dom';
 import React from "react";
 
 const Settings = () => {
+    const navigate = useNavigate();
     const [username, setUsername] = React.useState(''); // use state
     const [password, setPassword] = React.useState(''); // use state
 
@@ -28,7 +30,7 @@ const Settings = () => {
             .then(res => {
                 if (res.status === 200) {
                     alert('Homepage soon!');
-                    //history.push('/');
+                    navigate("/home");
                 } else {
                     const error = new Error(res.error);
                     throw error;
