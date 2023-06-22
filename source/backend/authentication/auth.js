@@ -35,10 +35,10 @@ router.post('/login', bodyParser.json(), async (req, res) => {
                         error: 'Incorrect username or password'
                     });
             } else {
-                // Issue token
+                // Generates token
                 const payload = { username };
                 const token = jwt.sign(payload, secret, {
-                    expiresIn: '1h'
+                    expiresIn: '2m' // expiration of cookie
                 });
                 res.cookie('token', token, { httpOnly: true })
                     .sendStatus(200);

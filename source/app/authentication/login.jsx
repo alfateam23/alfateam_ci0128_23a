@@ -2,7 +2,7 @@ import React from "react";
 
 const Settings = () => {
     const [username, setUsername] = React.useState(''); // use state
-    const [password, setPassword] = React.useState('pepe'); // use state
+    const [password, setPassword] = React.useState(''); // use state
 
     const handleUsernameChange = event => {
         //console.log('Valor del username:' + username);
@@ -23,11 +23,12 @@ const Settings = () => {
         fetch(`/backend/auth/login`, {
             method: 'POST',
             body: JSON.stringify(userData),
-            headers: {'Content-Type': 'application/json'}
+            headers: { 'Content-Type': 'application/json' }
         })
             .then(res => {
                 if (res.status === 200) {
-                    this.props.history.push('/');
+                    alert('Homepage soon!');
+                    //history.push('/');
                 } else {
                     const error = new Error(res.error);
                     throw error;
