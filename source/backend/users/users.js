@@ -87,47 +87,18 @@ async function changeEstadoActividad(cedula, EstadoActividad) {
   }
 }
 
-/* Query for creating an admin user */
-async function createUser(
-  Cedula,
-  Email,
-  PrimerNombre,
-  SegundoNombre,
-  PrimerApellido,
-  SegundoApellido,
-  Clave,
-  NombreRol
-) {
-  try {
-    const result = await db.executeQuery(`
-            UPDATE TipoVisitante
-            SET Monto = '${Monto}', Moneda = '${Moneda}'
-            WHERE TipoProcedencia = '${TipoProcedencia}'
-                AND TipoVisita = '${TipoVisita}'
-                AND Estatus = '${Estatus}'
-                AND CategoriaPago = '${CategoriaPago}'
-        `);
-    return result.recordsets[0];
-  } catch (error) {
-    throw error;
-  }
-}
-
 /* Retrieve a specific tarifa */
-router.get(
-  "/editar/:Cedula",
-  async (req, res) => {
-    try {
-      // console.log(req.params.TipoProcedencia);
-      // console.log(req.params.TipoVisita);
-      console.log(req.params.Cedula);
-      const result = await getTarifa(req.params.Cedula);
-      res.send(result);
-    } catch (error) {
-      res.status(500).send("Error retrieving from tarifa");
-    }
+router.get("/editar/:Cedula", async (req, res) => {
+  try {
+    // console.log(req.params.TipoProcedencia);
+    // console.log(req.params.TipoVisita);
+    console.log(req.params.Cedula);
+    const result = await getTarifa(req.params.Cedula);
+    res.send(result);
+  } catch (error) {
+    res.status(500).send("Error retrieving from tarifa");
   }
-);
+});
 
 /* Query for getting a specific tarifa */
 async function getTarifa(Cedula) {
@@ -146,13 +117,8 @@ async function getTarifa(Cedula) {
 /* Post for editing a specific User */
 router.post("/editar", bodyParser.json(), async (req, res) => {
   try {
-    let {
-      PrimerNombre,
-      PrimerApellido,
-      SegundoApellido,
-      Email,
-      Cedula,
-    } = req.body;
+    let { PrimerNombre, PrimerApellido, SegundoApellido, Email, Cedula } =
+      req.body;
     await setUsuario(
       PrimerNombre,
       PrimerApellido,
@@ -168,11 +134,11 @@ router.post("/editar", bodyParser.json(), async (req, res) => {
 
 /* Query for updating a specific User */
 async function setUsuario(
-    PrimerNombre,
-    PrimerApellido,
-    SegundoApellido,
-    Email,
-    Cedula
+  PrimerNombre,
+  PrimerApellido,
+  SegundoApellido,
+  Email,
+  Cedula
 ) {
   try {
     const result = await db.executeQuery(`
@@ -189,4 +155,64 @@ async function setUsuario(
   }
 }
 
+// Post for creating an admin user
+router.post("/create", bodyParser.json(), async (req, res) => {
+  try {
+    let {
+      PrimerNombre,
+      SegundoNombre,
+      PrimerApellido,
+      SegundoApellido,
+      Email,
+      Cedula,
+      Clave,
+      NombreRol,
+    } = req.body;
+    console.log("Desde el backend PrimerNombre: "+ PrimerNombre);
+    await createUser(
+      PrimerNombre,
+      SegundoNombre,
+      PrimerApellido,
+      SegundoApellido,
+      Email,
+      Cedula,
+      Clave,
+      NombreRol
+    );
+    res.status(200).send("Usuario actualizado correctamente");
+  } catch (error) {
+    console.log(error)
+    res.status(500).send("Error saving data from Users" + error);
+  }
+});
+
+// Query for creating an admin user
+async function createUser(
+  PrimerNombre,
+  SegundoNombre,
+  PrimerApellido,
+  SegundoApellido,
+  Email,
+  Cedula,
+  Clave,
+  NombreRol
+) {
+  try {
+    console.log("Desde el create User: "+ PrimerNombre);
+    const result = await db.executeQuery(`
+            EXEC InsertAdmin
+             @PrimerNombre = '${PrimerNombre}',
+             @SegundoNombre = '${SegundoNombre}',
+             @PrimerApellido = '${PrimerApellido}', 
+             @SegundoApellido = '${SegundoApellido}', 
+             @Email = '${Email}', 
+             @Cedula = '${Cedula}',
+             @Clave = '${Clave}', 
+             @NombreRol = '${NombreRol}' 
+        `);
+    return result.recordsets[0];
+  } catch (error) {
+    throw error;
+  }
+}
 module.exports = { router };
