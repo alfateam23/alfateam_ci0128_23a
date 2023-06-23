@@ -20,6 +20,7 @@ import TarifasEditar from './admin_dashboard/pages/TarifasEditar';
 import Reports from './admin_dashboard/pages/Reports';
 import Users from './admin_dashboard/pages/users/usersList';
 import Horarios from './admin_dashboard/pages/Horarios';
+import Cupos from './admin_dashboard/pages/Cupos';
 
 
 /**
@@ -59,6 +60,7 @@ const AdminApp = () => {
                <Route path='/tarifas/editar/:TipoProcedencia/:TipoVisita/:Estatus/:CategoriaPago' element={<TarifasEditar />} />
                <Route path='/reports' element={<Reports />} />
                <Route path='/Horarios' element={<Horarios />} />
+               <Route path='/Cupos' element={<Cupos />} />
 
             </Routes>
          </RootLayout>
