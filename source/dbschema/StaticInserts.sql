@@ -277,10 +277,14 @@ VALUES ('Extranjero', 'Picnic', 'Adulto 65 años o más', 'Exonerado', 0, 'USD')
 /*
 Insertar todos los tipos de roles posibles.
 */
--- Insert "master" role -> has access to all features
+-- Rol corresponde al administrador que puede
+-- modificar todos los parámetros de la aplicación
 INSERT INTO Rol (Nombre)
-VALUES ('master');
-
--- Insert "regular" role -> -> has limited access
+VALUES ('Super Administrador');
+-- Administrador que puede visualizar parámetros
+-- de la aplicación y ver reportes
 INSERT INTO Rol (Nombre)
-VALUES ('regular');
+VALUES ('Administrador');
+-- Administrador que sólo puede ver reportes
+INSERT INTO Rol (Nombre)
+VALUES ('Visualizador');
