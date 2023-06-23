@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { IconName } from "react-icons/";
 import { CiCalendar } from "react-icons/ci";
 import { BrowserRouter as Router, Routes, Route, Link,
@@ -14,9 +14,11 @@ import { BrowserRouter as Router, Routes, Route, Link,
  * if the dates are empty then it sends an alert, if not it continues
  */
 export const Next_link = ({route_next, route_back,
-  userData, check, info}) => {
+  userData, check, info, review, clickFunction}) => { 
   
   const navigate = useNavigate();
+
+  const [sendReservation, setSendReservation] = useState(0);
   
   function checkDates (event) {
     event.preventDefault();
@@ -31,7 +33,18 @@ export const Next_link = ({route_next, route_back,
     }
   }
 
-  if (check != null) {
+  
+  useEffect(() => {
+    function reservationSave(userData) {
+      if (clickFunction && sendReservation === 1) {
+        clickFunction();
+      }
+    }
+    reservationSave(userData);
+    setSendReservation(0)
+  },[sendReservation]);
+
+  if (check === 1) {
     return (
       <div className="bottom-5 absolute flex flex-row
       space-x-32 lg:space-x-96 justify-center items-center">
@@ -47,7 +60,7 @@ export const Next_link = ({route_next, route_back,
         </Link>
       </div>
     );
-  } else if (info != null) {
+  } else if (info === 1) {
     return (
       <div className='flex flex-col'>
         <div className="">
@@ -57,6 +70,23 @@ export const Next_link = ({route_next, route_back,
             Atrás
           </Link>
         </div>
+      </div>
+    );
+  } else if (review === 1) {
+    return (
+      <div className="mt-5 flex flex-row
+      space-x-32 lg:space-x-96 justify-center items-center">
+        <Link to={route_back}
+        className="flex font-sans bg-YellowButtonP
+        px-8 py-2 shadow-lg hover:bg-YellowButton">
+          Atrás
+        </Link>
+        <Link onClick={()=>{
+          setSendReservation(()=>1)}} className="font-sans
+        bg-YellowButtonP
+        px-8 py-2 shadow-lg hover:bg-YellowButton">
+          Confirmar
+        </Link>
       </div>
     );
   }

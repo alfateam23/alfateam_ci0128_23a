@@ -14,6 +14,7 @@ export class UserData {
     this.plates = [];
     this.originCountry = '';
     this.originProvince = '';
+    this.totalPrice = '';
 
     this.visitors = [
         { countAdultKids06Nac: 0 },
@@ -26,8 +27,7 @@ export class UserData {
         { countAdultExt: 0 },
         { countElderExt: 0 },
     ];
-    this.area = '';
-    
+    this.area = '';    
   }
 
 }

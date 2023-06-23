@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import { useNavigate } from 'react-router-dom';
 import { My_Calendar } from "./Calendar";
 import { Next_link, NavBar_PIR, Dates_type_info } from './Common';
 import { From_until } from './select_dates/From_until'
@@ -8,6 +9,9 @@ import { Party_title,
 import { Start_reservation, Reservation_type } from './select_dates/Select_dates';
 import {FormularioView} from "../form/Form";
 import {Review_info} from "../form/Review_page";
+import { checkEmail, activateModal, SaveReservationFull,
+SaveReservationUser, updateUser } from '../form/SaveReservation';
+import { MyModal } from './Modal';
 
 /*
 Function to add the form for the traveller to fill
@@ -31,14 +35,65 @@ Function to show the review page
 */
 
 export const Review = ({UserData}) => {
+  const [openModal, setOpenModal] = useState(false);
+  const [modalBody, setModalBody] = useState(null);
+  const [storedUserData, setStoredUserData] = useState(null);
+  const navigate = useNavigate();
+  function modifyModalBody(value) {
+    setModalBody(value);
+  }
+
+  async function modifyModal() {
+    activateModal(openModal, setOpenModal);
+    const result = await checkEmail(modifyModalBody, UserData);
+    setStoredUserData(result);
+    if (result && result.result.userInfo.EmailExists === false) {
+      const result = await SaveReservationFull(UserData);
+      setModalBody(result);
+      if (result === "Correo Enviado!") {
+        setTimeout(() => {
+          navigate("/")
+        }, 4000);
+      }
+    } else if (result &&
+      result.result.userInfo.EmailExists === true) {
+        reservationOldUser(0);
+    }
+  }
+  // update = 0 doesn't want to update the details
+  // update = 1 wants to update details
+  async function reservationOldUser(update) {
+    if (update && storedUserData) {
+      updateUser(storedUserData, UserData);
+    }
+    const result = await SaveReservationUser(UserData);
+    setModalBody(result);
+    if (result === "Correo Enviado!") {
+      setTimeout(() => {
+        navigate("/")
+      }, 4000);
+    }
+  }
+
   return (
     <div className='flex flex-col space-y-8'>
       <Dates_type_info userData={UserData} />
       <NavBar_PIR selected={"review"}/>
       <br />
       <Review_info UserData={UserData}/>
-      <Next_link route_next='/'
+      <Next_link route_next='/' clickFunction={modifyModal}
+      review={1} userData={UserData}
       route_back='/reservation/info' />
+      <MyModal title={'Terminando Reservacion'} body={modalBody}
+      openModal={openModal} setOpenModal={setOpenModal}
+      acceptButtonFunc={reservationOldUser}
+      declineButtonFunc={reservationOldUser}
+      showFooter={(modalBody &&
+        modalBody.result !== undefined &&
+        modalBody.result.userInfo !== undefined &&
+        modalBody.result.userInfo.EmailExists !== undefined)
+        || modalBody === "Correo Enviado!"
+      ? 0 : 1}/>
     </div>
   );
 };

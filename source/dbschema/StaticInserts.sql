@@ -233,7 +233,7 @@ INSERT INTO ProvinciaCRC(Nombre) VALUES ('Limón');
 INSERT INTO ProvinciaCRC(Nombre) VALUES ('Alajuela');
 INSERT INTO ProvinciaCRC(Nombre) VALUES ('Heredia');
 INSERT INTO ProvinciaCRC(Nombre) VALUES ('San José');
-INSERT INTO ProvinciaCRC(Nombre) VALUES ('Puntareans');
+INSERT INTO ProvinciaCRC(Nombre) VALUES ('Puntarenas');
 INSERT INTO ProvinciaCRC(Nombre) VALUES ('');
 
 /*
@@ -274,3 +274,13 @@ INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, CategoriaPago, 
 VALUES ('Extranjero', 'Picnic', 'Adulto 65 años o más', 'Exonerado', 0, 'USD');
 
 
+/*
+Insertar todos los tipos de roles posibles.
+*/
+-- Insert "master" role -> has access to all features
+INSERT INTO Rol (Nombre)
+VALUES ('master');
+
+-- Insert "regular" role -> -> has limited access
+INSERT INTO Rol (Nombre)
+VALUES ('regular');

@@ -2,7 +2,7 @@ import React from "react";
 
 const Settings = () => {
     return (
-        <h1>Settings</h1>
+        <h1 data-test-id="title-settings">Settings</h1>
     );
   };
 
