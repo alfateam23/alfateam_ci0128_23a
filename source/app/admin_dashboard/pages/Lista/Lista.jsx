@@ -182,9 +182,11 @@ if (elementoCodigo1) {
             selectDate(date);
           }}
         />
-        {selectedStateFilter && (
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-xl my-4" onClick={resetTable}> Reiniciar Tabla</button>
-        )}
+        <div className="row col-12">
+          {selectedStateFilter && (
+          <button className="bg-[#FF8C32] hover:bg-[#FF8C32] text-black font-bold py-2 px-4 rounded my-4" onClick={resetTable}> Reiniciar Tabla</button>
+        )}</div>
+
       </div>
       <ReservationTable
   data={data}

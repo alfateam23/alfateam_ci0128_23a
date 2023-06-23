@@ -1,5 +1,4 @@
 import React from 'react';
-import Lista from './Lista';
 
 const TablaReservaciones = ({
   data,
@@ -11,36 +10,36 @@ const TablaReservaciones = ({
 }) => {
   return (
     <table className="w-full text-sm text-center ">
-<thead className="  text-white uppercase">
-        <tr>
-          <th scope="col" className="bg-blue-500 text-lg px-6 py-3 w-[250px]">
+<thead className="text-xl text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <tr className="bg-[#FF8C32]">
+          <th scope="col" className="px-6 py-3 w-[250px]">
             Código
             <button onClick={() => sortElements('ReservacionCodigo')}>
                 {sortField === 'ReservacionCodigo' && sortOrder === 'asc' ? '▲' : '▼'}
             </button>
           </th>
-          <th scope="col" className="bg-blue-500 text-xl px-6 py-3 w-[200px] ">
+          <th scope="col" className="px-6 py-3 w-[200px] ">
             Tipo 
             <button onClick={() => sortElements('TipoArea')}>
               {sortField === 'TipoArea' && sortOrder === 'asc' ? '▲' : '▼'}
             </button>
           </th>
-          <th scope="col" className="bg-blue-500  text-lg px-6 py-3 w-[300px]">
+          <th scope="col" className="px-6 py-3 w-[300px]">
             Visitantes{' '}
             <button onClick={() => sortElements('TotalCantidadVisitantes')}>
                 {sortField === 'TotalCantidadVisitantes' && sortOrder === 'asc' ? '▲' : '▼'}
               </button>
           </th>
-          <th scope="col" className="bg-blue-500 text-lg px-6 py-4 w-[900px]">
+          <th scope="col" className="px-6 py-3 w-[900px]">
             Fecha entrada
           </th>
-          <th scope="col" className="bg-blue-500 text-lg px-6 py-3 w-[250px]">
+          <th scope="col" className="px-6 py-3 w-[250px]">
             Estado
             <button onClick={() => sortElements('EstadoPago')}>
                 {sortField === 'EstadoPago' && sortOrder === 'asc' ? '▲' : '▼'}
                 </button>
           </th>
-          <th scope="col" className="bg-blue-500 px-6 py-3"></th>
+          <th scope="col" className="px-6 py-3"></th>
         </tr>
       </thead>
       <tbody className="text-gray-500 dark:text-gray-400">
@@ -72,7 +71,7 @@ const TablaReservaciones = ({
             <div className="flex flex-row">
   {item.EstadoActividad && (
     <button
-      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4"
+      className="bg-[#FF8C32] hover:bg-[#FF8C32] text-black font-bold py-2 px-4 rounded m-4"
       onClick={() => cancelEstado(item.ReservacionCodigo)}
     >
       Cancelar
@@ -80,7 +79,7 @@ const TablaReservaciones = ({
   )}
   {!item.EstadoPago && item.EstadoActividad && (
     <button
-      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4"
+      className="bg-[#FF8C32] hover:bg-[#FF8C32] text-black font-bold py-2 px-4 rounded m-4"
       onClick={() => aprobeEstado(item.ReservacionCodigo)}
     >
       Aceptar
