@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
 import {
    Availability_page,
@@ -19,6 +19,12 @@ import Tarifas from './admin_dashboard/pages/Tarifas';
 import TarifasEditar from './admin_dashboard/pages/TarifasEditar';
 import Reports from './admin_dashboard/pages/Reports';
 import Users from './admin_dashboard/pages/users/usersList';
+
+/* Authentication */
+import Login from './authentication/login';
+import withAuth from './authentication/withAuth';
+const AuthenticatedRootLayout = withAuth(RootLayout);
+
 
 
 /**
@@ -44,21 +50,23 @@ const AdminApp = () => {
    const userData = new UserData();
    return (
       <div>
-         <RootLayout>
-            <Routes>
-               <Route path="/" element={<Home />} />
+         <Routes>
+            <Route path="/" element={<Login />} />
+            <Route element={<AuthenticatedRootLayout />}>
+               <Route path="/home" element={<Home />} />
                <Route path="/lista" element={<Lista />} />
                <Route path="/settings" element={<Settings />} />
                <Route path="/reservation" element={<Select_dates_page UserData={userData} />} />
-               <Route path="/reservation/availability" element={<Availability_page UserData={userData} />} />  
+               <Route path="/reservation/availability" element={<Availability_page UserData={userData} />} />
                <Route path="/reservation/info" element={<T_information UserData={userData} />} />
                <Route path="/reservation/review" element={<Review UserData={userData} />} />
                <Route path='/tarifas' element={<Tarifas />} />
                <Route path='users' element={<Users />} />
                <Route path='/tarifas/editar/:TipoProcedencia/:TipoVisita/:Estatus/:CategoriaPago' element={<TarifasEditar />} />
                <Route path='/reports' element={<Reports />} />
-            </Routes>
-         </RootLayout>
+               <Route path="/login" element={<Login />} />
+            </Route>
+         </Routes>
       </div>
    );
 }
@@ -70,7 +78,7 @@ const CustomerApp = () => {
          <Routes>
             <Route path="/" element={<Navbar />} />
             <Route path="/reservation" element={<Select_dates_page UserData={userData} />} />
-            <Route path="/reservation/availability" element={<Availability_page UserData={userData} />} />  
+            <Route path="/reservation/availability" element={<Availability_page UserData={userData} />} />
             <Route path="/reservation/info" element={<T_information UserData={userData} />} />
             <Route path="/reservation/review" element={<Review UserData={userData} />} />
             <Route path="/visitors" element={<Visitors />} />
@@ -84,7 +92,7 @@ const CustomerApp = () => {
  * web application.
  */
 const App = () => {
-   const runAdminApp = true; // Change for either admin or normal mode
+   const runAdminApp = true; // Change for either admin or guest mode
    if (runAdminApp) {
       return (AdminApp());
    } else {
