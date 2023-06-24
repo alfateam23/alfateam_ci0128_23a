@@ -11,9 +11,6 @@ const Reports = () => {
     const [consult, setConsult] = useState(0);
 
     useEffect(() => {
-      console.log(startDate)
-      console.log(endDate)
-      console.log(reportType)
       if (reportType && startDate && endDate) {
         fetch(`/backend/reports/${reportType}/${startDate}/${endDate}`)
           .then((res) => {
@@ -61,7 +58,7 @@ const Reports = () => {
           </div>
         </div>
         <div>
-          {!data ? "Loading..." : 
+          {!data ? "Loading..." :
           <Table theadData={getHeadings(data)} tbodyData={data}/>}
         </div>
       </div>
