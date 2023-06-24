@@ -168,7 +168,7 @@ router.post("/create", bodyParser.json(), async (req, res) => {
       Clave,
       NombreRol,
     } = req.body;
-    console.log("Desde el backend PrimerNombre: "+ PrimerNombre);
+    //console.log("Desde el backend PrimerNombre: "+ PrimerNombre);
     await createUser(
       PrimerNombre,
       SegundoNombre,
@@ -198,7 +198,7 @@ async function createUser(
   NombreRol
 ) {
   try {
-    console.log("Desde el create User: "+ PrimerNombre);
+    //console.log("Desde el create User: "+ PrimerNombre);
     const result = await db.executeQuery(`
             EXEC InsertAdmin
              @PrimerNombre = '${PrimerNombre}',
