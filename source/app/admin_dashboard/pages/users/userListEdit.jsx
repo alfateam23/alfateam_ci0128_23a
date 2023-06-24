@@ -4,9 +4,8 @@ import "flowbite";
 
 const TarifasEditar = () => {
   const { Cedula } = useParams(); // aca entran los parametros
-  const [data, setData] = React.useState(null); // use state
+  const [data, setData] = React.useState(null); // use state para datos
   const navigate = useNavigate(); // for redirecting
-
   /* For editing a userForm */
   const [PrimerNombreEdit, setPrimerNombreEdit] = React.useState(null); // edit variable for PrimerNombreEdit
   const [PrimerApellidoEdit, setPrimerApellidoEdit] = React.useState(null); // edit variable for PrimerApellidoEdit
@@ -28,14 +27,9 @@ const TarifasEditar = () => {
           data[0].Email || ""
         ); // Establecer valor por defecto
       });
-    //console.log(data);
   };
-
+  // metodo para establecer valores por defecto
   const setDaultValues = (Nombre, PrimerApellido, SegundoApellido, Email) => {
-    /*console.log("Nombre: " + Nombre);
-    console.log("PrimerApellido: " + PrimerApellido);
-    console.log("SegundoApellido: " + SegundoApellido);
-    console.log("Email: " + Email);*/
     setPrimerNombreEdit(Nombre);
     setPrimerApellidoEdit(PrimerApellido);
     setSegundoApellidoEdit(SegundoApellido);
@@ -53,7 +47,6 @@ const TarifasEditar = () => {
       Email: EmailEdit,
       Cedula: Cedula,
     };
-    // console.log("SegundoApellido " + SegundoApellidoEdit);
     fetch("/backend/users/editar", {
       method: "POST",
       body: JSON.stringify(datosUsuario),
@@ -65,7 +58,6 @@ const TarifasEditar = () => {
       .then(function (body) {
         console.log(body);
       });
-    //console.log("Llegue hasta aqui")
     navigate("/users");
   }
 

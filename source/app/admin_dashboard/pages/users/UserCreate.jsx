@@ -5,8 +5,8 @@ import { ComponentDropDown } from "./Input";
 
 const CreateUser = () => {
   const navigate = useNavigate(); // for redirecting
-  const [confirmarClave, setConfirmarClave] = React.useState("");
-  const [contraseñasCoinciden, setContraseñasCoinciden] = React.useState(true);
+  const [confirmarClave, setConfirmarClave] = React.useState(""); // confirmacion de clave
+  const [contraseñasCoinciden, setContraseñasCoinciden] = React.useState(true); // variable comprobar que claves sean iguales
   const [submitClicked, setSubmitClicked] = React.useState(false);
   const [TemporalRol, setTemporalRol] = React.useState(null); // edit variable for Rol
   /* For editing a userForm */
@@ -21,13 +21,14 @@ const CreateUser = () => {
     { Nombre: "Super Administrador" },
     { Nombre: "Administrador" },
     { Nombre: "Visualizador" },
-  ];
+  ]; // arreglo para guardar diferentes roles de usuarios
 
   const handleClaveChange = (e) => {
     setClave(e.target.value);
   };
 
   const handleConfirmarClaveChange = (e) => {
+    // metodos para confirmar claves
     setConfirmarClave(e.target.value);
     setContraseñasCoinciden(e.target.value === clave);
   };
