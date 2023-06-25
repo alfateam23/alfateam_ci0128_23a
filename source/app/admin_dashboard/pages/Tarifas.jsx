@@ -81,7 +81,7 @@ const Tarifas = () => {
                                         </td>
                                         <td className="px-6 py-4 text-right">
                                             <a 
-                                            href={`tarifas/editar/${tarifa.TipoProcedencia}/${tarifa.TipoVisita}/${tarifa.Estatus}/${tarifa.CategoriaPago}`}
+                                            href={`tarifas/editar/${tarifa.TipoProcedencia}/${tarifa.TipoVisita}/${tarifa.Estatus}/${tarifa.CategoriaPago}`} // aca mando los parametros en mi casa cedula
                                             className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
                                         </td>
                                     </tr >

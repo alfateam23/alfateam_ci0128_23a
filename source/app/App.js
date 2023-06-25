@@ -19,6 +19,8 @@ import Tarifas from './admin_dashboard/pages/Tarifas';
 import TarifasEditar from './admin_dashboard/pages/TarifasEditar';
 import Reports from './admin_dashboard/pages/Reports';
 import Users from './admin_dashboard/pages/users/usersList';
+import UsersEdit from './admin_dashboard/pages/users/userListEdit';
+import UserCreate from './admin_dashboard/pages/users/UserCreate';
 
 /* Authentication */
 import Login from './authentication/login';
@@ -63,6 +65,8 @@ const AdminApp = () => {
                <Route path='/tarifas' element={<Tarifas />} />
                <Route path='users' element={<Users />} />
                <Route path='/tarifas/editar/:TipoProcedencia/:TipoVisita/:Estatus/:CategoriaPago' element={<TarifasEditar />} />
+               <Route path='/users/editar/:Cedula' element={<UsersEdit/>} />
+               <Route path='/users/create' element={<UserCreate/>} />
                <Route path='/reports' element={<Reports />} />
                <Route path="/login" element={<Login />} />
             </Route>
