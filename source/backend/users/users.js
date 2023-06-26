@@ -47,13 +47,7 @@ router.post("/changeActive/:cedula", bodyParser.json(), async (req, res) => {
     } else {
       oppositeEstadoActividad = "0";
     }
-    console.log("OJO");
-    console.log("OJO");
-    console.log("OJO");
-    console.log(user.recordset[0].EstadoActividad);
     oppositeEstadoActividad = !user.recordset[0].EstadoActividad;
-    console.log(oppositeEstadoActividad);
-    console.log(userCedula);
     await changeEstadoActividad(userCedula, oppositeEstadoActividad);
     res.status(200).send;
   } catch (error) {
@@ -71,7 +65,7 @@ router.get("/getAdmins", async (req, res) => {
     );
     res.send(users.recordsets[0]);
   } catch (error) {
-    res.status(500).send("Error retrieving visitors");
+    res.status(500).send("Error retrieving administrators");
   }
 });
 
@@ -92,7 +86,6 @@ router.get("/editar/:Cedula", async (req, res) => {
   try {
     // console.log(req.params.TipoProcedencia);
     // console.log(req.params.TipoVisita);
-    console.log(req.params.Cedula);
     const result = await getTarifa(req.params.Cedula);
     res.send(result);
   } catch (error) {
