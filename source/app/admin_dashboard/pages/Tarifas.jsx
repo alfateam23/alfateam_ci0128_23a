@@ -26,16 +26,16 @@ const Tarifas = () => {
 
     return (
         <div>
-            <h1 className="font-sans text-4xl rounded-none py-4 m-3"> Tarifas </h1>
+            <h1 className="font-sans text-4xl rounded-none py-4 m-3" data-test-id="title-tarifas"> Tarifas </h1>
             {/* Waits for data to be charged */}
             {/* Esta tabla es un componente de flowbite, por eso algunos tags están definidos con esos atributos */}
             {data ? (
                 <div className="table-container">
                     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-                        <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400 px-6">
+                        <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400 px-6" data-test-id="table-tarifas">
                             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
-                                    <th scope="col" className="px-6 py-3">
+                                    <th scope="col" className="px-6 py-3" data-test-id="column-Procedencia">
                                         {TABLE_HEAD[0]}
                                     </th>
                                     <th scope="col" className="px-6 py-3">
@@ -81,7 +81,7 @@ const Tarifas = () => {
                                         </td>
                                         <td className="px-6 py-4 text-right">
                                             <a 
-                                            href={`tarifas/editar/${tarifa.TipoProcedencia}/${tarifa.TipoVisita}/${tarifa.Estatus}/${tarifa.CategoriaPago}`}
+                                            href={`tarifas/editar/${tarifa.TipoProcedencia}/${tarifa.TipoVisita}/${tarifa.Estatus}/${tarifa.CategoriaPago}`} // aca mando los parametros en mi casa cedula
                                             className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
                                         </td>
                                     </tr >
