@@ -1,4 +1,5 @@
 import { React, useEffect, useState } from "react";
+import ReactDOMServer from 'react-dom/server'
 import { Table, getHeadings } from './ReportsUtility/Table';
 import { ExportToExcel } from "./ReportsUtility/Excel";
 import DatePicker from "react-datepicker";
@@ -49,7 +50,7 @@ const Reports = () => {
               <option value="profits">Financiero</option>
             </select>
           </div>
-          <div className="flex flex-row space-x-10 -translate-y-2">
+          <div className="flex flex-row space-x-10 -translate-y-2 z-[2000]">
             <DatePicker selected={startDate} className="rounded-xl
             shadow-[1px_7px_15px_-4px_rgba(0,0,0,0.75)]"
             onChange={(date) => setStartDate(date)} />
@@ -58,7 +59,7 @@ const Reports = () => {
             onChange={(date) => setEndDate(date)} />
           </div>
           <div>
-            <ExportToExcel />
+            <ExportToExcel startDate={startDate} endDate={endDate}/>
           </div>
         </div>
         <div>

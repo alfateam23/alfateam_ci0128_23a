@@ -30,16 +30,3 @@ delete from Cliente where Email = 'pablito-clava@gmail.com'
 delete from Telefono where Email = 'pablito-clava@gmail.com'
 delete from Usuario where Email = 'pablito-clava@gmail.com'
 delete from Reservacion where Codigo = 7
-
-DECLARE @StartDate DATE = '2023-06-01';
-DECLARE @FinishDate DATE = '2023-06-30';
-
-SELECT FechaInicio AS FECHA,
-TipoProcedencia AS TipoDeVisitante,
-Procedencia = CASE WHEN NombreProvincia = '' THEN NombrePais ELSE NombreProvincia END,
-TipoDeVisita = CASE WHEN TipoArea = 'C' THEN 'Camping' ELSE 'Picnic' END,
-Estatus AS TipoDeTiquete,
-CantidadVisitantes AS CantidadDeVisitantes,
-Codigo AS CodReservacion
-FROM Reservacion JOIN Visitante ON CodigoReservacion = Codigo
-WHERE FechaInicio >= @StartDate AND FechaInicio <= @FinishDate
