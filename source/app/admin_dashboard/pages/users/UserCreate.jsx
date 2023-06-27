@@ -15,8 +15,10 @@ const CreateUser = () => {
   const [SegundoApellidoEdit, setSegundoApellidoEdit] = React.useState(null); // edit variable for SegundoApellidoEdit
   const [EmailEdit, setEmailEdit] = React.useState(null); // edit variable for EmailEdit
   const [CedulaEdit, setCedulaEdit] = React.useState(null); // edit variable for CedulaEdit
-  const [clave, setClave] = React.useState(""); // edit variable for EmailEdit
+  const [clave, setClave] = React.useState(""); // edit variable for password
   const [NombreRolEdit, setNombreRolEdit] = React.useState(null); // edit variable for Rol
+  // const bcrypt = require("bcrypt");
+  const bcryptjs = require("bcryptjs");
   const Usuarios = [
     { Nombre: "Super Administrador" },
     { Nombre: "Administrador" },
@@ -33,6 +35,12 @@ const CreateUser = () => {
     setContraseñasCoinciden(e.target.value === clave);
   };
 
+  const hashPassword =  (password) => {
+    const salt = 8;
+    let passwordHash =  bcryptjs.hashSync(password, salt);
+    return passwordHash;
+  };
+
   // Fetch del pos en una funcion, on click correr
   function handleForm(event) {
     event.preventDefault();
@@ -42,6 +50,8 @@ const CreateUser = () => {
     }
 
     if (submitClicked && NombreRolEdit) {
+      const passwordHash = hashPassword(clave);
+      console.log("Prueba hash: " + passwordHash);
       let datosUsuario = {
         PrimerNombre: PrimerNombreEdit,
         SegundoNombre: "",
@@ -49,7 +59,7 @@ const CreateUser = () => {
         SegundoApellido: SegundoApellidoEdit,
         Email: EmailEdit,
         Cedula: CedulaEdit,
-        Clave: clave,
+        Clave: passwordHash,
         NombreRol: NombreRolEdit,
       };
       fetch("/backend/users/create", {
