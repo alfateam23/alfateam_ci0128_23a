@@ -10,6 +10,12 @@ import { UserData } from './UserData';
 import { Visitors } from './visitors/Visitors';
 import Lista from './admin_dashboard/pages/Lista/Lista';
 import { useLocation } from 'react-router-dom';
+import {
+   LandingPage,
+   AboutPage,
+   ActivitiesPage,
+   ContactPage
+} from './landing_page/LandingPage'
 
 /* import for Centro de Control */
 import RootLayout from './admin_dashboard/layout/RootLayout';
@@ -26,27 +32,6 @@ import UserCreate from './admin_dashboard/pages/users/UserCreate';
 import Login from './authentication/login';
 import withAuth from './authentication/withAuth';
 const AuthenticatedRootLayout = withAuth(RootLayout);
-
-
-
-/**
- * Temp navbar of project
- */
-const Navbar = () => {
-   return (
-      <div className="background-color: rgb(254 243 199)" >
-         <h1 className="flex justify-center items-center  text-4xl p-4"> navegation bar </h1>
-         <ul className="hidden md:flex">
-            <li className="p-4">
-               <a className="transition ease-in-out hover:text-[#ffaf00] hover:duration-700 cursor-pointer" href="/Dashboard">Dashboard</a>
-            </li>
-            <li className="p-4">
-               <a className="transition ease-in-out hover:text-[#ffaf00] hover:duration-700 cursor-pointer" href="/reservation">Reserva Ahora</a>
-            </li>
-         </ul>
-      </div>
-   );
-}
 
 const AdminApp = () => {
    const userData = new UserData();
@@ -80,7 +65,10 @@ const CustomerApp = () => {
    return (
       <div>
          <Routes>
-            <Route path="/" element={<Navbar />} />
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/activities" element={<ActivitiesPage />} />
+            <Route path="/contact" element={<ContactPage />} />
             <Route path="/reservation" element={<Select_dates_page UserData={userData} />} />
             <Route path="/reservation/availability" element={<Availability_page UserData={userData} />} />
             <Route path="/reservation/info" element={<T_information UserData={userData} />} />
@@ -96,7 +84,7 @@ const CustomerApp = () => {
  * web application.
  */
 const App = () => {
-   const runAdminApp = true; // Change for either admin or guest mode
+   const runAdminApp = false; // Change for either admin or guest mode
    if (runAdminApp) {
       return (AdminApp());
    } else {
