@@ -16,7 +16,7 @@
 }*/
 
 const DbConfig = {
-    server: '172.16.202.209',
+    server: '172.16.202.212',
     authentication: {
         type: 'default',
         options: {
@@ -40,7 +40,7 @@ async function executeQuery(query) {
         return result;
     } catch (err) {
         throw err;
-    } 
+    }
     //quitar finally para correr en windows
 }
 
