@@ -273,10 +273,8 @@ VALUES ('Extranjero', 'Picnic', 'Adulto', 'No exonerado', 13.56, 'USD');
 INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, CategoriaPago, Monto, Moneda)
 VALUES ('Extranjero', 'Picnic', 'Adulto 65 años o más', 'Exonerado', 0, 'USD');
 
-
-
 -- Insert roles
 INSERT INTO Rol (Nombre) VALUES
-('Super Administrador'),
 ('Administrador'),
-('Visualizador')
+('Operador'),
+('Visualizador');
