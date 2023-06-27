@@ -1,5 +1,7 @@
+
 import React, { useEffect, useState } from 'react';
 import { Input, Button } from 'antd';
+import { error } from 'selenium-webdriver';
 
 function Cupos() {
   const [cupoPicnicTotal, setCupoPicnicTotal] = useState('');
@@ -11,28 +13,42 @@ function Cupos() {
   const [nuevoCupoCampingTotal, setNuevoCupoCampingTotal] = useState('');
   const [nuevoCupoCampingLinea, setNuevoCupoCampingLinea] = useState('');
 
-/*
+
   useEffect(() => {
-    Promise.all([
-      fetch("/backend/reservationDetails/getCuposPicnicTotal"),
-      fetch("/backend/reservationDetails/getCuposPicnicLinea"),
-      fetch("/backend/reservationDetails/getCuposCampingTotal"),
-      fetch("/backend/reservationDetails/getCuposCampingLinea")
-    ])
-      .then((responses) => {
-        return Promise.all(responses.map((res) => res.json()));
+    fetch("/backend/quota/P")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
       })
-      .then(([cupoPicnicTotal, cupoPicnicLinea, cupoCampingTotal, cupoCampingLinea]) => {
-        setCupoPicnicTotal(cupoPicnicTotal);
-        setCupoPicnicLinea(cupoPicnicLinea);
-        setCupoCampingTotal(cupoCampingTotal);
-        setCupoCampingLinea(cupoCampingLinea);
+      .then((data) => {
+        setCupoPicnicTotal(data.CupoTotal);
+        setCupoPicnicLinea(data.CupoOnline);
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
       });
   }, []);
-*/
+
+  useEffect(() => {
+    fetch("/backend/quota/C")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setCupoCampingTotal(data.CupoTotal);
+        setCupoCampingLinea(data.CupoOnline);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+  }, []);
+
+
   const CupoPicnicTotalChange = (event) => {
     const value = event.target.value.replace(/[^0-9]/g, '');
     setNuevoCupoPicnicTotal(value);
@@ -54,6 +70,8 @@ function Cupos() {
   };
 
   //Actualizar los cupos de Camping
+
+
   const ActualizarCupoCamping = () => {
     if (nuevoCupoCampingTotal !== '') {
       if (nuevoCupoCampingLinea !== '' && parseInt(nuevoCupoCampingTotal) <= parseInt(nuevoCupoCampingLinea)) {
@@ -73,27 +91,40 @@ function Cupos() {
       setCupoCampingLinea(nuevoCupoCampingLinea);
     }
   };
-  /*
+
   useEffect(() => {
-    if (nuevoCupoCampingTotal !== '' && nuevoCupoCampingLinea !== '' && parseInt(nuevoCupoCampingTotal) <= parseInt(nuevoCupoCampingLinea)) {
-      window.alert('No pueden haber más cupos en línea que cupos totales.');
-      return;
+    if(nuevoCupoCampingLinea!==''){
+      setNuevoCupoCampingLinea(cupoCampingLinea)
     }
-  
-    if (nuevoCupoCampingTotal !== '') {
-      setCupoCampingTotal(nuevoCupoCampingTotal);
+    if(nuevoCupoCampingTotal!==''){
+      setNuevoCupoCampingTotal(cupoCampingTotal)
     }
-  
-    if (nuevoCupoCampingLinea !== '' && cupoCampingTotal !== '') {
-      if (parseInt(nuevoCupoCampingLinea) > parseInt(cupoCampingTotal)) {
-        window.alert('No pueden haber más cupos en línea que cupos totales.');
-        return;
+    let result = null;
+    fetch('/backend/quota/update', {
+      method: 'PUT',
+      body: JSON.stringify({
+        area: 'C',
+        total: nuevoCupoCampingTotal,
+        online: nuevoCupoCampingLinea
+      }),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    }).then((res) => {
+      if (!res.ok) {
+        console.log('Network response was not ok');
       }
-  
-      setCupoCampingLinea(nuevoCupoCampingLinea);
-    }
-  }, [nuevoCupoCampingTotal, nuevoCupoCampingLinea, cupoCampingTotal]);
-*/
+      return res.json();
+    }).then((data) => {
+      result = data;
+    })
+    .catch((error) => {
+      console.error('Error getting user information:', error);
+    });
+
+  }, [nuevoCupoCampingTotal,nuevoCupoCampingLinea]);
+
+
   //Actualizar Cupos de pincnic
   const ActualizarCupoPicnic = () => {
     if (nuevoCupoPicnicTotal !== '') {
@@ -101,7 +132,6 @@ function Cupos() {
         window.alert('No pueden haber más cupos en linea que cupos totales".');
         return;
       }
-
       setCupoPicnicTotal(nuevoCupoPicnicTotal);
     }
 
@@ -110,33 +140,41 @@ function Cupos() {
         window.alert('No pueden haber más cupos en linea que cupos totales".');
         return;
       }
-
       setCupoPicnicLinea(nuevoCupoPicnicLinea);
     }
   };
   
-/*
   useEffect(() => {
-    if (nuevoCupoPicnicTotal !== '' && nuevoCupoPicnicLinea !== '' && parseInt(nuevoCupoPicnicTotal) <= parseInt(nuevoCupoPicnicLinea)) {
-      window.alert('No pueden haber más cupos en línea que cupos totales.');
-      return;
+    if(nuevoCupoPicnicLinea!==''){
+      setNuevoCupoPicnicLinea(cupoPicnicLinea)
     }
-  
-    if (nuevoCupoPicnicTotal !== '') {
-      setCupoPicnicTotal(nuevoCupoPicnicTotal);
+    if(nuevoCupoPicnicTotal!==''){
+      setNuevoCupoPicnicTotal(cupoPicnicTotal)
     }
-  
-    if (nuevoCupoPicnicLinea !== '' && cupoPicnicTotal !== '') {
-      if (parseInt(nuevoCupoPicnicLinea) > parseInt(cupoPicnicTotal)) {
-        window.alert('No pueden haber más cupos en línea que cupos totales.');
-        return;
+    let result = null;
+    fetch('/backend/quota/update', {
+      method: 'PUT',
+      body: JSON.stringify({
+        area: 'P',
+        total: nuevoCupoPicnicTotal,
+        online: nuevoCupoPicnicLinea
+      }),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    }).then((res) => {
+      if (!res.ok) {
+        console.log('Network response was not ok');
       }
-  
-      setCupoPicnicLinea(nuevoCupoPicnicLinea);
-    }
-  }, [nuevoCupoPicnicTotal, nuevoCupoPicnicLinea, cupoPicnicTotal]);
+      return res.json();
+    }).then((data) => {
+      result = data;
+    })
+    .catch((error) => {
+      console.error('Error getting user information:', error);
+    });
 
-*/
+  }, [nuevoCupoPicnicTotal,nuevoCupoPicnicLinea]);
 
 
   return (
