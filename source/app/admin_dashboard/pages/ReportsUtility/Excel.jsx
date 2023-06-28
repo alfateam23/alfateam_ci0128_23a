@@ -20,7 +20,7 @@ export const ExportToExcel = ({startDate, endDate}) => {
     rounded-lg border border-black
     hover:bg-gray-100 hover:text-blue-700
     shadow-[1px_7px_15px_-4px_rgba(0,0,0,0.75)]">
-        Alternative
+        Descargar reportes
     </button>
   );
 };
