@@ -240,7 +240,7 @@ INSERT INTO ProvinciaCRC(Nombre) VALUES ('');
 Insertar todos los tipos de visitante posibles.
 */
 
-INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, CategoriaPago, Monto, Moneda) 
+INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, CategoriaPago, Monto, Moneda)
 VALUES ('Nacional', 'Camping', 'Niño 0 a 6 años', 'Exonerado', 0, 'CRC');
 INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, CategoriaPago, Monto, Moneda)
 VALUES ('Nacional', 'Camping', 'Niño 6 a 12 años', 'No exonerado', 3390, 'CRC');
@@ -274,17 +274,9 @@ INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, CategoriaPago, 
 VALUES ('Extranjero', 'Picnic', 'Adulto 65 años o más', 'Exonerado', 0, 'USD');
 
 
-/*
-Insertar todos los tipos de roles posibles.
-*/
--- Rol corresponde al administrador que puede
--- modificar todos los parámetros de la aplicación
-INSERT INTO Rol (Nombre)
-VALUES ('Super Administrador');
--- Administrador que puede visualizar parámetros
--- de la aplicación y ver reportes
-INSERT INTO Rol (Nombre)
-VALUES ('Administrador');
--- Administrador que sólo puede ver reportes
-INSERT INTO Rol (Nombre)
-VALUES ('Visualizador');
+
+-- Insert roles
+INSERT INTO Rol (Nombre) VALUES
+('Super Administrador'),
+('Administrador'),
+('Visualizador')
