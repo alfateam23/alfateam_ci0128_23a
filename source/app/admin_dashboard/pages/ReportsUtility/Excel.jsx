@@ -30,7 +30,9 @@ const exportToCSV = async (title, startDate, endDate) => {
   const visitation = await functions.createVisitationSheet(title, startDate, endDate);
   title.pop();
   const picnicFinancial = await functions.createPicnicFinancialSheet(title, startDate, endDate);
+  const campingFinancial = await functions.createCampingFinancialSheet(title, startDate, endDate);
   XLSX.utils.book_append_sheet(wb,visitation[0], visitation[1]);
   XLSX.utils.book_append_sheet(wb,picnicFinancial[0], picnicFinancial[1]);
+  XLSX.utils.book_append_sheet(wb,campingFinancial[0], campingFinancial[1]);
   XLSX.writeFile(wb, "Reportes_Junquillal.xlsx");
 };

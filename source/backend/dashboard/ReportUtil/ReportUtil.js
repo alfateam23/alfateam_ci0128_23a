@@ -1,4 +1,4 @@
-const db = require('../DbConfig');
+const db = require('../../DbConfig');
 
 async function selectVisitsInDateRange(startdate, enddate) {
   try {
