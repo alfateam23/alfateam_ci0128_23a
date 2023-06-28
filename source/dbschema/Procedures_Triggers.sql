@@ -53,6 +53,35 @@ BEGIN
   WHERE Cedula = @Cedula;
 END;
 
+
+/*---- Procedimientos para actualiza Usuario con actualizar rol y contrasena ----*/
+go
+CREATE PROCEDURE UpdateUserRolPassword
+  @Cedula VARCHAR(60),
+  @Email VARCHAR(60) = NULL,
+  @PrimerNombre VARCHAR(60) = NULL,
+  @SegundoNombre VARCHAR(60) = NULL,
+  @PrimerApellido VARCHAR(60) = NULL,
+  @SegundoApellido VARCHAR(60) = NULL,
+  @Clave VARCHAR(100),
+  @NombreRol VARCHAR(60)
+AS
+BEGIN
+  UPDATE Usuario
+  SET
+    Email = ISNULL(@Email, Email),
+    PrimerNombre = ISNULL(@PrimerNombre, PrimerNombre),
+    SegundoNombre = ISNULL(@SegundoNombre, SegundoNombre),
+    PrimerApellido = ISNULL(@PrimerApellido, PrimerApellido),
+    SegundoApellido = ISNULL(@SegundoApellido, SegundoApellido)
+  WHERE Cedula = @Cedula;
+    -- Update Autorizacion 
+    UPDATE Autorizacion
+    SET
+      NombreRol = ISNULL(@NombreRol, NombreRol)
+    WHERE CedulaAdmin = @Cedula;
+END;
+
 /*EXEC InsertUser 
   @Email = 'example@email.com',
   @Cedula = '123456789',

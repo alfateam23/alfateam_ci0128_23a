@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import "flowbite";
 import { ComponentDropDown } from "./Input";
@@ -17,11 +17,10 @@ const CreateUser = () => {
   const [CedulaEdit, setCedulaEdit] = React.useState(null); // edit variable for CedulaEdit
   const [clave, setClave] = React.useState(""); // edit variable for password
   const [NombreRolEdit, setNombreRolEdit] = React.useState(null); // edit variable for Rol
-  // const bcrypt = require("bcrypt");
   const bcryptjs = require("bcryptjs");
   const Usuarios = [
-    { Nombre: "Super Administrador" },
     { Nombre: "Administrador" },
+    { Nombre: "Operador" },
     { Nombre: "Visualizador" },
   ]; // arreglo para guardar diferentes roles de usuarios
 
@@ -34,10 +33,10 @@ const CreateUser = () => {
     setConfirmarClave(e.target.value);
     setContraseñasCoinciden(e.target.value === clave);
   };
-
-  const hashPassword =  (password) => {
+  // metodo para encriptar la contraseña
+  const hashPassword = (password) => {
     const salt = 8;
-    let passwordHash =  bcryptjs.hashSync(password, salt);
+    let passwordHash = bcryptjs.hashSync(password, salt);
     return passwordHash;
   };
 
@@ -51,7 +50,6 @@ const CreateUser = () => {
 
     if (submitClicked && NombreRolEdit) {
       const passwordHash = hashPassword(clave);
-      console.log("Prueba hash: " + passwordHash);
       let datosUsuario = {
         PrimerNombre: PrimerNombreEdit,
         SegundoNombre: "",
@@ -231,8 +229,8 @@ const CreateUser = () => {
         </div>
 
         <div>
-          <br />
-          <br />
+          <br/>
+          <br/>
           <button
             type="submit"
             value="CrearUsuario"
