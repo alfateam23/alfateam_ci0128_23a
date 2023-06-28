@@ -53,7 +53,7 @@ BEGIN
   WHERE Cedula = @Cedula;
 END;
 
-/*EXEC InsertUser
+/*EXEC InsertUser 
   @Email = 'example@email.com',
   @Cedula = '123456789',
   @PrimerNombre = 'John',
