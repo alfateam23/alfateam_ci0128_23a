@@ -31,6 +31,27 @@ function Horarios() {
       });
   }, []);
 
+  useEffect(() => {
+    fetch("/backend/schedule/C")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        const fechaHora = moment(data.HoraApertura);
+        const horaAperturaFormateada = fechaHora.format('HH:mm');
+        setHoraEntradaC(horaAperturaFormateada);
+        const fechaHora2 = moment(data.HoraCierre);
+        const horaAperturaFormateada2 = fechaHora2.format('HH:mm');
+        setHoraSalidaC(horaAperturaFormateada2);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+  }, []);
+
   const horaEntradaPChange = (time) => {
     setHoraEntradaP(time.format('HH:mm'));
   };
@@ -53,13 +74,9 @@ function Horarios() {
 
   return (
     <div>
-      <h1 className="font-sans text-4xl rounded-none py-4 m-3">Configuracion de horarios</h1>
-      <div>
-        <p className="font-sans rounded-none py-4 m-3">Hora de entrada: {horaEntradaP ? horaEntradaP : ''}</p>
-        <p className="font-sans rounded-none py-4 m-3">Hora de salida: {horaSalidaP ? horaSalidaP : ''}</p>
-        <p className="font-sans rounded-none py-4 m-3">Hora de entrada para camping: {horaEntradaC ? horaEntradaC : ''}</p>
-        <p className="font-sans rounded-none py-4 m-3">Hora de salida para camping: {horaSalidaC ? horaSalidaC : ''}</p>
-      </div>
+      <h2 className="font-sans text-4xl rounded-none py-4 m-3">Configurar horas para Picnic</h2>
+      <p className="font-sans rounded-none py-4 m-3">Hora de entrada para picnic: {horaEntradaP ? horaEntradaP : ''}</p>
+      <p className="font-sans rounded-none py-4 m-3">Hora de salida para picnic: {horaSalidaP ? horaSalidaP : ''}</p>
       <label className="font-sans rounded-none py-4 m-3 flex flex-col">Nueva hora de entrada:</label>
       <LocalizationProvider dateAdapter={AdapterMoment}>
         <MobileTimePicker
@@ -73,6 +90,24 @@ function Horarios() {
         <MobileTimePicker
           value={horaSalidaP ? convertirAMoment(horaSalidaP) : null}
           onChange={horaSalidaPChange}
+        />
+      </LocalizationProvider>
+      <h2 className="font-sans text-4xl rounded-none py-4 m-3">Configurar horas para Camping</h2>
+        <p className="font-sans rounded-none py-4 m-3">Hora de entrada para camping: {horaEntradaC ? horaEntradaC : ''}</p>
+        <p className="font-sans rounded-none py-4 m-3">Hora de salida para camping: {horaSalidaC ? horaSalidaC : ''}</p>
+      <label className="font-sans rounded-none py-4 m-3 flex flex-col">Nueva hora de entrada:</label>
+      <LocalizationProvider dateAdapter={AdapterMoment}>
+        <MobileTimePicker
+          value={horaEntradaC ? convertirAMoment(horaEntradaC) : null}
+          onChange={horaEntradaCChange}
+        />
+      </LocalizationProvider>
+
+      <label className="font-sans rounded-none py-4 m-3 flex flex-col">Nueva hora de salida:</label>
+      <LocalizationProvider dateAdapter={AdapterMoment}>
+        <MobileTimePicker
+          value={horaSalidaC ? convertirAMoment(horaSalidaC) : null}
+          onChange={horaSalidaCChange}
         />
       </LocalizationProvider>
     </div>
