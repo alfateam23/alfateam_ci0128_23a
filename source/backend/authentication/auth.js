@@ -23,8 +23,6 @@ router.post('/login', bodyParser.json(), async (req, res) => {
         const { username, password } = req.body
         // Aquí se compara la password que ingresó el usuario con la hasheada de la db
         userExist = await checkUser(username);
-        console.log('Nombre de usuario: ' + username);
-        console.log('Contrasena de usuario: ' + password);
         if (!userExist) {
             res.status(401)
                 .json({
