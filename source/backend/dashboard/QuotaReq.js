@@ -27,7 +27,12 @@ async function getQuota(area) {
   try {
     const result = await db.executeQuery(
       `SELECT CupoTotal, CupoOnline FROM Area WHERE Tipo='${area}'`
-    )
+    );
+
+    if (result.recordset.length === 0) {
+      throw new Error('No se encontraron registros para el área especificada');
+    }
+    console.log(result)
     return result.recordset[0];
   } catch (error) {
     throw error;
@@ -38,13 +43,22 @@ async function updateQuota(area, total, online) {
   try {
     total = parseInt(total);
     online = parseInt(online);
+    console.log("Cupos totales obtenidos del Front:", total);
+    console.log("Cupos virtuales obtenidos del Front:", online);
+
     const result = await db.executeQuery(
       `UPDATE Area
-      SET CupoTotal = ${total},
-          CupoOnline = ${online}
+      SET CupoTotal = '${total}',
+          CupoOnline = '${online}'
+      OUTPUT inserted.CupoTotal, inserted.CupoOnline
       WHERE Tipo='${area}'`
-    )
-    return result.recordset[0];
+    );
+
+    if (result.recordsets.length === 0 || result.recordsets[0].length === 0) {
+      throw new Error('No se encontraron registros para el área especificada');
+    }
+
+    return result.recordsets[0][0];
   } catch (error) {
     throw error;
   }
