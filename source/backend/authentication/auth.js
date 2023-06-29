@@ -63,10 +63,10 @@ async function checkUser(username) {
         WHERE Cedula = '${username}'
         `);
         if (result.recordsets[0].length === 0) {
-            console.log('No user found');
+            // console.log('No user found');
             return false;
         } else {
-            console.log('User found');
+            // console.log('User found');
             return true;
         }
     } catch (error) {
@@ -77,35 +77,25 @@ async function checkUser(username) {
 /* Checks if the user ID matches with password */
 async function checkPassword(username, password) {
     try {
-        const salt = 8;
-        // hace query y retorna si la contraseña coincide o no
-        console.log('Hola desde checkPassword');
         const result = await db.executeQuery(`
         SELECT Clave
         FROM Administrador
         WHERE Cedula = '${username}'
         `);
+
         const recordset = result.recordsets[0];
         const { Clave } = recordset[0];
-        console.log('Clave ' + Clave);
-
         let isEqual = await compareHash(password, Clave);
-        console.log('valor del compare' + isEqual);
 
-        // return false;
         if (!Clave) {
-            console.log('No password found');
-            console.log('Password found in DB' + result.recordsets[0]);
-            console.log('Password inserted by user' + password);
+            // console.log('No password found in DB');
             return false;
         } else {
-            if (bcrypt.compare(password, Clave)) {
-                console.log('Correct username & password');
+            if (isEqual) {
+                // console.log('Correct username & password');
                 return true;
             } else {
-                console.log('Password not matching username');
-                console.log('Password found in DB' + result.recordsets[0]);
-                console.log('Password inserted by user' + password);
+                // console.log('Password not matching username');
                 return false;
             }
         }
