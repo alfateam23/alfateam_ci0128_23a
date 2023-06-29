@@ -230,25 +230,26 @@ CREATE TABLE Factura
   REFERENCES Reservacion(Codigo)
 );
 
--- Solicitud de servicio (kayak, etc.) en una fecha y hora específica
-CREATE TABLE SolicitudServicio
-(
-  Cedula VARCHAR(60) NOT NULL,
-  NombreServicio VARCHAR(60) NOT NULL,
-  Fecha DATETIME NOT NULL,
-  CONSTRAINT PK_SolicitudServicio PRIMARY KEY(Cedula, NombreServicio, Fecha),
-  CONSTRAINT FK_SolicitudServicio_Cliente FOREIGN KEY(Cedula)
-  REFERENCES Cliente(Cedula),
-  CONSTRAINT FK_SolicitudServicio_TipoServicio FOREIGN KEY(NombreServicio)
-  REFERENCES TipoServicio(Nombre),
-);
-
-
--- Tipo de servicio (kayak, etc.)
 CREATE TABLE TipoServicio
 (
-  Cedula VARCHAR(60) NOT NULL,
-  Monto MONEY NOT NULL,
-  Moneda CHAR(3) NOT NULL,
-  Tiempo INT NOT NULL
+  Nombre VARCHAR(60),
+  Tiempo TIME NOT NULL,
+  MONTO MONEY NOT NULL,
+  MONEDA CHAR(3) NOT NULL,
+  CONSTRAINT PK_TipoServicio PRIMARY KEY(Nombre, Tiempo)
+);
+
+CREATE TABLE Servicio
+(
+  Cedula VARCHAR(60),
+  NombreServicio VARCHAR(60),
+  TiempoServicio TIME NOT NULL,
+  Fecha DATETIME,
+  MONTO MONEY NOT NULL,
+  MONEDA CHAR(3) NOT NULL,
+  CONSTRAINT PK_Servicio PRIMARY KEY(Cedula,NombreServicio,Fecha),
+  CONSTRAINT FK_Servicio_Cedula FOREIGN KEY(Cedula)
+  REFERENCES Cliente(Cedula),
+  CONSTRAINT FK_Servicio_Nombre FOREIGN KEY(NombreServicio, TiempoServicio)
+  REFERENCES TipoServicio(Nombre, Tiempo)
 );

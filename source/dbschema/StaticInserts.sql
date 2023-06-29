@@ -273,7 +273,26 @@ VALUES ('Extranjero', 'Picnic', 'Adulto', 'No exonerado', 13.56, 'USD');
 INSERT INTO TipoVisitante (TipoProcedencia, TipoVisita, Estatus, CategoriaPago, Monto, Moneda)
 VALUES ('Extranjero', 'Picnic', 'Adulto 65 años o más', 'Exonerado', 0, 'USD');
 
+INSERT INTO TipoServicio (Nombre, Tiempo, MONTO, MONEDA)
+VALUES ('Kayak Doble', '00:30:00', 8000.00, 'CRC');
 
+INSERT INTO TipoServicio (Nombre, Tiempo, MONTO, MONEDA)
+VALUES ('Kayak Doble', '01:00:00', 10000.00, 'CRC');
+
+INSERT INTO TipoServicio (Nombre, Tiempo, MONTO, MONEDA)
+VALUES ('Kayak Individual', '00:30:00', 6000.00, 'CRC');
+
+INSERT INTO TipoServicio (Nombre, Tiempo, MONTO, MONEDA)
+VALUES ('Kayak Individual', '01:00:00', 8000.00, 'CRC');
+
+INSERT INTO TipoServicio (Nombre, Tiempo, MONTO, MONEDA)
+VALUES ('Bicicletas', '04:00:00', 12.00, 'USD');
+
+INSERT INTO TipoServicio (Nombre, Tiempo, MONTO, MONEDA)
+VALUES ('Bicicletas', '08:00:00', 20.00, 'USD');
+
+INSERT INTO TipoServicio (Nombre, Tiempo, MONTO, MONEDA)
+VALUES ('Bicicletas', '24:00:00', 25.00, 'USD');
 
 -- Insert roles
 INSERT INTO Rol (Nombre) VALUES
