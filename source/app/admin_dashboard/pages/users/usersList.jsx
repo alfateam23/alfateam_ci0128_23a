@@ -88,12 +88,12 @@ const UsersList = () => {
                     <td className="px-6 py-4 ">
                       {user.EstadoActividad ? "Activo" : "Deshabilitado"}
                     </td>
-                    <td className="px-6 py-4 text-right">
+                    <td className="px-6 py-4">
                       <button
                         onClick={() => handleUserState(user.Cedula)}
                         className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                       >
-                        Cambiar Estado
+                        {user.EstadoActividad ? "Deshabilitar" : "Activar"}
                       </button>
                     </td>
                     <td className="px-6 py-4 text-right">
