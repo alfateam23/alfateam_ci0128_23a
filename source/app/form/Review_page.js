@@ -18,9 +18,10 @@ export const Review_info = ({ UserData }) => {
   );
   const fontSemiBold = "text-sm font-semibold";
   let date = UserData.start_date.toDateString();
-  date += UserData.end_date instanceof Date ? 
-  " to " + UserData.end_date.toDateString() :
-  '';
+  date +=
+    UserData.end_date instanceof Date
+      ? " to " + UserData.end_date.toDateString()
+      : "";
   CalculateCost(UserData);
   return (
     <div>
@@ -110,9 +111,7 @@ export const Review_info = ({ UserData }) => {
               <dt className={classNames(textGray, fontSemiBold)}>
                 Fecha reservación:
               </dt>
-              <dd className={fontSemiBold}>
-                {date}
-              </dd>
+              <dd className={fontSemiBold}>{date}</dd>
             </div>
 
             <div className={flexCol}>
