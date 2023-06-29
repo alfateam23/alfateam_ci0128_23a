@@ -1,5 +1,6 @@
 {
   "devDependencies": {
+    "cy-verify-downloads": "^0.1.15",
     "cypress": "^12.15.0"
   },
   "name": "e2e",
