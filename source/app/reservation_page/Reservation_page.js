@@ -8,7 +8,7 @@ import { Party_title,
   Spaces_left } from './Availability_page';
 import { Start_reservation, Reservation_type } from './select_dates/Select_dates';
 import {FormularioView} from "../form/Form";
-import {Review_info} from "../form/Review_page";
+import {Review_info} from "../review_page/Review_page";
 import { checkEmail, activateModal, SaveReservationFull,
 SaveReservationUser, updateUser } from '../form/SaveReservation';
 import { MyModal } from './Modal';
