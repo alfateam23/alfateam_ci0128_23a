@@ -39,7 +39,7 @@ router.post('/login', bodyParser.json(), async (req, res) => {
                 // Generates token
                 const payload = { username };
                 const token = jwt.sign(payload, secret, {
-                    expiresIn: '1m' // expiration of cookie
+                    expiresIn: '15m' // expiration of cookie
                 });
                 res.cookie('token', token, { httpOnly: true })
                     .sendStatus(200);
