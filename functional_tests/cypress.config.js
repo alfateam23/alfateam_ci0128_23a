@@ -7,6 +7,14 @@ module.exports = defineConfig({
     },
     experimentalStudio: true,
   },
+
   viewportWidth: 1440,
   viewportHeight: 900,
+
+  component: {
+    devServer: {
+      framework: "create-react-app",
+      bundler: "webpack",
+    },
+  },
 });

@@ -1,10 +1,11 @@
+import loginPage from "../pageobjects/loginPage";
+import dashboardPage from "../pageobjects/dashboardPage";
+
 describe('booking', () => {
   it('creates a booking for camping', () => {
     cy.visit('http://localhost:3000/')
-    cy.get('#username').type('admin')
-    cy.get('#password').type('1234')
-    cy.contains('Iniciar Sesión').click()
-    cy.wait(500)
+    loginPage.login()
+
     cy.contains('Reservas').click()
     cy.wait(500)
     cy.contains('Camping').click()

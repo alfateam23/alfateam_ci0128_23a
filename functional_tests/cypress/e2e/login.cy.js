@@ -1,36 +1,30 @@
-import { beforeEach } from "mocha"
-import loginPage from "../pageobjects/loginPage"
+import loginPage from "../pageobjects/loginPage";
+import dashboardPage from "../pageobjects/dashboardPage";
 
-describe('Login test', () => {
-  beforeEach(() => {
+describe('Login page', () => {
+  before(() => {
     cy.visit('http://localhost:3000/')
   })
 
-  it('Log in and open app tabs', () => {
+  it('Log in', () => {
     loginPage.login();
-
   })
 
-  it('logs on to the application and check that session is valid after page reload, and log out', () => {
 
 
+  it('Open tab for creating bookings', () => {
+    dashboardPage.createBookings();
+  })
 
-    cy.reload()
-    cy.contains('Reservas').click()
-    cy.wait(500)
-    cy.reload()
-    cy.contains('Lista de Reservas').click()
-    cy.wait(500)
-    cy.reload()
-    cy.contains('Reportes').click()
-    cy.wait(500)
-    cy.reload()
-    cy.contains('Tarifas').click()
-    cy.wait(500)
-    cy.reload()
-    cy.contains('Usuarios').click()
-    cy.wait(500)
-    cy.reload()
-    cy.contains('Log out').click()
+  it('Open tab for updating bookings', () => {
+    dashboardPage.updateBookings();
+  })
+
+  it('Open tab for creating bookings', () => {
+    dashboardPage.createBookings();
+  })
+
+  it('Open tab for updating bookings', () => {
+    dashboardPage.updateBookings();
   })
 })
