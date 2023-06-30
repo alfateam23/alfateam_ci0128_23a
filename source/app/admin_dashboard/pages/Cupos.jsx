@@ -67,82 +67,89 @@ function Cupos() {
 
   //Actualizar los cupos de Camping
   const ActualizarCupoCamping = () => {
-    if (nuevoCupoCampingTotal !== '') {
-      setCupoCampingTotal(nuevoCupoCampingTotal);
-    }
-
-    if (nuevoCupoCampingLinea !== '') {
+    if(nuevoCupoCampingTotal !== '' && nuevoCupoCampingLinea !== ''){
       setCupoCampingLinea(nuevoCupoCampingLinea);
+      setCupoCampingTotal(nuevoCupoCampingTotal);
+    }else{
+      window.alert('Debes llenar ambos espacios para configurar correctamente los cupos.');
+      return;
     }
   };
 
   useEffect(() => {
-    let result = null;
-    fetch('/backend/quota/update', {
-      method: 'PUT',
-      body: JSON.stringify({
-        area: 'C',
-        total: cupoCampingTotal,
-        online: cupoCampingLinea
-      }),
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-      },
-    }).then((res) => {
-      if (!res.ok) {
-        console.log('Network response was not ok');
-      }
-      return res.json();
-    }).then((data) => {
-    console.log("Cupos virtuales enviados del Front:", data.total)
-    console.log("Cupos totales obtenidos del Front:", data.online)
-      result = data;
-    })
-    .catch((error) => {
-      console.error('Error getting user information:', error);
-    });
-
-  }, [cupoCampingTotal,cupoCampingLinea]);
+    if (nuevoCupoCampingTotal !== '' && nuevoCupoCampingLinea !== '') {
+      let result = null;
+      fetch('/backend/quota/update', {
+        method: 'PUT',
+        body: JSON.stringify({
+          area: 'C',
+          total: cupoCampingTotal,
+          online: cupoCampingLinea
+        }),
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+        },
+      })
+        .then((res) => {
+          if (!res.ok) {
+            console.log('Network response was not ok');
+          }
+          return res.json();
+        })
+        .then((data) => {
+          console.log("Cupos virtuales enviados del Front:", data.total)
+          console.log("Cupos totales obtenidos del Front:", data.online)
+          result = data;
+        })
+        .catch((error) => {
+          console.error('Error getting user information:', error);
+        });
+    }
+  }, [cupoCampingTotal, cupoCampingLinea]);
 
 
   //Actualizar Cupos de pincnic
   const ActualizarCupoPicnic = () => {
-    if (nuevoCupoPicnicTotal !== '') {
-      setCupoPicnicTotal(nuevoCupoPicnicTotal);
-    }
-
-    if (nuevoCupoPicnicLinea !== '' && cupoPicnicTotal !== '') {
+    if(nuevoCupoPicnicTotal !== '' && nuevoCupoPicnicLinea !== ''){
       setCupoPicnicLinea(nuevoCupoPicnicLinea);
+      setCupoPicnicTotal(nuevoCupoPicnicTotal);
+    }else{
+      window.alert('Debes llenar ambos espacios para configurar correctamente los cupos.');
+      return;
     }
   };
-
+  
   useEffect(() => {
-    let result = null;
-    fetch('/backend/quota/update', {
-      method: 'PUT',
-      body: JSON.stringify({
-        area: 'P',
-        total: cupoPicnicTotal,
-        online: cupoPicnicLinea
-      }),
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-      },
-    }).then((res) => {
-      if (!res.ok) {
-        console.log('Network response was not ok');
-      }
-      return res.json();
-    }).then((data) => {
-    console.log("Cupos virtuales enviados del Front:", data.total)
-    console.log("Cupos totales obtenidos del Front:", data.online)
-      result = data;
-    })
-    .catch((error) => {
-      console.error('Error getting user information:', error);
-    });
-
-  }, [cupoPicnicTotal,cupoPicnicLinea]);
+    if (nuevoCupoPicnicTotal !== '' && nuevoCupoPicnicLinea !== '') {
+      let result = null;
+      fetch('/backend/quota/update', {
+        method: 'PUT',
+        body: JSON.stringify({
+          area: 'P',
+          total: cupoPicnicTotal,
+          online: cupoPicnicLinea
+        }),
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+        },
+      })
+        .then((res) => {
+          if (!res.ok) {
+            console.log('Network response was not ok');
+          }
+          return res.json();
+        })
+        .then((data) => {
+          console.log("Cupos virtuales enviados del Front:", data.total)
+          console.log("Cupos totales obtenidos del Front:", data.online)
+          result = data;
+        })
+        .catch((error) => {
+          console.error('Error getting user information:', error);
+        });
+    }
+  }, [cupoPicnicTotal, cupoPicnicLinea]);
+  
 
 
 return (
