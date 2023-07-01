@@ -19,6 +19,7 @@ import Tarifas from './admin_dashboard/pages/Tarifas';
 import TarifasEditar from './admin_dashboard/pages/TarifasEditar';
 import Reports from './admin_dashboard/pages/Reports';
 import Users from './admin_dashboard/pages/users/usersList';
+import Cupos from './admin_dashboard/pages/Cupos';
 
 
 /**
@@ -57,6 +58,8 @@ const AdminApp = () => {
                <Route path='users' element={<Users />} />
                <Route path='/tarifas/editar/:TipoProcedencia/:TipoVisita/:Estatus/:CategoriaPago' element={<TarifasEditar />} />
                <Route path='/reports' element={<Reports />} />
+               <Route path='/Cupos' element={<Cupos />} />
+
             </Routes>
          </RootLayout>
       </div>
