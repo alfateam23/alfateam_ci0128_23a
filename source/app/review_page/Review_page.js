@@ -3,6 +3,7 @@ import classNames from "classnames";
 import "./style.css";
 import CalculateCost from "./CalculateVisitors";
 
+// funcion para devolver informacion de reserva
 export const Review_info = ({ UserData }) => {
   const filteredPlates = UserData.plates.filter((plate) => plate.trim() !== "");
   const flexCol = classNames("flex", "flex-col", "pb-3");
