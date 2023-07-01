@@ -23,6 +23,17 @@ router.get('/checkVisitor/:id', async (req, res) => {
   }
 })
 
+router.get('/getServices', async (req, res) => {
+  try {
+    const result = await db.executeQuery(
+      `Select * from TipoServicio`
+    )
+    res.json(result.recordset);
+  } catch (error) {
+    console.log('Error al revisar visitante existente: ', error);
+  }
+})
+
 router.post('/saveService', async (req, res) => {
   try {
     const result = await insertSevice(req.body);

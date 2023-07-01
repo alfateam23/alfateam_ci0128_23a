@@ -1,31 +1,18 @@
 import React, {useState} from "react";
-import {
-  LocalizationProvider,
-  DateTimePicker } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
-
+import { ServicePage } from "./ServiceUtil/InsertServicePage";
 import { InsertIDPage } from "./ServiceUtil/InsertIDPage";
 
 export const Service = () => {
-  // page = 1 first page, page = 2 second page
+  // page = 0 first page, page = 1 second page
   const [page, setPage] = useState(0);
+  const [visitorInfo, setVisitorInfo] = useState(null);
 
   return (
     <div>
-      {page === 0 ? <InsertIDPage setPage={setPage}/> :
-      <SecondPage/>}
-    </div>
-  );
-};
-
-export const SecondPage = () => {
-  const [value, onChange] = useState(new Date());
-
-  return (
-    <div>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DateTimePicker label="Basic date time picker" />
-      </LocalizationProvider>
+      {page === 0 ? <InsertIDPage
+      setPage={setPage}
+      setVisitorInfo={setVisitorInfo}/> :
+      <ServicePage visitorInfo={visitorInfo}/>}
     </div>
   );
 };

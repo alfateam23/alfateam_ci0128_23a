@@ -7,7 +7,7 @@ import {
   Button
 } from 'flowbite-react';
 
-export const InsertIDPage = ({setPage}) => {
+export const InsertIDPage = ({setPage, setVisitorInfo}) => {
   const [id,setID] = useState(null);
   const [openModal, setOpenModal] = useState(false);
   function handleChange(event) {
@@ -15,9 +15,11 @@ export const InsertIDPage = ({setPage}) => {
   }
   async function validVisitor() {
     const result = await checkVisitorExistance(id);
-    console.log(result)
     if (result[0].EmailExists !== undefined) {
       setOpenModal(true);
+    } else {
+      setVisitorInfo(result[0]);
+      setPage(1);
     }
   }
   return (

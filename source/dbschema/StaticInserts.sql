@@ -290,9 +290,9 @@ VALUES ('Bicicletas', '04:00:00', 12.00, 'USD');
 
 INSERT INTO TipoServicio (Nombre, Tiempo, MONTO, MONEDA)
 VALUES ('Bicicletas', '08:00:00', 20.00, 'USD');
-
+-- Cero horas significa las 24 horas
 INSERT INTO TipoServicio (Nombre, Tiempo, MONTO, MONEDA)
-VALUES ('Bicicletas', '24:00:00', 25.00, 'USD');
+VALUES ('Bicicletas', '00:00:00', 25.00, 'USD');
 
 -- Insert roles
 INSERT INTO Rol (Nombre) VALUES
