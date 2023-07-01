@@ -84,7 +84,7 @@ if (elementoCodigo1) {
 
   const cancelEstado = (ReservacionCodigo) => {
     const updatedData = data.map((item) => {
-      if (item.ReservacionCodigo === ReservacionCodigo && item.EstadoActividad === true) {
+      if (item.ReservacionCodigo === ReservacionCodigo && item.EstadoActividad === true && item.ReservacionCodigo !== false) {
           setCancelado(ReservacionCodigo);
           return { ...item, EstadoActividad: false };
       }
@@ -113,7 +113,8 @@ if (elementoCodigo1) {
 
   const aprobeEstado = (ReservacionCodigo) => {
     const updatedData = data.map((item) => {
-      if (item.ReservacionCodigo === ReservacionCodigo && item.EstadoPago === false) {
+      if (item.ReservacionCodigo === ReservacionCodigo && item.EstadoPago === false && item.ReservacionCodigo !== false) {
+        console.log(item)
         setAceptado(ReservacionCodigo);
         return { ...item, EstadoPago: true };
       }
