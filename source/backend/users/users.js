@@ -110,16 +110,28 @@ async function getTarifa(Cedula) {
 /* Post for editing a specific User */
 router.post("/editar", bodyParser.json(), async (req, res) => {
   try {
-    let { PrimerNombre, PrimerApellido, SegundoApellido, Email, Cedula } =
-      req.body;
+    let {
+      PrimerNombre,
+      PrimerApellido,
+      SegundoApellido,
+      Email,
+      Cedula,
+      Clave,
+      NombreRol,
+    } = req.body;
     await setUsuario(
       PrimerNombre,
       PrimerApellido,
       SegundoApellido,
       Email,
-      Cedula
+      Cedula,
+      Clave,
+      NombreRol
     );
-    res.status(200).send("Usuario actualizado correctamente");
+    if(Clave.length > 0){
+      await UpdatePassword(Cedula, Clave)
+    }
+    res.status(200).send;
   } catch (error) {
     res.status(500).send("Error saving data from Users" + error);
   }
@@ -131,22 +143,40 @@ async function setUsuario(
   PrimerApellido,
   SegundoApellido,
   Email,
-  Cedula
+  Cedula,
+  Clave,
+  NombreRol
 ) {
   try {
+    
     const result = await db.executeQuery(`
-            EXEC UpdateUser
-             @PrimerNombre = '${PrimerNombre}',
-             @PrimerApellido = '${PrimerApellido}', 
-             @SegundoApellido = '${SegundoApellido}', 
-             @Email = '${Email}', 
-             @Cedula = '${Cedula}'
+            EXEC UpdateUserRolPassword
+             @PrimerNombre = '${PrimerNombre !== "" ? PrimerNombre : null}',
+             @PrimerApellido = '${PrimerApellido !== "" ? PrimerApellido : null}', 
+             @SegundoApellido = '${SegundoApellido !== "" ? SegundoApellido : null }', 
+             @Email = '${Email !== "" ? Email : null}', 
+             @Cedula = '${Cedula !== "" ? Cedula : null}',
+             @Clave = '${Clave !== "" ? Clave : null}', 
+             @NombreRol = '${NombreRol!== "" ? NombreRol : null}'
         `);
     return result.recordsets[0];
   } catch (error) {
     throw error;
   }
 }
+
+async function UpdatePassword(Cedula, Clave) {
+  try {
+    const result = await db.executeQuery(`
+            UPDATE Administrador
+            SET Clave = '${Clave}'
+            WHERE Cedula = '${Cedula}'
+        `);
+  } catch (error) {
+    throw error;
+  }
+}
+
 
 // Post for creating an admin user
 router.post("/create", bodyParser.json(), async (req, res) => {
@@ -172,9 +202,9 @@ router.post("/create", bodyParser.json(), async (req, res) => {
       Clave,
       NombreRol
     );
-    res.status(200).send("Usuario actualizado correctamente");
+    res.status(200).send;
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).send("Error saving data from Users" + error);
   }
 });
@@ -208,4 +238,5 @@ async function createUser(
     throw error;
   }
 }
+
 module.exports = { router };

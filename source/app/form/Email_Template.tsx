@@ -11,7 +11,7 @@ import { Body } from "@react-email/body";
 import { Heading } from "@react-email/heading";
 import { Row } from "@react-email/row";
 
-export const Template = ({ UserData , code}) => {
+export const Template = ({ UserData, code }) => {
   const date =
     UserData.area === "Camping"
       ? `${UserData.start_date.toDateString()} to ${UserData.end_date.toDateString()}`
@@ -102,7 +102,12 @@ export const Template = ({ UserData , code}) => {
                     textAlign: "center",
                   }}
                 >
-                  Estimado(a) Visitante
+                  Estimado(a):{" "}
+                  {UserData.nameUser +
+                    " " +
+                    UserData.firstSurname +
+                    " " +
+                    UserData.secondSurname}
                 </Heading>
                 <Heading
                   as="h3"
@@ -127,14 +132,6 @@ export const Template = ({ UserData , code}) => {
                   Datos Personales
                 </Heading>
 
-                <Text style={paragraph}>
-                  <b>Nombre: </b>
-                  {UserData.nameUser +
-                    " " +
-                    UserData.firstSurname +
-                    " " +
-                    UserData.secondSurname}
-                </Text>
                 <Text style={{ ...paragraph, marginTop: -5 }}>
                   <b>Correo: </b>
                   {UserData.mail}
@@ -146,11 +143,6 @@ export const Template = ({ UserData , code}) => {
                 <Text style={{ ...paragraph, marginTop: -5 }}>
                   <b>Procedencia: </b>
                   {originText}
-                </Text>
-
-                <Text style={{ ...paragraph, marginTop: -5 }}>
-                  <b>Código de reservación: </b>
-                  {code}
                 </Text>
 
                 <Heading
@@ -166,6 +158,11 @@ export const Template = ({ UserData , code}) => {
                 <Text style={paragraph}>
                   <b>Tipo de reservación: </b>
                   {UserData.area}
+                </Text>
+
+                <Text style={{ ...paragraph, marginTop: -5 }}>
+                  <b>Código de reservación: </b>
+                  {code}
                 </Text>
 
                 <Text style={paragraph}>

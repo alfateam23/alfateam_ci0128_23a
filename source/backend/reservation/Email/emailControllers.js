@@ -5,6 +5,7 @@ const dotenv = require("dotenv");
 const nodemailer = require("nodemailer");
 dotenv.config();
 
+// tranporter para info del correo
 let transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
   port: 465,
@@ -15,6 +16,7 @@ let transporter = nodemailer.createTransport({
   },
 });
 
+// metodo para enviar correo
 const sendEmail = expressAsyncHandler(async (req, res) => {
   const { email, subject, message } = req.body;
   //console.log(email, subject, message);
