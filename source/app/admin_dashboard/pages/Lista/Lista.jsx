@@ -159,7 +159,7 @@ if (elementoCodigo1) {
     <div className="container">
       <div className="row">
         <div className="col-12">
-          <h1 className="font-lexend text-center text-2xl">Reservaciones</h1>
+          <h1 className="font-sans text-4xl rounded-none py-4 m-3">Reservaciones</h1>
         </div>
       </div>
       <div className="row">

@@ -40,7 +40,7 @@ async function executeQuery(query) {
         return result;
     } catch (err) {
         throw err;
-    } 
+    }
     //quitar finally para correr en windows
 }
 

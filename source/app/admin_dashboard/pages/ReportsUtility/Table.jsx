@@ -1,4 +1,11 @@
 export function Table({theadData, tbodyData}) {
+  const map = {
+    TipoProcedencia:"Tipo de Procedencia",
+    TipoVisita:"Area",
+    Estatus:"Estatus",
+    CategoriaPago:"Categoría de Pago",
+    TotalVisitantes:"Total de Visitas",
+  }
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
       <table className="w-full text-sm text-center text-gray-500 dark:text-gray-400 px-6">
@@ -6,7 +13,7 @@ export function Table({theadData, tbodyData}) {
               <tr className="bg-[#FF8C32]">
                 {theadData.map(heading => {
                         return <th key={heading}
-                        scope="col" className="px-6 py-3">{heading}</th>
+                        scope="col" className="px-6 py-3">{map[heading]}</th>
                         })}
               </tr>
           </thead>
