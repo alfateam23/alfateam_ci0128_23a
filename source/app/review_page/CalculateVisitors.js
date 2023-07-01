@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 
+//  metodo para calcular el costo de la reservacion
 const CalculateCost = (UserData) => {
   const [costData, setCostData] = useState(null);
   const StringNumberVisitors =

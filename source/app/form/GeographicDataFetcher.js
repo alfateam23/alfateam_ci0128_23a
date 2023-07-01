@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+// metodo para sacar de la base de datos los diferentes paises y provinvias
 export const GeographicDataFetcher = () => {
   let pais, provincias;
   const [countryData, setCountryData] = useState(null);

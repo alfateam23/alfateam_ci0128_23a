@@ -1,13 +1,9 @@
 import { Descriptions } from "antd";
 import classNames from "classnames";
-import React, { useState, useEffect } from "react";
-import {
-  ContenedorBotonCentrado,
-  Boton,
-} from "./Elementos/ElementosFormulario";
 import "./style.css";
 import CalculateCost from "./CalculateVisitors";
 
+// funcion para devolver informacion de reserva
 export const Review_info = ({ UserData }) => {
   const filteredPlates = UserData.plates.filter((plate) => plate.trim() !== "");
   const flexCol = classNames("flex", "flex-col", "pb-3");
@@ -28,9 +24,11 @@ export const Review_info = ({ UserData }) => {
       <div className="flex justify-center">
         <a
           href="#"
-          className="block max-w-lg p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
+          className="block max-w-lg p-6 bg-white border border-gray-200 rounded-lg 
+              shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
         >
-          <dl className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-md text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
+          <dl className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-md
+               text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
             <div className={flexCol}>
               <dt className={classNames(textGray, fontSemiBold)}>
                 Nombre persona que reserva:
