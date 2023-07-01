@@ -1,4 +1,4 @@
 export default {
-  roots: ['../tests'],
+  roots: ['.'],
   testEnvironment: 'jsdom',
 };

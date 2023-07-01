@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import Lista from '../src/components/Lista';
+import Lista from '../source/app/admin_dashboard/pages/Lista/Lista';
 
 describe('Lista component', () => {
     // 1.Prueba de que se muestre mensaje de cargando datos si no hay reservas
@@ -18,14 +18,14 @@ describe('Lista component', () => {
     jest.spyOn(window, 'fetch').mockImplementation(() => {
       return Promise.resolve({
         ok: true,
-        json: () => Promise.resolve(dummyData), 
+        json: () => Promise.resolve(dummyData),
       });
     });
-  
+
     render(<Lista />);
-  
+
     await waitFor(() => screen.getByText('Lista de Reservas'));
-  
+
     expect(screen.getByText('Camping')).toBeInTheDocument();
     expect(screen.getByText('Picnic')).toBeInTheDocument();
       window.fetch.mockRestore();
@@ -78,16 +78,16 @@ describe('Lista component', () => {
     fireEvent.change(screen.getByLabelText('Estado Filter'), { target: { value: 'Aprobado' } });
 
     const tableRows = screen.getAllByRole('row');
-    expect(tableRows).toHaveLength(2); 
+    expect(tableRows).toHaveLength(2);
 
     const row1 = screen.getByText('1');
     expect(row1).toBeInTheDocument();
 
-    expect(screen.queryByText('2')).not.toBeInTheDocument(); 
+    expect(screen.queryByText('2')).not.toBeInTheDocument();
   });
 
 
-  //5. Prueba de cancelacion de reserva 
+  //5. Prueba de cancelacion de reserva
 
   test('should cancel a reservation', async () => {
     jest.spyOn(window, 'fetch').mockImplementation((url) => {
@@ -102,21 +102,21 @@ describe('Lista component', () => {
         json: () => Promise.resolve(dummyData),
       });
     });
-  
+
     render(<Lista />);
-  
+
     await waitFor(() => screen.getByText('Lista de Reservas'));
-  
+
     const cancelButton = screen.getByText('Cancelar');
     userEvent.click(cancelButton);
-  
+
     expect(window.fetch).toHaveBeenCalledWith(
       '/backend/reservationDetails/cancelReservation/123'
     );
     expect(screen.getByText('Cancelado')).toBeInTheDocument();
       window.fetch.mockRestore();
   });
-  
+
     // 6. Prueba de que una reserva se apruebe correctamente
 test('should approve a reservation', async () => {
     jest.spyOn(window, 'fetch').mockImplementation((url) => {
@@ -131,7 +131,7 @@ test('should approve a reservation', async () => {
         json: () => Promise.resolve(dummyData),
       });
     });
-  
+
     render(<Lista />);
     await waitFor(() => screen.getByText('Lista de Reservas'));
     const approveButton = screen.getByText('Confirmar');
@@ -147,18 +147,18 @@ test('should approve a reservation', async () => {
 
 test('should sort reservations by column', async () => {
     render(<Lista />);
-  
+
     await waitFor(() => screen.getByText('Lista de Reservas'));
-  
+
     const codeHeader = screen.getByText('Codigo');
     userEvent.click(codeHeader);
-  
+
     const rows = screen.getAllByRole('row');
     expect(rows[1]).toHaveTextContent('123');
     expect(rows[2]).toHaveTextContent('456');
-  
+
     userEvent.click(codeHeader);
-  
+
     const reversedRows = [...rows].reverse();
     expect(reversedRows[1]).toHaveTextContent('456');
     expect(reversedRows[2]).toHaveTextContent('123');
@@ -168,25 +168,25 @@ test('should sort reservations by column', async () => {
 
 test('should render "Cancelar" button', async () => {
     render(<Lista />);
-  
+
     await waitFor(() => screen.getByText('Lista de Reservas'));
-  
+
     const reservationItems = screen.getAllByRole('row');
     reservationItems.forEach((item) => {
       expect(screen.getByText('Cancelar', { container: item })).toBeInTheDocument();
     });
-  });  
-  
-//9. Prueba del boton cancelar 
+  });
+
+//9. Prueba del boton cancelar
 
 test('should cancel a reservation when "Cancelar" button is clicked', async () => {
     render(<Lista />);
-  
+
     await waitFor(() => screen.getByText('Lista de Reservas'));
-  
+
     const cancelButtons = screen.getAllByText('Cancelar');
     userEvent.click(cancelButtons[0]);
-  
+
     expect(mockCancelReservation).toHaveBeenCalledWith(123);
     expect(screen.getByText('Cancelado')).toBeInTheDocument();
   });
@@ -195,23 +195,23 @@ test('should cancel a reservation when "Cancelar" button is clicked', async () =
 
 test('should render "Aceptar" button', async () => {
     render(<Lista />);
-  
+
     await waitFor(() => screen.getByText('Lista de Reservas'));
-  
+
     const reservationItems = screen.getAllByRole('row');
     reservationItems.forEach((item) => {
       expect(screen.getByText('Aceptar', { container: item })).toBeInTheDocument();
     });
   });
 
-//11. Prueba del boton aceptar 
+//11. Prueba del boton aceptar
 
 test('should confirm a reservation when "Confirmar" button is clicked', async () => {
     render(<Lista />);
     await waitFor(() => screen.getByText('Lista de Reservas'));
     const confirmButtons = screen.getAllByText('Confirmar');
     userEvent.click(confirmButtons[0]);
-  
+
     expect(mockConfirmReservation).toHaveBeenCalledWith(123);
     expect(screen.getByText('Aprobado')).toBeInTheDocument();
   });
@@ -221,7 +221,7 @@ test('should confirm a reservation when "Confirmar" button is clicked', async ()
 test('should render "Mostrar Calendario" button', async () => {
     render(<Lista />);
     await waitFor(() => screen.getByText('Lista de Reservas'));
-  
+
     expect(screen.getByText('Mostrar Calendario')).toBeInTheDocument();
   });
 
@@ -237,27 +237,27 @@ test('should show calendar when "Mostrar Calendario" button is clicked', async (
  //11. Prueba de rederizado del boton oscultar calendario
  test('should render "Ocultar Calendario" button', async () => {
     render(<Lista />);
-  
+
     await waitFor(() => screen.getByText('Lista de Reservas'));
-  
+
     const showCalendarButton = screen.getByText('Mostrar Calendario');
     userEvent.click(showCalendarButton);
-  
+
     expect(screen.getByText('Ocultar Calendario')).toBeInTheDocument();
   });
 
 //14.Prueba de funcionalidad del boton ocultar calendario
 test('should hide calendar when "Ocultar Calendario" button is clicked', async () => {
     render(<Lista />);
-  
+
     await waitFor(() => screen.getByText('Lista de Reservas'));
     const showCalendarButton = screen.getByText('Mostrar Calendario');
     userEvent.click(showCalendarButton);
-  
+
     expect(screen.getByRole('dialog')).toBeInTheDocument();
     const hideCalendarButton = screen.getByText('Ocultar Calendario');
     userEvent.click(hideCalendarButton);
-  
+
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
@@ -270,7 +270,7 @@ test('should render calendar when "Mostrar Calendario" button is clicked', async
     const mostrarCalendarioButton = screen.getByText('Mostrar Calendario');
     fireEvent.click(mostrarCalendarioButton);
     expect(screen.getByTestId('my-calendar')).toBeInTheDocument();
-  });  
+  });
 
   afterEach(() => {
     global.fetch.mockRestore();

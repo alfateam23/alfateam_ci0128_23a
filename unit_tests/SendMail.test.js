@@ -1,4 +1,4 @@
-import sendEmail from "./sendEmail";
+import sendEmail from "../source/backend/reservation/Email/emailControllers"
 
 // para verificar si se envía correctamente el correo electrónico
 
@@ -100,4 +100,3 @@ describe("sendEmail", () => {
     });
   });
 });
-
