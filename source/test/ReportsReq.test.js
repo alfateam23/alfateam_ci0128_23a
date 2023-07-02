@@ -1,4 +1,4 @@
-const index = require("../backend/dashboard/ReportUtil")
+const index = require("../backend/dashboard/ReportUtil/ReportUtil")
 
 describe("reports: profits and visits", () => {
   it("profits with start date after end date", async () => {
