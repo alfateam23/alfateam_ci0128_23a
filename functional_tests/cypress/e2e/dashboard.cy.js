@@ -2,7 +2,7 @@ import loginPage from "../pageobjects/loginPage";
 import dashboardPage from "../pageobjects/dashboardPage";
 
 describe("dashboard", () => {
-  before(() => {
+  beforeEach(() => {
     loginPage.login();
   })
 

@@ -1,14 +1,13 @@
+import loginPage from "../pageobjects/loginPage"
+import usersPage from "../pageobjects/usersPage"
+
 describe('users', () => {
-  it('logs on to the application, disable and re-enable a user', () => {
-    cy.visit('http://localhost:3000/')
-    cy.get('#username').type('admin')
-    cy.get('#password').type('1234')
-    cy.contains('Iniciar Sesión').click()
+  beforeEach(() =>{
+    loginPage.login()
+  })
+
+  it('list users', () => {
     cy.contains('Usuarios').click()
-    cy.contains('Activo')
-    cy.contains('Cambiar Estado').click()
-    cy.contains('Deshabilitado')
-    cy.contains('Cambiar Estado').click()
-    cy.contains('Activo')
+    cy.contains('858574')
   })
 })

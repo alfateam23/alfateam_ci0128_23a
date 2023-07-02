@@ -1,4 +1,6 @@
 class loginPage {
+  baseUrl = "http://localhost:3000/"
+
   prompts = {
     login: "Iniciar Sesión",
     logout: "Log out"
@@ -10,15 +12,19 @@ class loginPage {
   }
 
   login() {
-    cy.visit('http://localhost:3000/')
-    cy.get('#username').type(credentials.username)
-    cy.get('#password').type(credentials.password)
-    cy.contains(prompts.login).click()
+    cy.visit(this.baseUrl);
+    cy.get('#username').type(this.credentials.username);
+    cy.get('#password').type(this.credentials.password);
+    cy.contains(this.prompts.login).click();
   }
 
   logout() {
-    cy.contains(prompts.logout).click()
+    cy.visit(this.baseUrl);
+    cy.get('#username').type(this.credentials.username);
+    cy.get('#password').type(this.credentials.password);
+    cy.contains(this.prompts.login).click();
+    cy.contains(this.prompts.logout).click();
   }
 }
 
-export default loginPage;
+module.exports = new loginPage();

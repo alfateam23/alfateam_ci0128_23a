@@ -5,9 +5,7 @@ describe('booking', () => {
   it('creates a booking for camping', () => {
     cy.visit('http://localhost:3000/')
     loginPage.login()
-
-    cy.contains('Reservas').click()
-    cy.wait(500)
+    dashboardPage.openBookings();
     cy.contains('Camping').click()
     cy.wait(500)
     cy.contains('Desde').click()
