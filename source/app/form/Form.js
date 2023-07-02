@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   ComponenteInput,
   ComponenteInputIncDec,
@@ -44,7 +44,7 @@ export const FormularioView = ({ UserData }) => {
   const [counterPlacas, setCounterPlacas] = useState(0); // variable para llevar cantidad de placas ingresadas
   const [mostrarPlacas, setMostrarPlacas] = useState(0);
   const [totalPersonas, setTotalPersonas] = useState(UserData.totalPeople);
-  const [totalPlacas, setTotalPlacas] = useState(6); //totalPlacas = 6;
+  const [totalPlacas, setTotalPlacas] = useState(6); //max = 6;
   const [counterNinos0a6Nac, setCounterNinos0a6Nac] = useState(0);
   const [counterNinos6a12Nac, setCounterNinos6a12Nac] = useState(0);
   const [counterAdultosNac, setCounterAdultosNac] = useState(0);
@@ -114,18 +114,6 @@ export const FormularioView = ({ UserData }) => {
         counterAdultosExt,
         counterAdultosMayorExt,
       ];
-      /*console.log("Name User:", UserData.nameUser);
-      console.log("Second Name:", UserData.secondName);
-      console.log("First Surname:", UserData.firstSurname);
-      console.log("Second Surname:", UserData.secondSurname);
-      console.log("ID:", UserData.id);
-      console.log("Phone:", UserData.phone);
-      console.log("Email:", UserData.mail);
-      console.log("Origin Country:", UserData.originCountry);
-      console.log("Origin Province:", UserData.originProvince);
-      console.log("Plates:", UserData.plates);
-      console.log("Visitors:", UserData.visitors);*/
-      //reinicio los campos
       cambiarFormularioValido(true);
       cambiarNombre({ campo: "", valido: null });
       setSecondName({ campo: "", valido: null });
