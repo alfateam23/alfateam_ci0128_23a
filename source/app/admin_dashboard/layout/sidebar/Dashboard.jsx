@@ -7,7 +7,7 @@ const Dashboard = () => {
     return (
         <div>
             {/* Nav bar */}
-            <nav class="fixed top-0 z-50 w-full bg-[#FF8C32] border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+            <nav class="fixed top-0 z-50 w-full bg-[#F79327] border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
                 <div class="px-3 py-3 lg:px-5 lg:pl-3">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center justify-start">
@@ -17,20 +17,26 @@ const Dashboard = () => {
                                     <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
                                 </svg>
                             </button>
-                            <h1 href="https://flowbite.com" class="flex ml-2 md:mr-24">
-                                <p class="font-lexend self-center text-xl sm:text-2xl whitespace-nowrap dark:text-white">Centro de Control</p>
-                            </h1>
+                            <img className=" bg-white rounded-full h-12 w-12" src="https://drive.google.com/uc?id=1AzdOB5sYhrBQ1tvrRwc7TP3BlIk0xZJX" alt="Image" />
+
+                            <p class="font-libre-franklin font-bold ml-2 md:mr-24 self-center text-xl sm:text-2xl whitespace-nowrap text-[#4A55A2]">AsoJunquillal</p>
+
+                        </div>
+                        <div class="flex items-center">
+                            <div class="flex items-center ml-3">
+                                <p class="font-libre-franklin self-center text-xl sm:text-2xl whitespace-nowrap text-[#FEE8B0]">Centro de Control</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </nav>
-            
+
             <aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-[#DDDDDD] border-r border-black-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700" aria-label="Sidebar">
                 <div class="h-full px-3 pb-4 overflow-y-auto bg-[#DDDDDD] dark:bg-gray-800">
                     <ul class="space-y-2 font-medium">
                         {/* Home */}
                         <li>
-                            <NavLink  to={"/home"} className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <NavLink to={"/home"} className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
                                 <svg class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"></path>
                                 </svg>
@@ -80,7 +86,7 @@ const Dashboard = () => {
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z"></path>
                                 </svg>  <span class="flex-1 ml-3 whitespace-nowrap">Cupos</span>
                             </NavLink>
-                        </li>                        
+                        </li>
                         {/* Horarios */}
                         <li>
                             <NavLink to={"#"} className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
