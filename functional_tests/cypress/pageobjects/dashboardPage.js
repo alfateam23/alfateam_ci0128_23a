@@ -34,51 +34,42 @@ class dashboardPage {
     }
   }
 
-  openCreateBookings() {
+  openHome() {
     cy.contains(tabs.home.tabname).click();
-    cy.contains(tabs.home.contains);
+    cy.contains(tabs.home.content);
+  }
+
+  openBookings() {
     cy.contains(tabs.createBookings.tabname).click();
     cy.contains(tabs.createBookings.content);
   }
 
-  openUpdateBookings() {
-    cy.contains(tabs.home.tabname).click();
-    cy.contains(tabs.home.contains);
+  openBookingsList() {
     cy.contains(tabs.updateBookings.tabname).click();
     cy.contains(tabs.updateBookings.content);
   }
 
-  openReadReports() {
-    cy.contains(tabs.home.tabname).click();
-    cy.contains(tabs.home.contains);
+  openReports() {
     cy.contains(tabs.readReports.tabname).click();
-    cy.contains(tabs.readReports.content).click();
+    cy.contains(tabs.readReports.content);
   }
 
-  openUpdateFees() {
-    cy.contains(tabs.home.tabname).click();
-    cy.contains(tabs.home.contains);
+  openFees() {
     cy.contains(tabs.updateFees.tabname).click();
     cy.contains(tabs.updateFees.content);
   }
 
-  openUpdateSchedules() {
-    cy.contains(tabs.home.tabname).click();
-    cy.contains(tabs.home.contains);
+  openSchedules() {
     cy.contains(tabs.updateSchedules.tabname).click();
     cy.contains(tabs.updateSchedules.content);
   }
 
-  openCreateServices() {
-    cy.contains(tabs.home.tabname).click();
-    cy.contains(tabs.home.contains);
+  openServices() {
     cy.contains(tabs.createServices.tabname).click();
     cy.contains(tabs.createServices.content);
   }
 
-  openUpdateUsers() {
-    cy.contains(tabs.home.tabname).click();
-    cy.contains(tabs.home.contains);
+  openUsers() {
     cy.contains(tabs.updateUsers.tabname).click();
     cy.contains(tabs.updateUsers.content);
   }

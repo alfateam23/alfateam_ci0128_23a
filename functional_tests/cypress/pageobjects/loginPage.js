@@ -5,15 +5,15 @@ class loginPage {
   }
 
   credentials = {
-    username: 112790958,
-    password: 1234
+    username: "112790958",
+    password: "1234"
   }
 
   login() {
+    cy.visit('http://localhost:3000/')
     cy.get('#username').type(credentials.username)
     cy.get('#password').type(credentials.password)
     cy.contains(prompts.login).click()
-
   }
 
   logout() {
