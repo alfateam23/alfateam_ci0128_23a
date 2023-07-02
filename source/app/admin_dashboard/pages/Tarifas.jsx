@@ -48,10 +48,10 @@ const Tarifas = () => {
                                         {TABLE_HEAD[3]}
                                     </th>
                                     <th scope="col" className="px-6 py-3">
-                                        {TABLE_HEAD[4]}
+                                        {TABLE_HEAD[5]}
                                     </th>
                                     <th scope="col" className="px-6 py-3">
-                                        {TABLE_HEAD[5]}
+                                        {TABLE_HEAD[4]}
                                     </th>
                                     <th scope="col" className="px-6 py-3">
                                         <span className="sr-only">{TABLE_HEAD[6]}</span>
@@ -79,15 +79,21 @@ const Tarifas = () => {
                                             {tarifa.CategoriaPago}
                                         </td>
                                         <td className="px-6 py-4">
-                                            {tarifa.Monto}
-                                        </td>
-                                        <td className="px-6 py-4">
                                             {tarifa.Moneda}
                                         </td>
+                                        <td className="px-6 py-4">
+                                            {tarifa.Monto}
+                                        </td>
                                         <td className="px-6 py-4 text-right">
-                                            <a
-                                                href={`tarifas/editar/${tarifa.TipoProcedencia}/${tarifa.TipoVisita}/${tarifa.Estatus}/${tarifa.CategoriaPago}`} // aca mando los parametros en mi casa cedula
-                                                className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                                            <div className="flex items-center whitespace-nowrap">
+                                                <a
+                                                    href={`tarifas/editar/${tarifa.TipoProcedencia}/${tarifa.TipoVisita}/${tarifa.Estatus}/${tarifa.CategoriaPago}`}
+                                                    className="font-medium text-black hover:underline"
+                                                >
+                                                    Editar Tarifa
+                                                </a>
+                                                <svg className="ml-2" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon></svg>
+                                            </div>
                                         </td>
                                     </tr >
                                 ))}
