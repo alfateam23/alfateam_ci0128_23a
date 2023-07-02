@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
+//adapted from https://github.com/callbackcoding/Send-email-using-Nodemailer.git
 import sendEmail from "./SendEmail";
 
 export const activateModal = (openModal, setOpenModal) => {
   setOpenModal(!openModal);
 };
 
+// metodo para enviar datos del email
 export const checkEmail = async (modifyModalBody, UserData) => {
   let result = null;
   await fetch('/backend/insertReservation/checkEmail', {

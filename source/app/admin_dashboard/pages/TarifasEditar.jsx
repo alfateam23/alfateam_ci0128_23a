@@ -5,7 +5,7 @@ import 'flowbite';
 
 
 const TarifasEditar = () => {
-    const { TipoProcedencia, TipoVisita, Estatus, CategoriaPago } = useParams();
+    const { TipoProcedencia, TipoVisita, Estatus, CategoriaPago } = useParams(); // aca entran los parametros
     const [data, setData] = React.useState(null); // use state
     const navigate = useNavigate(); // for redirecting
 
@@ -119,7 +119,7 @@ const TarifasEditar = () => {
                             </div>
                             <div class="relative z-0 w-full mb-6 group">
                                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="Moneda">Moneda</label>
-                                <input id="Moneda" name="Moneda"
+                                <input id="Moneda" name="Moneda" //con el id para que el server lo identifique
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder={tarifa.Moneda} required
                                     onChange={e => setMoneda(e.target.value)}
                                     type="text" />

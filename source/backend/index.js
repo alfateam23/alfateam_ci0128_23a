@@ -14,8 +14,12 @@ const bodyParser = require('body-parser');
 const reports = require('./dashboard/ReportsReq')
 const users = require('./users/users')
 const schedule = require('./dashboard/ScheduleReq');
+const auth = require('./authentication/auth')
 
 dotenv.config();
+
+/* Authentication */
+const cookieParser = require('cookie-parser'); // adds cookies to the sessions
 
 const cors = require("cors");
 const corsOptions = {
@@ -25,6 +29,7 @@ const corsOptions = {
 };
 app.use(cors()); // Use this after the variable declaration
 app.use(express.json()); // tell the server to accept the json data from frontend
+app.use(cookieParser()); // adds cookies to the sessions
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use("/backend/capacity", availabilityInfo.router);
@@ -39,5 +44,11 @@ app.use('/backend/users', users.router);
 app.use("/backend/email", emailManager);
 app.use("/backend/reports", reports.router);
 app.use("/backend/schedule", schedule.router);
+
+/* Authentication */
+const secret = 'mysecretsshhh'; // secret key (should not be here in desployment)
+app.use('/backend/auth', auth.router);
+
+
 
 app.listen(3030, ()=> console.log('Listening on port 3030...'));

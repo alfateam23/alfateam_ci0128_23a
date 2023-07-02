@@ -32,9 +32,9 @@ const Tarifas = () => {
             {data ? (
                 <div className="table-container">
                     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-                        <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400 px-6" data-test-id="table-tarifas">
-                            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                <tr>
+                        <table className="w-full text-sm text-center text-gray-500 dark:text-gray-400 px-6" data-test-id="table-tarifas">
+                            <thead className="text-xl text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                <tr className="bg-[#FF8C32]">
                                     <th scope="col" className="px-6 py-3" data-test-id="column-Procedencia">
                                         {TABLE_HEAD[0]}
                                     </th>
@@ -60,8 +60,13 @@ const Tarifas = () => {
                             </thead>
                             <tbody>
                                 {data.map((tarifa, index) => (
-                                    <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600" >
-                                        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    <tr
+                                        key={index}
+                                        className="bg-white border-b text-lg dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                                    >
+                                        <th scope="row"
+                                            className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                                        >
                                             {tarifa.TipoProcedencia}
                                         </th>
                                         <td className="px-6 py-4">
@@ -80,9 +85,9 @@ const Tarifas = () => {
                                             {tarifa.Moneda}
                                         </td>
                                         <td className="px-6 py-4 text-right">
-                                            <a 
-                                            href={`tarifas/editar/${tarifa.TipoProcedencia}/${tarifa.TipoVisita}/${tarifa.Estatus}/${tarifa.CategoriaPago}`}
-                                            className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                                            <a
+                                                href={`tarifas/editar/${tarifa.TipoProcedencia}/${tarifa.TipoVisita}/${tarifa.Estatus}/${tarifa.CategoriaPago}`} // aca mando los parametros en mi casa cedula
+                                                className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
                                         </td>
                                     </tr >
                                 ))}
@@ -90,7 +95,7 @@ const Tarifas = () => {
                         </table>
                     </div>
                 </div>
-            // Si aun no esta la data tira este mensaje
+                // Si aun no esta la data tira este mensaje
             ) : ("Cargando información...")}
 
             {/* this button is for TESTING the FETCH, you can copy and paste to try the fetch in your own file*/}
