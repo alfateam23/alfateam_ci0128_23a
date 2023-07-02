@@ -61,7 +61,11 @@ router.post("/changeActive/:cedula", bodyParser.json(), async (req, res) => {
 router.get("/getAdmins", async (req, res) => {
   try {
     let users = await db.executeQuery(
-      `SELECT U.* FROM Usuario U JOIN Administrador A ON U.Cedula = A.Cedula;`
+      `SELECT U.*, AUT.NombreRol 
+      FROM Usuario U
+      JOIN Administrador A ON U.Cedula = A.Cedula 
+      JOIN Autorizacion AUT ON AUT.CedulaAdmin = U.Cedula
+      `
     );
     res.send(users.recordsets[0]);
   } catch (error) {

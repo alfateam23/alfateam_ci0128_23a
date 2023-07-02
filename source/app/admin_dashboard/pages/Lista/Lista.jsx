@@ -184,7 +184,7 @@ if (elementoCodigo1) {
         />
         <div className="row col-12">
           {selectedStateFilter && (
-          <button className="bg-[#FF8C32] hover:bg-[#FF8C32] text-black font-bold py-2 px-4 rounded my-4" onClick={resetTable}> Reiniciar Tabla</button>
+          <button className="bg-[#FF8C32] hover:bg-[#FF8C32] text-black font-bold py-2 px-4 rounded my-4" onClick={resetTable}>Limpiar Filtro</button>
         )}</div>
 
       </div>

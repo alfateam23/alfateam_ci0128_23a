@@ -5,10 +5,10 @@ import moment from 'moment';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 
 function Horarios() {
-  const [horaEntradaP, setHoraEntradaP] = useState(null);
-  const [horaSalidaP, setHoraSalidaP] = useState(null);
-  const [horaEntradaC, setHoraEntradaC] = useState(null);
-  const [horaSalidaC, setHoraSalidaC] = useState(null);
+  const [horaEntradaPicnic, setHoraEntradaPicnic] = useState(null);
+  const [horaSalidaPicnic, setHoraSalidaPicnic] = useState(null);
+  const [horaEntradaCamping, setHoraEntradaCamping] = useState(null);
+  const [horaSalidaCamping, setHoraSalidaCamping] = useState(null);
 
   useEffect(() => {
     fetch("/backend/schedule/P")
@@ -19,15 +19,14 @@ function Horarios() {
         return response.json();
       })
       .then((data) => {
-        console.log(data.HoraApertura)
         const fechaHora = moment(data.HoraApertura);
         const date = new Date(fechaHora);
         const horaAperturaFormateada = date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-        setHoraEntradaP(horaAperturaFormateada);
+        setHoraEntradaPicnic(horaAperturaFormateada);
         const fechaHora2 = moment(data.HoraCierre);
         const date2 = new Date(fechaHora2);
         const horaAperturaFormateada2 = date2.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });;
-        setHoraSalidaP(horaAperturaFormateada2);
+        setHoraSalidaPicnic(horaAperturaFormateada2);
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
@@ -46,34 +45,61 @@ function Horarios() {
         const fechaHora = moment(data.HoraApertura);
         const date = new Date(fechaHora);
         const horaAperturaFormateada = date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-        setHoraEntradaC(horaAperturaFormateada);
+        setHoraEntradaCamping(horaAperturaFormateada);
         const fechaHora2 = moment(data.HoraCierre);
         const date2 = new Date(fechaHora2);
         const horaAperturaFormateada2 = date2.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });;
-        setHoraSalidaC(horaAperturaFormateada2);
+        setHoraSalidaCamping(horaAperturaFormateada2);
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
       });
   }, []);
   
-  const horaEntradaPChange = (time) => {
-    setHoraEntradaP(time.format('HH:mm'));
+  const horaEntradaPicnicChange = (time) => {
+    setHoraEntradaPicnic(time.format('HH:mm'));
   };
   
   useEffect(() => {
-    if (horaEntradaP) {
-      console.log('Valores a enviar en la solicitud PUT:');
-      console.log('area:', 'P');
-      console.log('open:', horaEntradaP);
-      console.log('close:', horaSalidaP);
+    if (horaEntradaPicnic) {
+      fetch('/backend/schedule/update', {
+        method: 'PUT',
+        body: JSON.stringify({
+          area: 'P',
+          open: horaEntradaPicnic,
+          close: horaSalidaPicnic
+        }),
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+        },
+      })
+        .then((res) => {
+          if (!res.ok) {
+            console.log('Network response was not ok');
+          }
+          return res.json();
+        })
+        .then((data) => {
+          console.log('Data updated successfully:', data);
+        })
+        .catch((error) => {
+          console.error('Error updating data:', error);
+        });
+    }
+  }, [horaEntradaPicnic, horaSalidaPicnic]);
+
+  const horaSalidaPicnicChange = (time) => {
+    setHoraSalidaPicnic(time.format('HH:mm'));
+  };
+  useEffect(() => {
+    if (horaSalidaPicnic) {
   
       fetch('/backend/schedule/update', {
         method: 'PUT',
         body: JSON.stringify({
           area: 'P',
-          open: horaEntradaP,
-          close: horaSalidaP
+          open: horaEntradaPicnic,
+          close: horaSalidaPicnic
         }),
         headers: {
           'Content-type': 'application/json; charset=UTF-8',
@@ -92,53 +118,21 @@ function Horarios() {
           console.error('Error updating data:', error);
         });
     }
-  }, [horaEntradaP, horaSalidaP]);
+  }, [horaEntradaPicnic, horaSalidaPicnic]);
 
-  const horaSalidaPChange = (time) => {
-    setHoraSalidaP(time.format('HH:mm'));
-  };
-  useEffect(() => {
-    if (horaSalidaP) {
-  
-      fetch('/backend/schedule/update', {
-        method: 'PUT',
-        body: JSON.stringify({
-          area: 'P',
-          open: horaEntradaP,
-          close: horaSalidaP
-        }),
-        headers: {
-          'Content-type': 'application/json; charset=UTF-8',
-        },
-      })
-        .then((res) => {
-          if (!res.ok) {
-            console.log('Network response was not ok');
-          }
-          return res.json();
-        })
-        .then((data) => {
-          console.log('Data updated successfully:', data);
-        })
-        .catch((error) => {
-          console.error('Error updating data:', error);
-        });
-    }
-  }, [horaEntradaP, horaSalidaP]);
-
-  const horaEntradaCChange = (time) => {
-    setHoraEntradaC(time.format('HH:mm'));
+  const horaEntradaCampingChange = (time) => {
+    setHoraEntradaCamping(time.format('HH:mm'));
   };
 
   useEffect(() => {
-    if (horaEntradaC) {
+    if (horaEntradaCamping) {
   
       fetch('/backend/schedule/update', {
         method: 'PUT',
         body: JSON.stringify({
           area: 'C',
-          open: horaEntradaC,
-          close: horaSalidaC
+          open: horaEntradaCamping,
+          close: horaSalidaCamping
         }),
         headers: {
           'Content-type': 'application/json; charset=UTF-8',
@@ -157,21 +151,21 @@ function Horarios() {
           console.error('Error updating data:', error);
         });
     }
-  }, [horaEntradaC, horaSalidaC]);
+  }, [horaEntradaCamping, horaSalidaCamping]);
 
-  const horaSalidaCChange = (time) => {
-    setHoraSalidaC(time.format('HH:mm'));
+  const horaSalidaCampingChange = (time) => {
+    setHoraSalidaCamping(time.format('HH:mm'));
   };
 
   useEffect(() => {
-    if (horaSalidaC) {
+    if (horaSalidaCamping) {
   
       fetch('/backend/schedule/update', {
         method: 'PUT',
         body: JSON.stringify({
           area: 'C',
-          open: horaEntradaC,
-          close: horaSalidaC
+          open: horaEntradaCamping,
+          close: horaSalidaCamping
         }),
         headers: {
           'Content-type': 'application/json; charset=UTF-8',
@@ -190,7 +184,7 @@ function Horarios() {
           console.error('Error updating data:', error);
         });
     }
-  }, [horaEntradaC, horaSalidaC]);
+  }, [horaEntradaCamping, horaSalidaCamping]);
 
   const convertirAMoment = (time) => {
     return moment(time, 'HH:mm');
@@ -203,40 +197,40 @@ function Horarios() {
   return (
     <div>
       <h2 className="font-sans text-4xl rounded-none py-4 m-3">Configurar horas para Picnic</h2>
-      <p className="font-sans rounded-none py-4 m-3">        Hora de entrada para picnic: {horaEntradaP ? formatearHora(horaEntradaP) : ''}
+      <p className="font-sans rounded-none py-4 m-3">        Hora de entrada para picnic: {horaEntradaPicnic ? formatearHora(horaEntradaPicnic) : ''}
 </p>
-      <p className="font-sans rounded-none py-4 m-3">Hora de salida para picnic: {horaSalidaP ? formatearHora(horaSalidaP) : ''}</p>
+      <p className="font-sans rounded-none py-4 m-3">Hora de salida para picnic: {horaSalidaPicnic ? formatearHora(horaSalidaPicnic) : ''}</p>
       <label className="font-sans rounded-none py-4 m-3 flex flex-col">Nueva hora de entrada:</label>
       <LocalizationProvider dateAdapter={AdapterMoment}>
         <MobileTimePicker
-          value={horaEntradaP ? convertirAMoment(horaEntradaP) : null}
-          onChange={horaEntradaPChange}
+          value={horaEntradaPicnic ? convertirAMoment(horaEntradaPicnic) : null}
+          onChange={horaEntradaPicnicChange}
         />
       </LocalizationProvider>
 
       <label className="font-sans rounded-none py-4 m-3 flex flex-col">Nueva hora de salida:</label>
       <LocalizationProvider dateAdapter={AdapterMoment}>
         <MobileTimePicker
-          value={horaSalidaP ? convertirAMoment(horaSalidaP) : null}
-          onChange={horaSalidaPChange}
+          value={horaSalidaPicnic ? convertirAMoment(horaSalidaPicnic) : null}
+          onChange={horaSalidaPicnicChange}
         />
       </LocalizationProvider>
       <h2 className="font-sans text-4xl rounded-none py-4 m-3">Configurar horas para Camping</h2>
-        <p className="font-sans rounded-none py-4 m-3">Hora de entrada para camping: {horaEntradaC ? formatearHora(horaEntradaC) : ''}</p>
-        <p className="font-sans rounded-none py-4 m-3">Hora de salida para camping: {horaSalidaC ? formatearHora(horaSalidaC) : ''}</p>
+        <p className="font-sans rounded-none py-4 m-3">Hora de entrada para camping: {horaEntradaCamping ? formatearHora(horaEntradaCamping) : ''}</p>
+        <p className="font-sans rounded-none py-4 m-3">Hora de salida para camping: {horaSalidaCamping ? formatearHora(horaSalidaCamping) : ''}</p>
       <label className="font-sans rounded-none py-4 m-3 flex flex-col">Nueva hora de entrada:</label>
       <LocalizationProvider dateAdapter={AdapterMoment}>
         <MobileTimePicker
-          value={horaEntradaC ? convertirAMoment(horaEntradaC) : null}
-          onChange={horaEntradaCChange}
+          value={horaEntradaCamping ? convertirAMoment(horaEntradaCamping) : null}
+          onChange={horaEntradaCampingChange}
         />
       </LocalizationProvider>
 
       <label className="font-sans rounded-none py-4 m-3 flex flex-col">Nueva hora de salida:</label>
       <LocalizationProvider dateAdapter={AdapterMoment}>
         <MobileTimePicker
-          value={horaSalidaC ? convertirAMoment(horaSalidaC) : null}
-          onChange={horaSalidaCChange}
+          value={horaSalidaCamping ? convertirAMoment(horaSalidaCamping) : null}
+          onChange={horaSalidaCampingChange}
         />
       </LocalizationProvider>
     </div>
