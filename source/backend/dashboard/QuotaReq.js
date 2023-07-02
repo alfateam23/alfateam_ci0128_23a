@@ -32,7 +32,6 @@ async function getQuota(area) {
     if (result.recordset.length === 0) {
       throw new Error('No se encontraron registros para el área especificada');
     }
-    console.log(result)
     return result.recordset[0];
   } catch (error) {
     throw error;
@@ -43,9 +42,6 @@ async function updateQuota(area, total, online) {
   try {
     total = parseInt(total);
     online = parseInt(online);
-    console.log("Cupos totales obtenidos del Front:", total);
-    console.log("Cupos virtuales obtenidos del Front:", online);
-
     const result = await db.executeQuery(
       `UPDATE Area
       SET CupoTotal = '${total}',
