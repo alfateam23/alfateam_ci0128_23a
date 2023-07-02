@@ -1,4 +1,5 @@
 export class RegularExpresions {
+  // se guarda expresiones regulares para comprobar datos
   constructor() {
     //this.nombre = { campo: "", valido: null };
     this.expresiones = {

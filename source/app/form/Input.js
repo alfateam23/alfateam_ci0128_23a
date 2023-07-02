@@ -193,7 +193,7 @@ const ComponentDropDown = ({
     </div>
   );
 };
-
+// componete para checkbox 
 const ComponentCheckBox = ({
   label,
   name,

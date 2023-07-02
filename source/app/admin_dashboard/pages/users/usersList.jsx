@@ -42,7 +42,14 @@ const UsersList = () => {
   return (
     <div>
       <h1 className="font-sans text-4xl rounded-none py-4 m-3"> Usuarios </h1>
-
+      <a href="/users/create">
+        <button
+          type="button"
+          class="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+        >
+          Crear Usuario
+        </button>{" "}
+      </a>
       {/* Waits for data to be charged */}
       {/* Esta tabla es un componente de flowbite, por eso algunos tags están definidos con esos atributos */}
       {data ? (
@@ -88,12 +95,12 @@ const UsersList = () => {
                     <td className="px-6 py-4 ">
                       {user.EstadoActividad ? "Activo" : "Deshabilitado"}
                     </td>
-                    <td className="px-6 py-4 text-right">
+                    <td className="px-6 py-4">
                       <button
                         onClick={() => handleUserState(user.Cedula)}
                         className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                       >
-                        Cambiar Estado
+                        {user.EstadoActividad ? "Deshabilitar" : "Activar"}
                       </button>
                     </td>
                     <td className="px-6 py-4 text-right">
@@ -109,15 +116,8 @@ const UsersList = () => {
               </tbody>
             </table>
           </div>
-          <br/><br/>
-          <a href='/users/create'>
-            <button
-              type="button"
-              class="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-            >
-              Crear Usuario
-            </button>{" "}
-          </a>
+          <br />
+          <br />
         </div>
       ) : (
         // Si aun no esta la data tira este mensaje
