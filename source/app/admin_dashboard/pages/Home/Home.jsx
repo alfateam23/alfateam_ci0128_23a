@@ -1,6 +1,6 @@
 const Home = () => {
     return (
-        <div className="mt-3">
+        <div className="mt-4">
             <h1 class="font-lexend text-3xl font-thin" data-test-id="title-home">¡Bienvenido al Centro de control!</h1>
             <div class="">
                 <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
