@@ -28,7 +28,7 @@ router.get('/getServices', async (req, res) => {
     const result = await db.executeQuery(
       `Select * from TipoServicio`
     )
-    res.json(result.recordset);
+    res.json(formatTime(result.recordset));
   } catch (error) {
     console.log('Error al revisar visitante existente: ', error);
   }
@@ -37,7 +37,7 @@ router.get('/getServices', async (req, res) => {
 router.post('/saveService', async (req, res) => {
   try {
     const result = await insertSevice(req.body);
-    res.json(result);
+    res.json("Inserted");
   } catch (error) {
     console.log('Error al guardar servicio', error);
   }
@@ -67,6 +67,17 @@ async function insertSevice(service) {
   } catch (error) {
     throw error
   }
+}
+
+function formatTime(data) {
+  data.forEach((item)=>{
+    const dateTime = item.Tiempo;
+    const hours = String(dateTime.getUTCHours()).padStart(2,'0');
+    const minutes = String(dateTime.getMinutes()).padStart(2, '0');
+    const seconds = String(dateTime.getSeconds()).padStart(2, '0');
+    item.Tiempo = `${hours}:${minutes}:${seconds}`;
+  })
+  return data;
 }
 
 module.exports = { router }

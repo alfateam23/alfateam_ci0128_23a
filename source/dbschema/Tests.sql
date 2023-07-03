@@ -44,3 +44,4 @@ Group by FechaInicio
 Order by Fecha
 
 Select * From TipoServicio
+Select * from Servicio
