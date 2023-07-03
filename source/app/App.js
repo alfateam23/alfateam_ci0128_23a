@@ -33,7 +33,7 @@ import Login from './authentication/login';
 import withAuth from './authentication/withAuth';
 const AuthenticatedRootLayout = withAuth(RootLayout);
 
-const AdminApp = () => {
+const AdminApp = (setRunAdminApp) => {
    const userData = new UserData();
    return (
       <div>
@@ -60,12 +60,12 @@ const AdminApp = () => {
    );
 }
 
-const CustomerApp = () => {
+const CustomerApp = (setRunAdminApp) => {
    const userData = new UserData();
    return (
       <div>
          <Routes>
-            <Route path="/" element={<LandingPage />} />
+            <Route path="/" element={<LandingPage setRunAdminApp={setRunAdminApp}/>} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/activities" element={<ActivitiesPage />} />
             <Route path="/contact" element={<ContactPage />} />
@@ -84,11 +84,11 @@ const CustomerApp = () => {
  * web application.
  */
 const App = () => {
-   const runAdminApp = false; // Change for either admin or guest mode
+   const [runAdminApp, setRunAdminApp] = useState(false); // Change for either admin or guest mode
    if (runAdminApp) {
-      return (AdminApp());
+      return (AdminApp(setRunAdminApp));
    } else {
-      return (CustomerApp());
+      return (CustomerApp(setRunAdminApp));
    }
 }
 
