@@ -18,9 +18,7 @@ const Dashboard = () => {
                                 </svg>
                             </button>
                             <img className=" bg-white rounded-full h-12 w-12" src="https://drive.google.com/uc?id=1AzdOB5sYhrBQ1tvrRwc7TP3BlIk0xZJX" alt="Image" />
-
                             <p class="font-libre-franklin font-bold ml-2 md:mr-24 self-center text-xl sm:text-2xl whitespace-nowrap text-[#4A55A2]">AsoJunquillal</p>
-
                         </div>
                         <div class="flex items-center">
                             <div class="flex items-center ml-3">
