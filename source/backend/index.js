@@ -1,5 +1,4 @@
 // Node server for serving API endpoints, using Express.
-
 const express = require('express');
 const app = express();
 const dotenv = require("dotenv");
@@ -29,7 +28,6 @@ const corsOptions = {
   credentials: true, //access-control-allow-credentials:true
   optionSuccessStatus: 200,
 };
-
 app.use(cors()); // Use this after the variable declaration
 app.use(express.json()); // tell the server to accept the json data from frontend
 app.use(cookieParser()); // adds cookies to the sessions

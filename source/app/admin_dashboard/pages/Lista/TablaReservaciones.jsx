@@ -12,26 +12,29 @@ const TablaReservaciones = ({
     <table className="w-full text-sm text-center ">
 <thead className="text-xl text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
         <tr className="bg-[#FF8C32]">
-          <th scope="col" className="px-6 py-3 w-[250px]">
+          <th scope="col" className="px-6 py-3 w-[350px]">
             Código
             <button onClick={() => sortElements('ReservacionCodigo')}>
                 {sortField === 'ReservacionCodigo' && sortOrder === 'asc' ? '▲' : '▼'}
             </button>
           </th>
-          <th scope="col" className="px-6 py-3 w-[200px] ">
+          <th scope="col" className="px-6 py-3 w-[150px] ">
             Tipo 
             <button onClick={() => sortElements('TipoArea')}>
               {sortField === 'TipoArea' && sortOrder === 'asc' ? '▲' : '▼'}
             </button>
           </th>
-          <th scope="col" className="px-6 py-3 w-[300px]">
+          <th scope="col" className="px-6 py-3 w-[450px]">
             Visitantes{' '}
             <button onClick={() => sortElements('TotalCantidadVisitantes')}>
                 {sortField === 'TotalCantidadVisitantes' && sortOrder === 'asc' ? '▲' : '▼'}
               </button>
           </th>
           <th scope="col" className="px-6 py-3 w-[900px]">
-            Fecha entrada
+            Fecha
+            <button onClick={() => sortElements('FechaInicio')}>
+                {sortField === 'FechaInicio' && sortOrder === 'asc' ? '▲' : '▼'}
+              </button>
           </th>
           <th scope="col" className="px-6 py-3 w-[250px]">
             Estado
