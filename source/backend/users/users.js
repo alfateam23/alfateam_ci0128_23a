@@ -73,6 +73,23 @@ router.get("/getAdmins", async (req, res) => {
   }
 });
 
+/* Get all ACTIVE admin users */
+router.get("/getActiveAdmins", async (req, res) => {
+  try {
+    let users = await db.executeQuery(
+      `SELECT U.*, AUT.NombreRol 
+      FROM Usuario U
+      JOIN Administrador A ON U.Cedula = A.Cedula 
+      JOIN Autorizacion AUT ON AUT.CedulaAdmin = U.Cedula
+      WHERE U.EstadoActividad = 1;
+      `
+    );
+    res.send(users.recordsets[0]);
+  } catch (error) {
+    res.status(500).send("Error retrieving administrators");
+  }
+});
+
 async function changeEstadoActividad(cedula, EstadoActividad) {
   try {
     const result = await db.executeQuery(`
