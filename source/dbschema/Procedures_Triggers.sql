@@ -487,3 +487,25 @@ BEGIN
     INSERT INTO Autorizacion (CedulaAdmin, NombreRol)
     VALUES (@Cedula, @NombreRol);
 END;
+
+go
+CREATE PROCEDURE InsertServicio
+  @Cedula VARCHAR(60),
+  @NombreServicio VARCHAR(60),
+  @TiempoServicio TIME,
+  @Fecha DATETIME
+AS
+BEGIN
+  DECLARE @Monto MONEY;
+  DECLARE @Moneda CHAR(3);
+  
+  -- Retrieve the Monto and Moneda values from the TipoServicio table
+  SELECT @Monto = MONTO, @Moneda = MONEDA
+  FROM TipoServicio
+  WHERE Nombre = @NombreServicio AND Tiempo = @TiempoServicio;
+
+  -- Insert the service into the Servicio table
+  INSERT INTO Servicio (Cedula, NombreServicio, TiempoServicio, Fecha, MONTO, MONEDA)
+  VALUES (@Cedula, @NombreServicio, @TiempoServicio, @Fecha, @Monto, @Moneda);
+END;
+

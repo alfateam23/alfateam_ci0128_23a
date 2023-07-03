@@ -97,8 +97,6 @@ function Cupos() {
           return res.json();
         })
         .then((data) => {
-          console.log("Cupos virtuales enviados del Front:", data.total)
-          console.log("Cupos totales obtenidos del Front:", data.online)
           result = data;
         })
         .catch((error) => {
@@ -140,8 +138,6 @@ function Cupos() {
           return res.json();
         })
         .then((data) => {
-          console.log("Cupos virtuales enviados del Front:", data.total)
-          console.log("Cupos totales obtenidos del Front:", data.online)
           result = data;
         })
         .catch((error) => {

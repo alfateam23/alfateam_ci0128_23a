@@ -38,8 +38,8 @@ async function updateSchedule(area, open, close) {
   try {
     const result = await db.executeQuery(
       `UPDATE Area
-      SET HoraApertura = ${open},
-          HoraCierre = ${close}
+      SET HoraApertura = '${open}',
+          HoraCierre = '${close}'
       WHERE Tipo='${area}'`
     )
     return result.recordset[0];

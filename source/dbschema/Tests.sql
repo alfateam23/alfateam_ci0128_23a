@@ -43,4 +43,5 @@ AND TipoVisita = 'Camping' AND Estatus = 'Adulto'
 Group by FechaInicio
 Order by Fecha
 
-Select * From TipoVisitante
+Select * From TipoServicio
+Select * from Servicio
