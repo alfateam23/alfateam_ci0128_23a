@@ -62,7 +62,7 @@
     "yaml": "^2.2.2"
   },
   "scripts": {
-    "start": "PORT=3050 react-app-rewired start",
+    "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "jest",
     "eject": "react-app-rewired eject"

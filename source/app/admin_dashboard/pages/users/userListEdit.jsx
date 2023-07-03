@@ -80,6 +80,24 @@ const UserEditForm = () => {
     }
   }
 
+  /* This for managing the account state: active or disable  */
+  const handleUserState = (cedula) => {
+    fetch(`/backend/users/changeActive/${cedula}`, {
+      method: "POST",
+      // Additional options and headers can be added here
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // Process the fetched data as needed
+        console.log(data);
+      })
+      .catch((error) => {
+        // Handle any errors that occur during the request
+        console.error("Error:", error);
+      });
+    window.location.reload(); // for refreshing the window with the recently changed info
+  };
+
   // Set state
   React.useEffect(() => {
     const handleUser = () => {
@@ -113,7 +131,7 @@ const UserEditForm = () => {
       </a>
       <h1 className="font-sans text-4xl rounded-none py-4 m-3">
         {" "}
-        Editar Usuarios{" "}
+        Editar Usuario{" "}
       </h1>
       {data ? (
         <form method="POST" onSubmit={handleForm}>
@@ -232,9 +250,8 @@ const UserEditForm = () => {
             <input
               id="ConfirmarClave"
               name="ConfirmarClave"
-              className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${
-                contraseñasCoinciden ? "" : "border-red-500"
-              }`}
+              className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${contraseñasCoinciden ? "" : "border-red-500"
+                }`}
               onChange={handleConfirmarClaveChange}
               type="password"
             />
@@ -268,6 +285,22 @@ const UserEditForm = () => {
             >
               Actualizar Usuario
             </button>
+            {data.map((user) => (
+              user.EstadoActividad ?
+                <button
+                  className="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-[#FF9B9B] hover:bg-[#F24C3D] rounded-lg border border-gray-200"
+                  onClick={() => handleUserState(Cedula)}
+                >
+                  Desactivar Cuenta
+                </button> :
+                <button
+                  className="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-[#A0C49D] hover:bg-[#617A55] rounded-lg border border-gray-200"
+                  onClick={() => handleUserState(Cedula)}
+                >
+                  Activar Cuenta
+                </button>
+
+            ))}
           </div>
         </form>
       ) : (

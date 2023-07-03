@@ -14,6 +14,8 @@ const emailManager = require("./reservation/Email/emailRoutes");
 const bodyParser = require('body-parser');
 const reports = require('./dashboard/ReportsReq')
 const users = require('./users/users')
+const quota = require('./dashboard/QuotaReq');
+const schedule = require('./dashboard/ScheduleReq');
 const auth = require('./authentication/auth')
 const serviceManager = require('./dashboard/ServiceReq')
 
@@ -46,6 +48,8 @@ app.use('/backend/service', serviceManager.router);
 //Signup and login
 app.use("/backend/email", emailManager);
 app.use("/backend/reports", reports.router);
+app.use("/backend/quota", quota.router);
+app.use("/backend/schedule", schedule.router);
 
 
 /* Authentication */
