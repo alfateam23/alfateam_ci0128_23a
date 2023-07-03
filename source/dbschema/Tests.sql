@@ -30,3 +30,18 @@ delete from Cliente where Email = 'pablito-clava@gmail.com'
 delete from Telefono where Email = 'pablito-clava@gmail.com'
 delete from Usuario where Email = 'pablito-clava@gmail.com'
 delete from Reservacion where Codigo = 7
+
+Select *
+From Visitante JOIN Reservacion on Codigo=CodigoReservacion
+Where FechaInicio >='2023-06-01' AND FechaInicio <= '2023-06-30'
+AND TipoVisita = 'Camping' AND Estatus = 'Adulto'
+
+Select FechaInicio as Fecha, SUM(CantidadVisitantes) as Tiquetes, SUM(Subtotal) as Total
+From Visitante JOIN Reservacion on Codigo=CodigoReservacion
+Where FechaInicio >='2023-06-01' AND FechaInicio <= '2023-06-30'
+AND TipoVisita = 'Camping' AND Estatus = 'Adulto'
+Group by FechaInicio
+Order by Fecha
+
+Select * From TipoServicio
+Select * from Servicio

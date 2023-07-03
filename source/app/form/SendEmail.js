@@ -3,6 +3,7 @@
 import { Template } from "./Email_Template.tsx";
 import { render } from "@react-email/render";
 
+// metodo para enviar correo
 const sendEmail = async (UserData, code) => {
   const baseUrl = "http://localhost:8000";
 

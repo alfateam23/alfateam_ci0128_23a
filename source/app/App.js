@@ -20,13 +20,16 @@ import {
 /* import for Centro de Control */
 import RootLayout from './admin_dashboard/layout/RootLayout';
 import Settings from './admin_dashboard/pages/Settings';
-import Home from './admin_dashboard/pages/Home';
+import Home from './admin_dashboard/pages/Home/Home';
 import Tarifas from './admin_dashboard/pages/Tarifas';
 import TarifasEditar from './admin_dashboard/pages/TarifasEditar';
 import Reports from './admin_dashboard/pages/Reports';
 import Users from './admin_dashboard/pages/users/usersList';
+import Horarios from './admin_dashboard/pages/Horarios';
+import Cupos from './admin_dashboard/pages/Cupos';
 import UsersEdit from './admin_dashboard/pages/users/userListEdit';
 import UserCreate from './admin_dashboard/pages/users/UserCreate';
+import { Service } from './admin_dashboard/pages/Service';
 
 /* Authentication */
 import Login from './authentication/login';
@@ -52,7 +55,10 @@ const AdminApp = (setRunAdminApp) => {
                <Route path='/tarifas/editar/:TipoProcedencia/:TipoVisita/:Estatus/:CategoriaPago' element={<TarifasEditar />} />
                <Route path='/users/editar/:Cedula' element={<UsersEdit/>} />
                <Route path='/users/create' element={<UserCreate/>} />
+               <Route path='/service' element={<Service/>} />
                <Route path='/reports' element={<Reports />} />
+               <Route path='/Horarios' element={<Horarios />} />
+               <Route path='/Cupos' element={<Cupos />} />
                <Route path="/login" element={<Login />} />
             </Route>
          </Routes>

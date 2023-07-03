@@ -72,7 +72,7 @@ BEGIN
   VALUES (@Cedula, @Numero)
 END;
 
-/*EXEC InsertPhone 
+/*EXEC InsertPhone
   @Email = 'example@email.com',
   @Numero = '123-456-7890';*/
 -- Siguiente insertar el cliente
@@ -85,8 +85,8 @@ BEGIN
   INSERT INTO Cliente (Cedula)
   VALUES (@Cedula)
 END;
- 
-/*EXEC InsertClient 
+
+/*EXEC InsertClient
   @Email = 'example@email.com'*/;
 
 go
@@ -106,6 +106,7 @@ BEGIN
 END;
 
 -- Insertar reservación
+-- Se realiza como transacción, ya que el último código puede cambiar si entra otra reserva al mismo tiempo.
 go
 CREATE PROCEDURE InsertReservation
   @Cedula VARCHAR(60),
@@ -117,6 +118,7 @@ CREATE PROCEDURE InsertReservation
   @OutputParameter INT OUTPUT
 AS
 BEGIN
+  BEGIN TRANSACTION;
   DECLARE @Codigo INT;
   DECLARE @FechaSolicitud DATETIME;
   SET @FechaSolicitud = GETDATE(); -- Set the current date as the FechaSolicitud
@@ -131,10 +133,11 @@ BEGIN
 
   SET @OutputParameter = @Codigo;
   SELECT @OutputParameter AS OutputCode;
+  COMMIT;
 END;
 
 /*DECLARE @Output INT;
-EXEC InsertReservation 
+EXEC InsertReservation
   @Email = 'example@email.com',
   @TipoArea = 'C',
   @FechaInicio = '2023-06-01',
@@ -155,7 +158,7 @@ BEGIN
   VALUES (@CodigoReservacion, @Placa);
 END;
 
-/*EXEC InsertVehiculo 
+/*EXEC InsertVehiculo
   @CodigoReservacion = 1,
   @Placa = 'ABC123';*/
 
@@ -186,14 +189,14 @@ BEGIN
   VALUES (@CodigoReservacion, @TipoProcedencia, @TipoVisita, @Estatus, @CategoriaPago, @CantidadVisitantes, @Subtotal);
 END;
 
-/*EXEC InsertVisitante 
+/*EXEC InsertVisitante
   @CodigoReservacion = 1,
   @TipoProcedencia = 'Nacional',
   @TipoVisita = 'Camping',
   @Estatus = 'Adulto',
   @CategoriaPago = 'No exonerado',
   @CantidadVisitantes = 2;*/
-/*EXEC InsertVisitante 
+/*EXEC InsertVisitante
   @CodigoReservacion = 1,
   @TipoProcedencia = 'Nacional',
   @TipoVisita = 'Camping',
@@ -236,19 +239,22 @@ BEGIN
   VALUES (@Codigo, @CodigoReservacion, @EstadoPago, GETDATE(), @Monto, @Moneda);
 END;
 
-/*EXEC InsertFactura 
+/*EXEC InsertFactura
   @CodigoReservacion = 1,
   @EstadoPago = 1;
 
   select * from Factura
   select *from TipoVisitante*/
 
+-- Actualizar límite de visitantes.
+-- Se crea como transacción, ya que otra reservación puede actualizar el límite al mismo tiempo.
 go
 CREATE TRIGGER UpdateLimiteVisitantes
 ON Visitante
 AFTER INSERT
 AS
 BEGIN
+  BEGIN TRANSACTION;
   DECLARE @CodigoReservacion INT;
   DECLARE @FechaInicio DATETIME;
   DECLARE @FechaFin DATETIME;
@@ -311,6 +317,7 @@ BEGIN
 
     SET @CurrentDate = DATEADD(DAY, 1, @CurrentDate);
   END
+  COMMIT;
 END;
 
 go
@@ -479,5 +486,26 @@ BEGIN
     -- Assign role to the user in Autorizacion table
     INSERT INTO Autorizacion (CedulaAdmin, NombreRol)
     VALUES (@Cedula, @NombreRol);
+END;
+
+go
+CREATE PROCEDURE InsertServicio
+  @Cedula VARCHAR(60),
+  @NombreServicio VARCHAR(60),
+  @TiempoServicio TIME,
+  @Fecha DATETIME
+AS
+BEGIN
+  DECLARE @Monto MONEY;
+  DECLARE @Moneda CHAR(3);
+  
+  -- Retrieve the Monto and Moneda values from the TipoServicio table
+  SELECT @Monto = MONTO, @Moneda = MONEDA
+  FROM TipoServicio
+  WHERE Nombre = @NombreServicio AND Tiempo = @TiempoServicio;
+
+  -- Insert the service into the Servicio table
+  INSERT INTO Servicio (Cedula, NombreServicio, TiempoServicio, Fecha, MONTO, MONEDA)
+  VALUES (@Cedula, @NombreServicio, @TiempoServicio, @Fecha, @Monto, @Moneda);
 END;
 

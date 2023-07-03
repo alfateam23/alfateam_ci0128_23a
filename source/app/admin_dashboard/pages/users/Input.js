@@ -1,7 +1,7 @@
 import { Space, Menu } from "antd";
 import { ButtonDropDown, DropDown } from "./Elements/FormElements";
 import { DownOutlined } from "@ant-design/icons";
-// componente para desplegar paises y provincias
+// componente para desplegar los roles de usuario
 const ComponentDropDown = ({
   label,
   name,
@@ -22,8 +22,8 @@ const ComponentDropDown = ({
     SetItem(Nombre);
   };
 
-  const handleDropDownVisibleChange = (visible) => {
-    if (visible && selectedItem) {
+  const handleDropDownOpenChange = (open) => {
+    if (open && selectedItem) {
       const selectedItemName = selectedItem.Nombre;
       const currentSelectedItemName = items.find(
         (item) => item.Nombre === selectedItemName
@@ -46,14 +46,13 @@ const ComponentDropDown = ({
   );
 
   return (
-    // className="overflow-y-scroll"
     <div style={{ maxHeight: "70px" }}>
       <label htmlFor={name}>{label}</label>
       <div>
         <DropDown
           overlay={menu}
           trigger={["click"]}
-          onVisibleChange={handleDropDownVisibleChange}
+          onOpenChange={handleDropDownOpenChange}
         >
           <ButtonDropDown>
             <Space>
