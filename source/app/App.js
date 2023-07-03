@@ -20,7 +20,7 @@ import {
 /* import for Centro de Control */
 import RootLayout from './admin_dashboard/layout/RootLayout';
 import Settings from './admin_dashboard/pages/Settings';
-import Home from './admin_dashboard/pages/Home';
+import Home from './admin_dashboard/pages/Home/Home';
 import Tarifas from './admin_dashboard/pages/Tarifas';
 import TarifasEditar from './admin_dashboard/pages/TarifasEditar';
 import Reports from './admin_dashboard/pages/Reports';
