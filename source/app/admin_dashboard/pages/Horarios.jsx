@@ -5,10 +5,10 @@ import moment from 'moment';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 
 function Horarios() {
-  const [horaEntradaPicnic, setHoraEntradaPicnic] = useState(null);
-  const [horaSalidaPicnic, setHoraSalidaPicnic] = useState(null);
-  const [horaEntradaCamping, setHoraEntradaCamping] = useState(null);
-  const [horaSalidaCamping, setHoraSalidaCamping] = useState(null);
+  const [horaEntradaPicnic, sethoraEntradaPicnic] = useState(null);
+  const [horaSalidaPicnic, sethoraSalidaPicnic] = useState(null);
+  const [horaEntradaCamping, sethoraEntradaCamping] = useState(null);
+  const [horaSalidaCamping, sethoraSalidaCamping] = useState(null);
 
   useEffect(() => {
     fetch("/backend/schedule/P")
@@ -22,11 +22,11 @@ function Horarios() {
         const fechaHora = moment(data.HoraApertura);
         const date = new Date(fechaHora);
         const horaAperturaFormateada = date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-        setHoraEntradaPicnic(horaAperturaFormateada);
+        sethoraEntradaPicnic(horaAperturaFormateada);
         const fechaHora2 = moment(data.HoraCierre);
         const date2 = new Date(fechaHora2);
         const horaAperturaFormateada2 = date2.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });;
-        setHoraSalidaPicnic(horaAperturaFormateada2);
+        sethoraSalidaPicnic(horaAperturaFormateada2);
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
@@ -45,11 +45,11 @@ function Horarios() {
         const fechaHora = moment(data.HoraApertura);
         const date = new Date(fechaHora);
         const horaAperturaFormateada = date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-        setHoraEntradaCamping(horaAperturaFormateada);
+        sethoraEntradaCamping(horaAperturaFormateada);
         const fechaHora2 = moment(data.HoraCierre);
         const date2 = new Date(fechaHora2);
         const horaAperturaFormateada2 = date2.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });;
-        setHoraSalidaCamping(horaAperturaFormateada2);
+        sethoraSalidaCamping(horaAperturaFormateada2);
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
@@ -57,7 +57,7 @@ function Horarios() {
   }, []);
   
   const horaEntradaPicnicChange = (time) => {
-    setHoraEntradaPicnic(time.format('HH:mm'));
+    sethoraEntradaPicnic(time.format('HH:mm'));
   };
   
   useEffect(() => {
@@ -89,7 +89,7 @@ function Horarios() {
   }, [horaEntradaPicnic, horaSalidaPicnic]);
 
   const horaSalidaPicnicChange = (time) => {
-    setHoraSalidaPicnic(time.format('HH:mm'));
+    sethoraSalidaPicnic(time.format('HH:mm'));
   };
   useEffect(() => {
     if (horaSalidaPicnic) {
@@ -121,7 +121,7 @@ function Horarios() {
   }, [horaEntradaPicnic, horaSalidaPicnic]);
 
   const horaEntradaCampingChange = (time) => {
-    setHoraEntradaCamping(time.format('HH:mm'));
+    sethoraEntradaCamping(time.format('HH:mm'));
   };
 
   useEffect(() => {
@@ -154,7 +154,7 @@ function Horarios() {
   }, [horaEntradaCamping, horaSalidaCamping]);
 
   const horaSalidaCampingChange = (time) => {
-    setHoraSalidaCamping(time.format('HH:mm'));
+    sethoraSalidaCamping(time.format('HH:mm'));
   };
 
   useEffect(() => {
@@ -197,7 +197,7 @@ function Horarios() {
   return (
     <div>
       <h2 className="font-sans text-4xl rounded-none py-4 m-3">Configurar horas para Picnic</h2>
-      <p className="font-sans rounded-none py-4 m-3">        Hora de entrada para picnic: {horaEntradaPicnic ? formatearHora(horaEntradaPicnic) : ''}
+      <p className="font-sans rounded-none py-4 m-3">Hora de entrada para picnic: {horaEntradaPicnic ? formatearHora(horaEntradaPicnic) : ''}
 </p>
       <p className="font-sans rounded-none py-4 m-3">Hora de salida para picnic: {horaSalidaPicnic ? formatearHora(horaSalidaPicnic) : ''}</p>
       <label className="font-sans rounded-none py-4 m-3 flex flex-col">Nueva hora de entrada:</label>

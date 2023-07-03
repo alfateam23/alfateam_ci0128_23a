@@ -91,6 +91,7 @@ if (elementoCodigo1) {
       return item;
     });
     setData(updatedData);
+    window.location.reload();
   };
   useEffect(() => {
     if(cancelado !== 0){
@@ -119,6 +120,7 @@ if (elementoCodigo1) {
       return item;
     });
     setData(updatedData);
+    window.location.reload();
   };
 
   useEffect(() => {
