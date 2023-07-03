@@ -229,3 +229,27 @@ CREATE TABLE Factura
   CONSTRAINT FK_Factura_Reservacion FOREIGN KEY(CodigoReservacion)
   REFERENCES Reservacion(Codigo)
 );
+
+CREATE TABLE TipoServicio
+(
+  Nombre VARCHAR(60),
+  Tiempo TIME NOT NULL,
+  MONTO MONEY NOT NULL,
+  MONEDA CHAR(3) NOT NULL,
+  CONSTRAINT PK_TipoServicio PRIMARY KEY(Nombre, Tiempo)
+);
+
+CREATE TABLE Servicio
+(
+  Cedula VARCHAR(60),
+  NombreServicio VARCHAR(60),
+  TiempoServicio TIME NOT NULL,
+  Fecha DATETIME,
+  MONTO MONEY NOT NULL,
+  MONEDA CHAR(3) NOT NULL,
+  CONSTRAINT PK_Servicio PRIMARY KEY(Cedula,NombreServicio,Fecha),
+  CONSTRAINT FK_Servicio_Cedula FOREIGN KEY(Cedula)
+  REFERENCES Cliente(Cedula),
+  CONSTRAINT FK_Servicio_Nombre FOREIGN KEY(NombreServicio, TiempoServicio)
+  REFERENCES TipoServicio(Nombre, Tiempo)
+);

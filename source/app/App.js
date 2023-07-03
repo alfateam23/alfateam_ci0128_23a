@@ -29,6 +29,7 @@ import Horarios from './admin_dashboard/pages/Horarios';
 import Cupos from './admin_dashboard/pages/Cupos';
 import UsersEdit from './admin_dashboard/pages/users/userListEdit';
 import UserCreate from './admin_dashboard/pages/users/UserCreate';
+import { Service } from './admin_dashboard/pages/Service';
 
 /* Authentication */
 import Login from './authentication/login';
@@ -54,6 +55,7 @@ const AdminApp = () => {
                <Route path='/tarifas/editar/:TipoProcedencia/:TipoVisita/:Estatus/:CategoriaPago' element={<TarifasEditar />} />
                <Route path='/users/editar/:Cedula' element={<UsersEdit/>} />
                <Route path='/users/create' element={<UserCreate/>} />
+               <Route path='/service' element={<Service/>} />
                <Route path='/reports' element={<Reports />} />
                <Route path='/Horarios' element={<Horarios />} />
                <Route path='/Cupos' element={<Cupos />} />

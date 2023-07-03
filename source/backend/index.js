@@ -16,6 +16,7 @@ const users = require('./users/users')
 const quota = require('./dashboard/QuotaReq');
 const schedule = require('./dashboard/ScheduleReq');
 const auth = require('./authentication/auth')
+const serviceManager = require('./dashboard/ServiceReq')
 
 dotenv.config();
 
@@ -41,6 +42,7 @@ app.use("/backend/insertReservation", reservationManager.router);
 app.use("/backend/reservationCode", reservationCode.router);
 app.use('/tarifas', tarifas.router);
 app.use('/backend/users', users.router);
+app.use('/backend/service', serviceManager.router);
 //Signup and login
 app.use("/backend/email", emailManager);
 app.use("/backend/reports", reports.router);

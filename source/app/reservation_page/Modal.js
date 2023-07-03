@@ -12,7 +12,8 @@ acceptButtonFunc, declineButtonFunc, showFooter}) => {
         </Modal.Header>
         <Modal.Body>
           <div>
-            {!body ? 'Loading...' : 
+            {!body ? 'Loading...' :
+            typeof body === 'string' ? body :
             <ReviewModalBody body={body}/>}
           </div>
         </Modal.Body>
