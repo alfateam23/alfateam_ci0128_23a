@@ -1,6 +1,6 @@
 import React from 'react';
-import { Navbar } from 'flowbite-react';
-export const NavBar = () => {
+import { Navbar, Button } from 'flowbite-react';
+export const NavBar = ({setRunAdminApp}) => {
   return (
     <div>
       <Navbar
@@ -17,6 +17,11 @@ export const NavBar = () => {
             Aso Junquillal
           </span>
         </Navbar.Brand>
+        <div className="flex md:order-2">
+          <Button onClick={()=>setRunAdminApp(true)}>
+            Login Administradores
+          </Button>
+        </div>
         <Navbar.Toggle />
         <Navbar.Collapse>
           {/* eslint-disable-next-line no-useless-escape*/}
