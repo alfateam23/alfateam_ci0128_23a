@@ -1,7 +1,7 @@
 import React from "react";
 import 'flowbite';
 
-const TABLE_HEAD = ["Procedencia", "Tipo", "Edad", "Categoria de Pago", "Monto", "Modena", ""];
+const TABLE_HEAD = ["Procedencia", "Tipo", "Edad", "Categoria de Pago", "Monto", "Moneda", ""];
 
 const Tarifas = () => {
     const [data, setData] = React.useState(null); // use state
