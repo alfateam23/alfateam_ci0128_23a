@@ -4,6 +4,13 @@ import { CiCalendar } from "react-icons/ci";
 import { BrowserRouter as Router, Routes, Route, Link,
  useNavigate } from 'react-router-dom';
 
+import {
+  NextButtonSelectDates,
+  NextButtonInfoPage,
+  NextButtonReviewPage,
+  RegularNextButton
+} from './NextButton';
+
 /*outline-1 outline-dashed outline-black-500*/
 
 /**
@@ -32,7 +39,6 @@ export const Next_link = ({route_next, route_back,
       alert('Por favor digite las fechas que desea antes de continuar')
     }
   }
-
   
   useEffect(() => {
     function reservationSave(userData) {
@@ -46,64 +52,22 @@ export const Next_link = ({route_next, route_back,
 
   if (check === 1) {
     return (
-      <div className="bottom-5 absolute flex flex-row
-      space-x-32 lg:space-x-96 justify-center items-center">
-        <Link to={route_back}
-        className="flex font-sans bg-YellowButtonP
-        px-8 py-2 shadow-lg hover:bg-YellowButton">
-          Atrás
-        </Link>
-        <Link to={route_next} onClick={checkDates} className="font-sans
-        bg-YellowButtonP
-        px-8 py-2 shadow-lg hover:bg-YellowButton">
-          Siguiente
-        </Link>
-      </div>
+      <NextButtonSelectDates route_back={route_back}
+      route_next={route_next} checkDates={checkDates}/>
     );
   } else if (info === 1) {
     return (
-      <div className='flex flex-col'>
-        <div className="">
-          <Link to={route_back} className="font-sans bg-YellowButtonP float-left
-          ml-[10%] mb-[5%] px-8 py-2 shadow-lg hover:bg-YellowButton
-          inline-block">
-            Atrás
-          </Link>
-        </div>
-      </div>
+      <NextButtonInfoPage route_back={route_back}/>
     );
   } else if (review === 1) {
     return (
-      <div className="mt-5 flex flex-row
-      space-x-32 lg:space-x-96 justify-center items-center">
-        <Link to={route_back}
-        className="flex font-sans bg-YellowButtonP
-        px-8 py-2 shadow-lg hover:bg-YellowButton">
-          Atrás
-        </Link>
-        <Link onClick={()=>{
-          setSendReservation(()=>1)}} className="font-sans
-        bg-YellowButtonP
-        px-8 py-2 shadow-lg hover:bg-YellowButton">
-          Confirmar
-        </Link>
-      </div>
+      <NextButtonReviewPage route_back={route_back}
+      setSendReservation={setSendReservation}/>
     );
   }
   return (
-    <div className="mt-5 flex flex-row
-    space-x-32 lg:space-x-96 justify-center items-center">
-      <Link to={route_back}
-      className="flex font-sans bg-YellowButtonP
-      px-8 py-2 shadow-lg hover:bg-YellowButton">
-        Atrás
-      </Link>
-      <Link to={route_next} className="font-sans
-      bg-YellowButtonP
-      px-8 py-2 shadow-lg hover:bg-YellowButton">
-        Siguiente
-      </Link>
-    </div>
+    <RegularNextButton route_back={route_back}
+    route_next={route_next}/>
   );
 };
 
