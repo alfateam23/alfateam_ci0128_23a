@@ -5,33 +5,6 @@ const router = express.Router();
 // middlewar
 const bodyParser = require("body-parser");
 
-/* Post for creating an user */
-router.post("/generateUser", bodyParser.json(), async (req, res) => {
-  try {
-    let {
-      Cedula,
-      Email,
-      PrimerNombre,
-      SegundoNombre,
-      PrimerApellido,
-      SegundoApellido,
-      Clave,
-      NombreRol,
-    } = req.body;
-    await setTarifa(
-      TipoProcedencia,
-      TipoVisita,
-      Estatus,
-      CategoriaPago,
-      Monto,
-      Moneda
-    );
-    res.status(200).send;
-  } catch (error) {
-    res.status(500).send("Error while trying to create an user " + error);
-  }
-});
-
 /* Post for changing user */
 router.post("/changeActive/:cedula", bodyParser.json(), async (req, res) => {
   try {

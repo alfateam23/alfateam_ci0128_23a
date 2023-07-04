@@ -60,11 +60,9 @@ async function checkUser(username) {
         FROM Administrador
         WHERE Cedula = '${username}'
         `);
-        if (result.recordsets[0].length === 0) {
-            // console.log('No user found');
+        if (result.recordsets[0].length === 0) { 
             return false;
         } else {
-            // console.log('User found');
             return true;
         }
     } catch (error) {
@@ -86,14 +84,11 @@ async function checkPassword(username, password) {
         let isEqual = await compareHash(password, Clave);
 
         if (!Clave) {
-            // console.log('No password found in DB');
             return false;
         } else {
             if (isEqual) {
-                // console.log('Correct username & password');
                 return true;
             } else {
-                // console.log('Password not matching username');
                 return false;
             }
         }
