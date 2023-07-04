@@ -3,7 +3,7 @@ import { NavBar } from "./NavBar";
 import CarouselComponent from "./Carousel";
 import { Button } from "flowbite-react";
 
-export const LandingPage = ({setRunAdminApp}) => {
+export const LandingPage = () => {
   function reservation(){
     window.location.href = '/reservation';
   }
@@ -11,7 +11,7 @@ export const LandingPage = ({setRunAdminApp}) => {
     <div className="flex flex-col space-y-10
     justify-center items-center">
       <div className="w-full">
-        <NavBar setRunAdminApp={setRunAdminApp}/>
+        <NavBar/>
       </div>
       <div>
         <CarouselComponent />
