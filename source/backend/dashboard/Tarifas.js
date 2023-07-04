@@ -34,8 +34,8 @@ router.get('/editar/:TipoProcedencia/:TipoVisita/:Estatus/:CategoriaPago', async
 router.post('/editar/guardar', bodyParser.json(), async (req, res) => {
     try {
         let { TipoProcedencia, TipoVisita, Estatus, CategoriaPago, Monto, Moneda } = req.body
-       await setTarifa(TipoProcedencia, TipoVisita, Estatus, CategoriaPago, Monto, Moneda);
-       res.status(200).send;
+        await setTarifa(TipoProcedencia, TipoVisita, Estatus, CategoriaPago, Monto, Moneda);
+        res.status(200).send;
     } catch (error) {
         res.status(500).send('Error saving data from tarifa' + error);
     }
@@ -61,6 +61,7 @@ async function setTarifa(TipoProcedencia, TipoVisita, Estatus, CategoriaPago, Mo
 
 /* Query for getting a specific tarifa */
 async function getTarifa(TipoProcedencia, TipoVisita, Estatus, CategoriaPago) {
+    console.log("Invocaron el metodo getTarifa");
     try {
         const result = await db.executeQuery(`
         SELECT *
@@ -72,8 +73,9 @@ async function getTarifa(TipoProcedencia, TipoVisita, Estatus, CategoriaPago) {
       `);
         return result.recordsets[0];
     } catch (error) {
+        console.log("Error in getTarifa: " + error);
         throw error;
     }
 }
 
-module.exports = { router }
+module.exports = { router, getTarifa }
