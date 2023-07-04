@@ -12,6 +12,7 @@ import {Review_info} from "../review_page/Review_page";
 import { checkEmail, activateModal, SaveReservationFull,
 SaveReservationUser, updateUser } from '../form/SaveReservation';
 import { MyModal } from './Modal';
+import { ModalManager, ManageReservationOldUser } from './HelperFunctions';
 
 /*
 Function to add the form for the traveller to fill
@@ -44,35 +45,15 @@ export const Review = ({UserData}) => {
   }
 
   async function modifyModal() {
-    activateModal(openModal, setOpenModal);
-    const result = await checkEmail(modifyModalBody, UserData);
-    setStoredUserData(result);
-    if (result && result.result.userInfo.EmailExists === false) {
-      const result = await SaveReservationFull(UserData);
-      setModalBody(result);
-      if (result === "Correo Enviado!") {
-        setTimeout(() => {
-          navigate("/")
-        }, 4000);
-      }
-    } else if (result &&
-      result.result.userInfo.EmailExists === true) {
-        reservationOldUser(0);
-    }
+    await ModalManager(openModal,setOpenModal,modifyModalBody,
+      UserData,setStoredUserData,setModalBody,
+      navigate, reservationOldUser);
   }
   // update = 0 doesn't want to update the details
   // update = 1 wants to update details
   async function reservationOldUser(update) {
-    if (update && storedUserData) {
-      updateUser(storedUserData, UserData);
-    }
-    const result = await SaveReservationUser(UserData);
-    setModalBody(result);
-    if (result === "Correo Enviado!") {
-      setTimeout(() => {
-        navigate("/")
-      }, 4000);
-    }
+    ManageReservationOldUser(update, storedUserData, UserData,
+      setModalBody, navigate);
   }
 
   return (
