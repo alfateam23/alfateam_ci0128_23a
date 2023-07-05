@@ -1,5 +1,7 @@
 import { React, useEffect, useState } from "react";
+import ReactDOMServer from 'react-dom/server'
 import { Table, getHeadings } from './ReportsUtility/Table';
+import { ExportToExcel } from "./ReportsUtility/Excel";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -12,7 +14,6 @@ const Reports = () => {
 
     useEffect(() => {
       if (reportType && startDate && endDate) {
-        console.log('hola')
         fetch(`/backend/reports/${reportType}/${startDate}/${endDate}`)
           .then((res) => {
             if (!res.ok) {
@@ -35,29 +36,34 @@ const Reports = () => {
     };
 
     return (
-      <div className="flex flex-col space-y-20 bg-slate-400
-      rounded-3xl">
+      <div className="flex flex-col space-y-10">
+        <h1 className="font-sans text-4xl rounded-none py-4 m-3"> Reportes </h1>
         <div className="px-10 py-5
-        flex flex-row space-x-24
+        flex flex-col space-y-5 lg:flex-row lg:space-x-20
         items-center justify-center">
           <div>
-          <select className="rounded-lg border border-black
-          shadow-[1px_7px_15px_-4px_rgba(0,0,0,0.75)]"
-          value={reportType}
-          onChange={handleSelectChange}>
-            <option value="visits">Visitantes</option>
-            <option value="profits">Financiero</option>
-          </select>
+            <select className="rounded-lg border border-black
+            shadow-[1px_7px_15px_-4px_rgba(0,0,0,0.75)]"
+            value={reportType}
+            onChange={handleSelectChange}>
+              <option value="visits">Visitantes</option>
+              <option value="profits">Financiero</option>
+            </select>
           </div>
-          <div className="flex flex-row space-x-10">
-          <DatePicker selected={startDate} className="rounded-xl"
-          onChange={(date) => setStartDate(date)} />
-          <DatePicker selected={endDate} className="rounded-xl"
-          onChange={(date) => setEndDate(date)} />
+          <div className="flex flex-row space-x-10 -translate-y-2 z-[2000]">
+            <DatePicker selected={startDate} className="rounded-xl
+            shadow-[1px_7px_15px_-4px_rgba(0,0,0,0.75)]"
+            onChange={(date) => setStartDate(date)} />
+            <DatePicker selected={endDate} className="rounded-xl
+            shadow-[1px_7px_15px_-4px_rgba(0,0,0,0.75)]"
+            onChange={(date) => setEndDate(date)} />
+          </div>
+          <div>
+            <ExportToExcel startDate={startDate} endDate={endDate}/>
           </div>
         </div>
         <div>
-          {!data ? "Loading..." : 
+          {!data ? "Loading..." :
           <Table theadData={getHeadings(data)} tbodyData={data}/>}
         </div>
       </div>

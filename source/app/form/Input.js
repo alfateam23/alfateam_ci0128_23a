@@ -146,8 +146,7 @@ const ComponentDropDown = ({
 }) => {
   const handleMenuClick = (e) => {
     const selected = items.find((item) => item.Nombre === e.key);
-    const { Nombre } = selected || {};
-    setSelectedItem(Nombre);
+    setSelectedItem(selected);
   };
 
   const handleDropDownVisibleChange = (visible) => {
@@ -166,8 +165,7 @@ const ComponentDropDown = ({
     !selectedItem || !items.some((item) => item.Nombre === selectedItem.Nombre);
 
   const menu = (
-    <Menu onClick={handleMenuClick} 
-    className="h-52 overflow-y-scroll">
+    <Menu onClick={handleMenuClick} className="h-52 overflow-y-scroll">
       {items.map((items) => (
         <Menu.Item key={items.Nombre}>{items.Nombre}</Menu.Item>
       ))}
@@ -195,7 +193,7 @@ const ComponentDropDown = ({
     </div>
   );
 };
-
+// componete para checkbox 
 const ComponentCheckBox = ({
   label,
   name,

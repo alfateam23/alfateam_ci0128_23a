@@ -33,6 +33,26 @@ BEGIN
   END
 END;
 
+go
+CREATE PROCEDURE UpdateUser
+  @Cedula VARCHAR(60),
+  @Email VARCHAR(60) = NULL,
+  @PrimerNombre VARCHAR(60) = NULL,
+  @SegundoNombre VARCHAR(60) = NULL,
+  @PrimerApellido VARCHAR(60) = NULL,
+  @SegundoApellido VARCHAR(60) = NULL
+AS
+BEGIN
+  UPDATE Usuario
+  SET
+    Email = ISNULL(@Email, Email),
+    PrimerNombre = ISNULL(@PrimerNombre, PrimerNombre),
+    SegundoNombre = ISNULL(@SegundoNombre, SegundoNombre),
+    PrimerApellido = ISNULL(@PrimerApellido, PrimerApellido),
+    SegundoApellido = ISNULL(@SegundoApellido, SegundoApellido)
+  WHERE Cedula = @Cedula;
+END;
+
 /*EXEC InsertUser 
   @Email = 'example@email.com',
   @Cedula = '123456789',
@@ -43,30 +63,30 @@ END;
 -- Siguiente insertar telefono
 go
 CREATE PROCEDURE InsertPhone (
-  @Email VARCHAR(60),
+  @Cedula VARCHAR(60),
   @Numero VARCHAR(60)
 )
 AS
 BEGIN
-  INSERT INTO Telefono (Email, Numero)
-  VALUES (@Email, @Numero)
+  INSERT INTO Telefono (Cedula, Numero)
+  VALUES (@Cedula, @Numero)
 END;
 
-/*EXEC InsertPhone 
+/*EXEC InsertPhone
   @Email = 'example@email.com',
   @Numero = '123-456-7890';*/
 -- Siguiente insertar el cliente
 go
 CREATE PROCEDURE InsertClient (
-  @Email VARCHAR(60)
+  @Cedula VARCHAR(60)
 )
 AS
 BEGIN
-  INSERT INTO Cliente (Email)
-  VALUES (@Email)
+  INSERT INTO Cliente (Cedula)
+  VALUES (@Cedula)
 END;
- 
-/*EXEC InsertClient 
+
+/*EXEC InsertClient
   @Email = 'example@email.com'*/;
 
 go
@@ -86,9 +106,10 @@ BEGIN
 END;
 
 -- Insertar reservación
+-- Se realiza como transacción, ya que el último código puede cambiar si entra otra reserva al mismo tiempo.
 go
 CREATE PROCEDURE InsertReservation
-  @Email VARCHAR(60),
+  @Cedula VARCHAR(60),
   @TipoArea CHAR,
   @FechaInicio DATETIME,
   @FechaFin DATETIME,
@@ -97,6 +118,7 @@ CREATE PROCEDURE InsertReservation
   @OutputParameter INT OUTPUT
 AS
 BEGIN
+  BEGIN TRANSACTION;
   DECLARE @Codigo INT;
   DECLARE @FechaSolicitud DATETIME;
   SET @FechaSolicitud = GETDATE(); -- Set the current date as the FechaSolicitud
@@ -106,15 +128,16 @@ BEGIN
   IF @Codigo IS NULL
     SET @Codigo = 1;
 
-  INSERT INTO Reservacion (Codigo, Email, TipoArea, FechaSolicitud, FechaInicio, FechaFin, NombrePais, NombreProvincia)
-  VALUES (@Codigo, @Email, @TipoArea, @FechaSolicitud, @FechaInicio, @FechaFin, @NombrePais, @NombreProvincia);
+  INSERT INTO Reservacion (Codigo, Cedula, TipoArea, FechaSolicitud, FechaInicio, FechaFin, NombrePais, NombreProvincia)
+  VALUES (@Codigo, @Cedula, @TipoArea, @FechaSolicitud, @FechaInicio, @FechaFin, @NombrePais, @NombreProvincia);
 
   SET @OutputParameter = @Codigo;
   SELECT @OutputParameter AS OutputCode;
+  COMMIT;
 END;
 
 /*DECLARE @Output INT;
-EXEC InsertReservation 
+EXEC InsertReservation
   @Email = 'example@email.com',
   @TipoArea = 'C',
   @FechaInicio = '2023-06-01',
@@ -135,7 +158,7 @@ BEGIN
   VALUES (@CodigoReservacion, @Placa);
 END;
 
-/*EXEC InsertVehiculo 
+/*EXEC InsertVehiculo
   @CodigoReservacion = 1,
   @Placa = 'ABC123';*/
 
@@ -166,14 +189,14 @@ BEGIN
   VALUES (@CodigoReservacion, @TipoProcedencia, @TipoVisita, @Estatus, @CategoriaPago, @CantidadVisitantes, @Subtotal);
 END;
 
-/*EXEC InsertVisitante 
+/*EXEC InsertVisitante
   @CodigoReservacion = 1,
   @TipoProcedencia = 'Nacional',
   @TipoVisita = 'Camping',
   @Estatus = 'Adulto',
   @CategoriaPago = 'No exonerado',
   @CantidadVisitantes = 2;*/
-/*EXEC InsertVisitante 
+/*EXEC InsertVisitante
   @CodigoReservacion = 1,
   @TipoProcedencia = 'Nacional',
   @TipoVisita = 'Camping',
@@ -216,19 +239,22 @@ BEGIN
   VALUES (@Codigo, @CodigoReservacion, @EstadoPago, GETDATE(), @Monto, @Moneda);
 END;
 
-/*EXEC InsertFactura 
+/*EXEC InsertFactura
   @CodigoReservacion = 1,
   @EstadoPago = 1;
 
   select * from Factura
   select *from TipoVisitante*/
 
+-- Actualizar límite de visitantes.
+-- Se crea como transacción, ya que otra reservación puede actualizar el límite al mismo tiempo.
 go
 CREATE TRIGGER UpdateLimiteVisitantes
 ON Visitante
 AFTER INSERT
 AS
 BEGIN
+  BEGIN TRANSACTION;
   DECLARE @CodigoReservacion INT;
   DECLARE @FechaInicio DATETIME;
   DECLARE @FechaFin DATETIME;
@@ -291,6 +317,7 @@ BEGIN
 
     SET @CurrentDate = DATEADD(DAY, 1, @CurrentDate);
   END
+  COMMIT;
 END;
 
 go
@@ -396,10 +423,89 @@ END;
 
 go
 CREATE PROCEDURE GetReservationCode
-  @Email VARCHAR(60)
+  @Cedula VARCHAR(60)
 AS
 BEGIN
   SELECT Codigo
   FROM Reservacion
-  WHERE Email = @Email
+  WHERE Cedula = @Cedula
 END
+
+go
+CREATE PROCEDURE CheckIDExists
+(
+  @Cedula VARCHAR(60)
+)
+AS
+BEGIN
+  IF EXISTS(SELECT 1 FROM Usuario WHERE @Cedula = Cedula)
+  BEGIN
+    SELECT Email, Cedula, PrimerNombre, SegundoNombre, PrimerApellido, SegundoApellido
+    FROM Usuario
+    WHERE @Cedula = Cedula;
+  END
+  ELSE
+  BEGIN
+    SELECT CAST(0 AS BIT) AS EmailExists;
+  END
+END;
+
+go
+CREATE PROCEDURE GetPhone
+(
+  @Cedula VARCHAR(60)
+)
+AS
+BEGIN
+  SELECT Numero
+  FROM Telefono
+  WHERE @Cedula = Cedula
+END;
+
+/*---- Procedimientos para insertar USUARIOS ----*/
+go
+CREATE PROCEDURE InsertAdmin
+    @Cedula VARCHAR(60),
+    @Email VARCHAR(60),
+    @PrimerNombre VARCHAR(60),
+    @SegundoNombre VARCHAR(60),
+    @PrimerApellido VARCHAR(60),
+    @SegundoApellido VARCHAR(60),
+    @Clave VARCHAR(100),
+    @NombreRol VARCHAR(60)
+AS
+BEGIN
+    -- Insert user into Usuario table
+    INSERT INTO Usuario (Cedula, Email, PrimerNombre, SegundoNombre, PrimerApellido, SegundoApellido)
+    VALUES (@Cedula, @Email, @PrimerNombre, @SegundoNombre, @PrimerApellido, @SegundoApellido);
+
+    -- Insert administrator entry in Administrador table
+    INSERT INTO Administrador (Cedula, Clave)
+    VALUES (@Cedula, @Clave);
+
+    -- Assign role to the user in Autorizacion table
+    INSERT INTO Autorizacion (CedulaAdmin, NombreRol)
+    VALUES (@Cedula, @NombreRol);
+END;
+
+go
+CREATE PROCEDURE InsertServicio
+  @Cedula VARCHAR(60),
+  @NombreServicio VARCHAR(60),
+  @TiempoServicio TIME,
+  @Fecha DATETIME
+AS
+BEGIN
+  DECLARE @Monto MONEY;
+  DECLARE @Moneda CHAR(3);
+  
+  -- Retrieve the Monto and Moneda values from the TipoServicio table
+  SELECT @Monto = MONTO, @Moneda = MONEDA
+  FROM TipoServicio
+  WHERE Nombre = @NombreServicio AND Tiempo = @TiempoServicio;
+
+  -- Insert the service into the Servicio table
+  INSERT INTO Servicio (Cedula, NombreServicio, TiempoServicio, Fecha, MONTO, MONEDA)
+  VALUES (@Cedula, @NombreServicio, @TiempoServicio, @Fecha, @Monto, @Moneda);
+END;
+

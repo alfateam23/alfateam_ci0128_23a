@@ -1,18 +1,24 @@
 //adapted from https://github.com/callbackcoding/Send-email-using-Nodemailer.git
 
-import GeneratorEmailMessage from "./EmailAnswer_template";
+import { Template } from "./Email_Template.tsx";
+import { render } from "@react-email/render";
 
+// metodo para enviar correo
 const sendEmail = async (UserData, code) => {
   const baseUrl = "http://localhost:8000";
+
+  const html = render(<Template UserData= {UserData} code = {code}/>, {
+    pretty: true,
+  });
 
   let dataSend = {
     email: UserData.mail,
     subject: "Reservación Junquillal",
-    message: GeneratorEmailMessage(UserData, code),
+    message: html,
   };
 
   try {
-    const res = await fetch(`/backend/email/sendEmail`, {
+    let res = await fetch(`/backend/email/sendEmail`, {
       method: "POST",
       body: JSON.stringify(dataSend),
       headers: {
@@ -22,10 +28,12 @@ const sendEmail = async (UserData, code) => {
     });
 
     if (res.status > 199 && res.status < 300) {
-      alert("Send Successfully !");
+      res = "Correo Enviado!";
     }
+    return res;
   } catch (error) {
     console.error("Error sending email:", error);
+    return "Error enviando correo, verifique que lo haya digitado correctamente";
   }
 };
 

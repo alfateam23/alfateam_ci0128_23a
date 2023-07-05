@@ -1,5 +1,4 @@
-//npm install react-modal
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   ComponenteInput,
   ComponenteInputIncDec,
@@ -16,13 +15,10 @@ import {
   MensajeExito,
   MensajeError,
 } from "./Elementos/ElementosFormulario";
-
-import { useNavigate } from 'react-router-dom'
-
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
-
+import { GeographicDataFetcher } from "./GeographicDataFetcher";
 export const FormularioView = ({ UserData }) => {
   /* Estados para cada tipo de dato que use para poder hacer comprobacion de datos */
   const regularExpresions = new RegularExpresions();
@@ -48,7 +44,7 @@ export const FormularioView = ({ UserData }) => {
   const [counterPlacas, setCounterPlacas] = useState(0); // variable para llevar cantidad de placas ingresadas
   const [mostrarPlacas, setMostrarPlacas] = useState(0);
   const [totalPersonas, setTotalPersonas] = useState(UserData.totalPeople);
-  const [totalPlacas, setTotalPlacas] = useState(6); //totalPlacas = 6;
+  const [totalPlacas, setTotalPlacas] = useState(6); //max = 6;
   const [counterNinos0a6Nac, setCounterNinos0a6Nac] = useState(0);
   const [counterNinos6a12Nac, setCounterNinos6a12Nac] = useState(0);
   const [counterAdultosNac, setCounterAdultosNac] = useState(0);
@@ -64,41 +60,18 @@ export const FormularioView = ({ UserData }) => {
   const [selectedOption, setSelectedOption] = useState(null); // se usa para selecionar entre nacional o extranjero
   const nationalityOptions = ["Nacional", "Extranjero"];
   const navigate = useNavigate();
-  let pais = [];
-  let provincias = [];
-  const [countryData, setCountryData] = useState(null);
-  useEffect(() => {
-    fetch("/backend/geographicInfo/")
-      .then((res) => {
-        if (!res.ok) {
-          console.log("Network response was not ok");
-        }
-        const resClone = res.clone();
-        return resClone.json();
-      })
-      .then((data) => setCountryData(data))
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }, []);
-
-  if (countryData) {
-    pais = countryData.slice(0, countryData.length - 1);
-    provincias = countryData[countryData.length - 1];
-  }
-
-  // cambia que cuando de click de false a true
+  const { pais, provincias } = GeographicDataFetcher();
   const onChangeTerminos = (e) => {
+    // cambia que cuando de click de false a true
     cambiarTerminos(e.target.checked);
   };
-  //intercepta los datos que va a enviar del formulario
   const onSubmit = (e) => {
+    //intercepta los datos que va a enviar del formulario
     e.preventDefault();
-    //comprueba que la validacion de datos este en true
     if (
+      //comprueba que la validacion de datos este en true
       nombre.valido === "true" &&
       apellido.valido === "true" &&
-      apellido2.valido === "true" &&
       correo.valido === "true" &&
       telefono.valido === "true" &&
       terminos &&
@@ -112,8 +85,16 @@ export const FormularioView = ({ UserData }) => {
       UserData.id = e.target.identificacionUsuario.value;
       UserData.phone = e.target.telefono.value;
       UserData.mail = e.target.correo.value;
-      UserData.originCountry = selectOriginCountry;
-      UserData.originProvince = selectOriginProvince;
+      if (selectOriginCountry !== "") {
+        const { Nombre } = selectOriginCountry || {};
+        UserData.originCountry = Nombre;
+      }
+      if (selectOriginProvince !== "") {
+        const { Nombre } = selectOriginProvince || {};
+        UserData.originProvince = Nombre;
+      }
+      //UserData.originCountry = selectOriginCountry;
+      //UserData.originProvince = selectOriginProvince;
       UserData.totalPeople = totalPersonas;
       UserData.plates = [
         placa.campo,
@@ -123,7 +104,6 @@ export const FormularioView = ({ UserData }) => {
         placa5.campo,
         placa6.campo,
       ];
-      //UserData.TotalPeople = counterFuera;
       UserData.visitors = [
         counterNinos0a6Nac,
         counterNinos6a12Nac,
@@ -134,18 +114,6 @@ export const FormularioView = ({ UserData }) => {
         counterAdultosExt,
         counterAdultosMayorExt,
       ];
-      console.log("Name User:", UserData.nameUser);
-      console.log("Second Name:", UserData.secondName);
-      console.log("First Surname:", UserData.firstSurname);
-      console.log("Second Surname:", UserData.secondSurname);
-      console.log("ID:", UserData.id);
-      console.log("Phone:", UserData.phone);
-      console.log("Email:", UserData.mail);
-      console.log("Origin Country:", UserData.originCountry);
-      console.log("Origin Province:", UserData.originProvince);
-      console.log("Plates:", UserData.plates);
-      console.log("Visitors:", UserData.visitors);
-      //reinicio los campos
       cambiarFormularioValido(true);
       cambiarNombre({ campo: "", valido: null });
       setSecondName({ campo: "", valido: null });
@@ -177,7 +145,7 @@ export const FormularioView = ({ UserData }) => {
       setCounterPlacas(0);
       setMostrarPlacas(0);
       cambiarTerminos(false);
-      navigate('/reservation/review');
+      navigate("/reservation/review");
     } else {
       cambiarFormularioValido(false);
     }
@@ -223,7 +191,6 @@ export const FormularioView = ({ UserData }) => {
           label="Segundo Apellido"
           name="apellido2"
           leyendaError="El apellido solo puede contener letras y espacios."
-          expresionRegular={regularExpresions.expresiones.apellido2}
         />
 
         <ComponenteInput
