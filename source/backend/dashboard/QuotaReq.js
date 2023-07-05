@@ -61,4 +61,4 @@ async function updateQuota(area, total, online) {
   }
 }
 
-module.exports = { router };
+module.exports = { router, getQuota, updateQuota };
