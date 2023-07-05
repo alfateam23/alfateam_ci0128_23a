@@ -90,7 +90,7 @@ const CustomerApp = () => {
  * web application.
  */
 const App = () => {
-   const runAdminApp = false; // Change for either admin or guest mode
+   const runAdminApp = true; // Change for either admin or guest mode
    if (runAdminApp) {
       return (AdminApp());
    } else {

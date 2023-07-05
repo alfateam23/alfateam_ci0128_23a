@@ -75,20 +75,20 @@ async function changeEstadoActividad(cedula, EstadoActividad) {
   }
 }
 
-/* Retrieve a specific tarifa */
+/* Retrieve a specific User */
 router.get("/editar/:Cedula", async (req, res) => {
   try {
     // console.log(req.params.TipoProcedencia);
     // console.log(req.params.TipoVisita);
-    const result = await getTarifa(req.params.Cedula);
+    const result = await getUser(req.params.Cedula);
     res.send(result);
   } catch (error) {
     res.status(500).send("Error retrieving from tarifa");
   }
 });
 
-/* Query for getting a specific tarifa */
-async function getTarifa(Cedula) {
+/* Query for getting a specific user */
+async function getUser(Cedula) {
   try {
     const result = await db.executeQuery(`
         SELECT *
@@ -233,4 +233,4 @@ async function createUser(
   }
 }
 
-module.exports = { router };
+module.exports = { router, getUser };
