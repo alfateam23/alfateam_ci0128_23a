@@ -108,6 +108,7 @@
   "jest": {
     "testMatch": [
       "<rootDir>/test/*.test.js"
-    ]
+    ],
+    "setupFilesAfterEnv":["./setupTests.js"]
   }
 }

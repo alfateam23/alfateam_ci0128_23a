@@ -61,7 +61,6 @@ async function setTarifa(TipoProcedencia, TipoVisita, Estatus, CategoriaPago, Mo
 
 /* Query for getting a specific tarifa */
 async function getTarifa(TipoProcedencia, TipoVisita, Estatus, CategoriaPago) {
-    console.log("Invocaron el metodo getTarifa");
     try {
         const result = await db.executeQuery(`
         SELECT *
