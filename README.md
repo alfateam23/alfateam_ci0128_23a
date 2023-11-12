@@ -1,15 +1,12 @@
-# alfateam_ci0128_23a
+# Web App - Reservation System for Private Refuge
 
-Los integrantes del equipo son: 
+## Project Overview
+This project is a full-stack web application developed as part of a university assignment. Buil for a REAL CLIENT. The application serves as a reservation system for a private refuge. The project was developed in collaboration with a real client, following agile methodologies and using SCRUM and JIRA for project management.
 
-Jose Pereira Zúñiga
-Marco Piedra Venegas
-Ariel Solis Monge
-Josue Retana Rodríguez
-Jason Murillo Madrigal
-Scrum Master: Jose Pereira Zúñiga
+## Technologies Used
+The application was built using the following technologies:
+- **Frontend**: React.js with Tailwind for UI design
+- **Backend**: Express.js
 
-
-
-En este proyecto se trabajará para crear una aplicación Web para la Asoción Junquillal.
-Esta aplicación tendrá sistemas de reserva, pagos integrados y funcionará como herramienta general para esta organización.
+## University Project for Real Client
+Please note that this project was developed as part of a university assignment and is intended for educational purposes only.
